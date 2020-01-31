@@ -1,0 +1,39 @@
+function [Edc_,Edc__] = dc_objs_2d(geome_,parame_,finite_,gerjoii_,k_)
+% ..............................................................................
+% computes objective function value for a perturbation of the parameters
+% in the direction of the gradient with a step-size k_.
+% ..............................................................................
+% clean w first
+if isfield(gerjoii_,'w')
+  gerjoii_=rmfield(gerjoii_,'w');
+end
+if isfield(parame_,'w')
+  parame_=rmfield(parame_,'w');
+end
+if isfield(finite_,'w')
+  finite_=rmfield(finite_,'w');
+end
+% ..............................................................................
+% load source, receivers, measuring operator, observed data & std
+% ..............................................................................
+Ndc = sparse_diag(parame_.natu.dc.std_2d);
+sigm= parame_.dc.sigma;
+% ..............................................................................
+% perturb: left side of parabola
+% ..............................................................................
+parame_.dc.sigma = sigm .* exp(-k_*sigm .* gerjoii_.dc.g_2d);
+% ..............................................................................
+% fwd model
+% ..............................................................................
+% expand to robin & fwd
+[parame_,~] = dc_robin(geome_,parame_,finite_);
+[gerjoii_,~]= dc_fwd2d(parame_,finite_,gerjoii_);
+% ..............................................................................
+% how to filter dc data? try in space-frequency.
+% ..............................................................................
+% ..............................................................................
+% obj
+% ..............................................................................
+Edc_ = dc_E(parame_.natu.dc.d_2d,gerjoii_.dc.d_2d,Ndc,gerjoii_.dc.obj_FNC);
+Edc_ = Edc_ / ( parame_.natu.dc.d_2d(:).' * parame_.natu.dc.d_2d(:) );
+end

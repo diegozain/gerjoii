@@ -1,0 +1,28 @@
+\newcommand{\SortNoop}[1]{}
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bleistein(1986)]{bleistein1986two}
+Norman Bleistein.
+\newblock Two-and-one-half dimensional in-plane wave propagation.
+\newblock \emph{Geophysical Prospecting}, 34\penalty0 (5):\penalty0 686--703,
+  1986.
+
+\bibitem[Ernst et~al.(2007)Ernst, Green, Maurer, and
+  Holliger]{ernst2007application}
+Jacques~R Ernst, Alan~G Green, Hansruedi Maurer, and Klaus Holliger.
+\newblock Application of a new 2d time-domain full-waveform inversion scheme to
+  crosshole radar data.
+\newblock \emph{Geophysics}, 72\penalty0 (5):\penalty0 J53--J64, 2007.
+
+\bibitem[Pidlisecky and Knight(2008)]{pidlisecky2008fw2_5d}
+Adam Pidlisecky and Rosemary Knight.
+\newblock Fw2\_5d: A matlab 2.5-d electrical resistivity modeling code.
+\newblock \emph{Computers \& Geosciences}, 34\penalty0 (12):\penalty0
+  1645--1654, 2008.
+
+\end{thebibliography}

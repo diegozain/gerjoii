@@ -1,0 +1,29 @@
+# for all the fancy stuff you can change, take a look at:
+# https://github.com/matplotlib/matplotlib/blob/master/matplotlibrc.template
+# ...........................
+# axes stuff
+# ...........................
+axes.titlesize : 15
+axes.labelsize : 15
+axes.titleweight : bold
+# ...........................
+# line stuff
+# ...........................
+lines.linewidth : 1
+lines.markersize : 10
+# ...........................
+# tiny ticks on axes... ugh
+# ...........................
+xtick.labelsize : 13
+ytick.labelsize : 13
+xtick.major.size : 0
+ytick.major.size : 0
+# ...........................
+# legend stuff
+# ...........................
+legend.framealpha : 1
+legend.fontsize : 13
+# latex stuff
+# text.usetex : True
+# font.sans-serif : Helvetica
+# font.serif : Times New Roman
