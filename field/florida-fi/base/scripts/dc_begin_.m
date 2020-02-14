@@ -84,6 +84,21 @@ gerjoii_ = struct;
 gerjoii_.dc.electr_real  = parame_.dc.electr_real;
 gerjoii_.dc.n_electrodes = parame_.dc.n_electrodes;
 gerjoii_.dc.n_exp        = parame_.dc.n_exp;
+% ------------------------------------------------------------------------------
+% use pica or parabola?
+% for parabola comment this line:
+gerjoii_.dc.pica_me = 1;
+% ------------------------------------------------------------------------------
+% use weird step size average in dc_update2_5d__?
+% pica does this automatically.
+% If parabola is used and you want to get weird,
+% uncomment this line:
+gerjoii_.dc.weird_me = 1;
+% ------------------------------------------------------------------------------
+% save?
+% to not save comment this line:
+% gerjoii_.dc.save_dsigm = 1;
+% gerjoii_.dc.data_pathsigs_='sigs-dc/';
 %%{
 % ------------------------------------------------------------------------------
 %
