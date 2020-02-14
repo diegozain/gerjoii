@@ -435,6 +435,7 @@ if strcmp(gerjoii_.linker.yn,'y')
   gerjoii_.wdc.deps.b = [];
   gerjoii_.wdc.dsigx.b = [];
   gerjoii_.wdc.iter = 0;
+  gerjoii_.dc.v_currs=zeros(geome_.n,geome_.m);
   %
   if strcmp(gerjoii_.w.regu.f_yesno,'YES')
     gerjoii_.w.dEs_ = Inf;
@@ -510,6 +511,7 @@ z        =geome_.Y;
 h_w      =gerjoii_.wdc.h_w_;
 as       =gerjoii_.wdc.as;
 E        =gerjoii_.wdc.E;
+v_currs  =gerjoii_.dc.v_currs.';
 save('epsi','epsi')
 save('sigm','sigm')
 save('depsi','depsi')
@@ -524,6 +526,7 @@ save('as','as')
 save('x','x')
 save('z','z')
 save('p_inv','p_inv')
+save('v_currs','v_currs')
 cd ../../scripts/
 % ------------------------------------------------------------------------------
 % for linking

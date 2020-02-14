@@ -7,13 +7,13 @@ clc
 % python dc_process.py
 % ------------------------------------------------------------------------------
 % set std cut
-std_cut     = 4;%Inf; % 90
+std_cut     = 20;%Inf; % 90
 % set max cut for apparent resistivities
-rho_max_cut = 12; % Inf; 2000; 9000; 500;
+rho_max_cut = 5e+3; % Inf; 2000; 9000; 500;
 % x push so fwd domain play nice
-x_push      = 10; % m 5
+x_push      = 15; % m 5
 % max depth of fwd domain
-z_max       = 50; % m 15
+z_max       = 150; % m 15
 % ------  (plotting only) -------
 % set a spacing for dd 
 a    = 1;
@@ -127,6 +127,10 @@ currents(iremove) = NaN;
 % collect sources and rec
 src = src_rec_dc(:,1:2);
 rec = src_rec_dc(:,3:4);
+% ------------------------------------------------------------------------------
+% % dylan's florida data has this flipped for some weird reason. Feb 2020
+% % this only affects plotting
+% src = flip(src,2);
 % ------------------------------------------------------------------------------
 %                     pseudo sections
 % ------------------------------------------------------------------------------

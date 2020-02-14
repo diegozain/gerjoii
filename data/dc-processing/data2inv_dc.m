@@ -38,7 +38,7 @@ fprintf('\n     max cut-off for apparent resistivities:     %d\n\n',rho_max_cut)
 % ------------------------------------------------------------------------------
 %                                 load data
 % ------------------------------------------------------------------------------
-% load abmn ( in index! )
+% load abmn ( in index? )
 src_rec_dc = dlmread(strcat(path_,'abmn.txt'));
 n_shots    = size(src_rec_dc,1);
 src_rec_dc = binning(electr_real(:,1),src_rec_dc(:));
@@ -180,6 +180,10 @@ else
 end
 % ------------------------------------------------------------------------------
 %                                 plotting
+% ------------------------------------------------------------------------------
+% % dylan's florida data has this flipped for some weird reason. Feb 2020
+% % this only affects plotting
+% src = flip(src,2);
 % ------------------------------------------------------------------------------
 % dipole-dipole
 a=1;

@@ -197,6 +197,7 @@ if strcmp(gerjoii_.linker.yn,'y')
   gerjoii_.linker.path_ = '../tmp/';
   gerjoii_.dc.E = [];
   gerjoii_.dc.iter = 0;
+  gerjoii_.dc.v_currs=zeros(geome_.n,geome_.m);
   % ----------------------------------
   % global & internal iteration clock
   % ----------------------------------
@@ -238,12 +239,14 @@ dsigm_dc =gerjoii_.dc.dsigma.';
 x        =geome_.X;
 z        =geome_.Y;
 E        =gerjoii_.dc.E;
+v_currs  =gerjoii_.dc.v_currs.';
 save('sigm','sigm')
 save('dsigm_dc','dsigm_dc')
 save('E','E')
 save('x','x')
 save('z','z')
 save('p_inv','p_inv')
+save('v_currs','v_currs')
 cd ../../scripts/
 % ------------------------------------------------------------------------------
 % for linking

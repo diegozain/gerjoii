@@ -58,6 +58,7 @@ class fancy_figure():
         self.xdir = kwargs.get('xdir','upright')
         self.margin = kwargs.get('margin',(0.,0.))
         self.origin = kwargs.get('origin',None)
+        self.markersize = kwargs.get('markersize',None)
         # ......
         # color
         # ......
@@ -353,7 +354,7 @@ class fancy_figure():
             ax = self.ax_
         if self.x is None:
             self.x = np.arange(1.,self.curve.size+1)
-        ax.plot(self.x,self.curve,self.symbol, color=self.colop)
+        ax.plot(self.x,self.curve,self.symbol, color=self.colop,markersize=self.markersize)
         if self.xdir == 'reverse':
             ax.invert_xaxis()
         if self.ydir == 'reverse':
