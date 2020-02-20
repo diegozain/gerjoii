@@ -127,6 +127,21 @@ parame_.dc.sigma_o= ones(geome_.n,geome_.m)*sig_bg;
 % expand to robin grid
 [parame_,finite_] = dc_robin(geome_,parame_,finite_);
 % ------------------------------------------------------------------------------
+% use pica or parabola?
+% for parabola comment this line:
+gerjoii_.dc.pica_me = 1;
+% ------------------------------------------------------------------------------
+% use weird step size average in dc_update2_5d__?
+% pica does this automatically.
+% If parabola is used and you want to get weird,
+% uncomment this line:
+gerjoii_.dc.weird_me = 1;
+% ------------------------------------------------------------------------------
+% save?
+% to not save comment this line:
+% gerjoii_.dc.save_dsigm = 1;
+% gerjoii_.dc.data_pathsigs_='sigs-dc/';
+% ------------------------------------------------------------------------------
 %
 %                                     image
 %

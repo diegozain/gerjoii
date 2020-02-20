@@ -69,7 +69,11 @@ src = src_rec_dc(:,1:2);
 rec = src_rec_dc(:,3:4);
 % ------------------------------------------------------------------------------
 % current normalization --> voltage normalization.
-d_o = d_o./currents;
+prompt = '\n\n    Were the data collected with AGI (y or n):  ';
+AGI_SYS = input(prompt,'s');
+if strcmp(AGI_SYS,'n')
+  d_o = d_o./currents;
+end
 i_o = ones(size(currents));
 n_shots = numel(d_o);
 % ------------------------------------------------------------------------------
@@ -180,13 +184,36 @@ else
 end
 % ------------------------------------------------------------------------------
 %                                 plotting
+%                       this only affects plotting
 % ------------------------------------------------------------------------------
-% % dylan's florida data has this flipped for some weird reason. Feb 2020
-% % this only affects plotting
-% src = flip(src,2);
+% this part is just so dc_plot_srcrec_all plays nice.
+X   =zeros(1,2);
+X(1)=parame_.aa;
+X(2)=parame_.bb;
+geome_.X = X;
+gerjoii_.dc.electr_real=electr_real;
+n_exp = size(s_i_r_d_std,2);
+% ------------------------------------------------------------------------------
+for i_e=1:n_exp
+  s_all{i_e} = s_i_r_d_std{ i_e }{ 1 }(1:2);
+  r_all{i_e} = s_i_r_d_std{ i_e }{ 2 }(:,1:2);
+end
+dc_plot_srcrec_all(gerjoii_,geome_,s_all,r_all);
+clear gerjoii_ geome_
+% ------------------------------------------------------------------------------
+% dylan's florida data has this flipped for some weird reason. Feb 2020
+prompt = '\n\n    Are the ab electrodes flipped ba (y or n):  ';
+ab_flipped = input(prompt,'s');
+if strcmp(ab_flipped,'y')
+  src = flip(src,2);
+end
 % ------------------------------------------------------------------------------
 % dipole-dipole
-a=1;
+% ------------------------------------------------------------------------------
+% choose a-spacing
+prompt = '\n\n    what a-spacing do you want for dipol-dipole:  ';
+a = input(prompt);
+% ------------------------------------------------------------------------------
 [pseus_do,pseus_rhoa] = dc_pseus_dd(src,rec,d_o,rhoa,a,n_electrodes);
 source_no = 1:0.5:ceil(size(pseus_rhoa,2)/2);
 n_levels = 1:size(pseus_rhoa,1);

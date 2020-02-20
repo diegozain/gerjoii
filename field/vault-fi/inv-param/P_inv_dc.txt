@@ -1,3 +1,4 @@
-50 1e-10 2e-3 2e-3 9e-3 1e-4 1e-3 5e-1 1.6
-10 1e-10 2e-3 2e-3 9e-3 1e-4 1e-3 5e-1 1.6
+10 1e-10 1e-4 1e-4 5e-1 1e-6 1e-3 5e-1 1.4
+10 1e-10 5e-4 5e-4 5e-1 1e-6 1e-3 5e-1 1.4
+10 1e-10 1e-3 1e-3 5e-1 1e-5 1e-3 5e-1 1.4
 % tol_iter tol_error sig_ini sig_bg sig_max_ sig_min_ beta_dc momentum kk_factor

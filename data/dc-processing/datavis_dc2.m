@@ -7,16 +7,16 @@ clc
 % python dc_process.py
 % ------------------------------------------------------------------------------
 % set std cut
-std_cut     = 20;%Inf; % 90
+std_cut     = 100;%Inf; % 90
 % set max cut for apparent resistivities
 rho_max_cut = 5e+3; % Inf; 2000; 9000; 500;
 % x push so fwd domain play nice
 x_push      = 15; % m 5
 % max depth of fwd domain
-z_max       = 150; % m 15
+z_max       = 100; % m 15
 % ------  (plotting only) -------
 % set a spacing for dd 
-a    = 1;
+% a    = 2;
 % set colormap shift
 colo = 1; % 8; 4.2
 % ------------------------------------------------------------------------------
@@ -128,9 +128,45 @@ currents(iremove) = NaN;
 src = src_rec_dc(:,1:2);
 rec = src_rec_dc(:,3:4);
 % ------------------------------------------------------------------------------
-% % dylan's florida data has this flipped for some weird reason. Feb 2020
-% % this only affects plotting
-% src = flip(src,2);
+%
+%                     this only affects plotting
+%
+% ------------------------------------------------------------------------------
+%                         plot src-rec pairs
+% ------------------------------------------------------------------------------
+% bundle sources, current, receivers, observed data and standard deviation,
+% s_i_r_d_std{ j }{ 1 }(1:2) gives source.
+% s_i_r_d_std{ j }{ 1 }(3) gives current.
+% s_i_r_d_std{ j }{ 2 }(:,1:2) gives receivers.
+% s_i_r_d_std{ j }{ 2 }(:,3) gives observed data.
+% s_i_r_d_std{ j }{ 2 }(:,4) gives observed std.
+s_i_r_d_std = dc_iris2gerjoii( src,currents,rec,d_o,std_ );
+n_exp = size(s_i_r_d_std,2);
+% ------------------------------------------------------------------------------
+% this part is just so dc_plot_srcrec_all plays nice.
+X   =zeros(1,2);
+X(1)=electr_real(1,1);
+X(2)=electr_real(end,1);
+geome_.X = X;
+gerjoii_.dc.electr_real=electr_real;
+% ------------------------------------------------------------------------------
+for i_e=1:n_exp
+  s_all{i_e} = s_i_r_d_std{ i_e }{ 1 }(1:2);
+  r_all{i_e} = s_i_r_d_std{ i_e }{ 2 }(:,1:2);
+end
+dc_plot_srcrec_all(gerjoii_,geome_,s_all,r_all);
+clear gerjoii_ geome_
+% ------------------------------------------------------------------------------
+% dylan's florida data has this flipped for some weird reason. Feb 2020
+prompt = '\n\n    Are the ab electrodes flipped ba (y or n):  ';
+ab_flipped = input(prompt,'s');
+if strcmp(ab_flipped,'y')
+  src = flip(src,2);
+end
+% ------------------------------------------------------------------------------
+% choose a-spacing
+prompt = '\n\n    what a-spacing do you want for dipol-dipole:  ';
+a = input(prompt);
 % ------------------------------------------------------------------------------
 %                     pseudo sections
 % ------------------------------------------------------------------------------

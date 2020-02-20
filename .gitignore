@@ -4,6 +4,8 @@
 *.txt~
 *.tex~
 
+__pycache__/
+
 *.aux
 *.log
 *.nav
@@ -20,6 +22,7 @@
 *.DT1
 *.dat
 *.avi
+*.xcf
 
 variable-layout/
 scp-git/
@@ -30,6 +33,7 @@ compli-sy/
 dibujo-sy/
 effective-sy/
 example-sy/e2/
+example-sy/
 geyser-sy/
 glacier-sy/
 grenoble-aba/
@@ -61,10 +65,14 @@ groningen2/
 qifei/
 utah/
 bhrs/
+florida/
+geopark/
 geyser-c/
 groningen/
 idaho-peni/
 synthetic2/
 vinyard-hat/
 
-
+florida-fi/f20/
+florida-fi/f21/
+geopark-fi/g5/

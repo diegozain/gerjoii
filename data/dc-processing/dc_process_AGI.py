@@ -38,10 +38,10 @@ data = pd.read_csv(data_name_,sep=separator_)
 # Software version: 01.23.73E Survey period: 20190419 Records: 4113
 # Unit: meter
 # 
-data = data.iloc[3:,]
+# data = data.iloc[3:,]
 # ------------------------------------------------------------------------------
 # get all of the data!!
-voltages = data.iloc[:,4]    # ?
+voltages = data.iloc[:,4]    # V/I
 currents = data.iloc[:,6]    # mA
 std      = data.iloc[:,5]    # tenths of percent
 app_resi = data.iloc[:,7]    # ?

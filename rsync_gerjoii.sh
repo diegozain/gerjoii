@@ -17,7 +17,7 @@ then
   server_name="diegodomenzain@kestrel.boisestate.edu:/home/diegodomenzain/gerjoii/"
 fi
 # ------------------------------------------------------------------------------
-rsync -r -rav -e ssh --include '*/' --include='*'.{m,bash,sh,txt} -p --exclude='*' gerjoii/ $server_name
+rsync -r -rav -e ssh --include '*/' --include='*'.{m,bash,sh,txt} -p --exclude='*' --exclude .git/ gerjoii/ $server_name
 # ------------------------------------------------------------------------------
 cd gerjoii/
 # ------------------------------------------------------------------------------

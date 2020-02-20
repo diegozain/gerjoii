@@ -192,6 +192,21 @@ gerjoii_.wdc.sig_too  ='YES';
 gerjoii_.wdc.save_dsigs = 'YES';
 gerjoii_.wdc.save_deps  = 'YES';
 % ------------------------------------------------------------------------------
+% use pica or parabola?
+% for parabola comment this line:
+gerjoii_.dc.pica_me = 1;
+% ------------------------------------------------------------------------------
+% use weird step size average in dc_update2_5d__?
+% pica does this automatically.
+% If parabola is used and you want to get weird,
+% uncomment this line:
+gerjoii_.dc.weird_me = 1;
+% ------------------------------------------------------------------------------
+% save?
+% to not save comment this line:
+% gerjoii_.dc.save_dsigm = 1;
+% gerjoii_.dc.data_pathsigs_='sigs-dc/';
+% ------------------------------------------------------------------------------
 % here you could put whatever values for permittivity and conductivity 
 % but the max and min of permittivity also has to be same as in parame_w
 % ------------------------------------------------------------------------------
