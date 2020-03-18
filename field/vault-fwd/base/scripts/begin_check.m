@@ -14,31 +14,38 @@ cd(pwd_);
 % ------------------------------------------------------------------------------
 % build geometry and initial guess
 % ------------------------------------------------------------------------------
+pwd_ = pwd;
+cd ../../
 param_wdc;
+cd(pwd_);
 % ------------------------------------------------------------------------------
 %                 choose between wdc_geom and wdc_geom_:
 %
 % wdc_geom  gives dx,dz with wave criteria.
 % wdc_geom_ gives dx,dz arbitrarilly.
 % ------------------------------------------------------------------------------
-% [parame_,finite_,geome_] = wdc_geom(parame_);
+[parame_,finite_,geome_] = wdc_geom(parame_);
 % ------------------------------------------------------------------------------
-dx=0.05;
-[parame_,finite_,geome_] = wdc_geom_(parame_,dx);
+% dx=0.05;
+% [parame_,finite_,geome_] = wdc_geom_(parame_,dx);
 % ------------------------------------------------------------------------------
 % overwrite eps and sig with a cute box in the middle.
 % here you could put whatever values for permittivity and conductivity 
 % but the max and min of permittivity also has to be declared in param_wdc.m
 % ------------------------------------------------------------------------------
 % permittivity
-tmp_=load('../../image2mat/nature-synth/mat-file/epsi.mat');
-tmp_=tmp_.epsi;
-parame_.natu.epsilon_w = tmp_;
-% conductivity
-tmp_=load('../../image2mat/nature-synth/mat-file/sigm.mat');
-tmp_=tmp_.sigm;
-parame_.natu.sigma_w = tmp_;
-parame_.natu.sigma_dc = parame_.natu.sigma_w.';
+% tmp_=load('../mat-file/epsi.mat');
+% tmp_=tmp_.epsi;
+% parame_.natu.epsilon_w = tmp_;
+% % conductivity
+% tmp_=load('../mat-file/sigm.mat');
+% tmp_=tmp_.sigm;
+% parame_.natu.sigma_w = tmp_;
+% parame_.natu.sigma_dc = parame_.natu.sigma_w.';
+% ------------------------------------------------------------------------------
+% wavelength [m] & velocity [m/ns]
+% l = parame_.w.c/( sqrt( relative_permittivity ))/parame_.w.fo;
+% v = parame_.w.c/( sqrt( relative_permittivity )) * 1e-9;
 % ------------------------------------------------------------------------------
 % truth
 % ------------------------------------------------------------------------------

@@ -31,15 +31,15 @@ function [gerjoii_,finite_] = dc_fwd2_5d(parame_,finite_,gerjoii_)
 %	  e = (d x 1)  vector
 %
 % 
-
+% ..............................................................................
 d_o = parame_.natu.dc.d;
 n = finite_.dc.nx ; % geome_.n;
 m = finite_.dc.nz ; % geome_.m;
 M = gerjoii_.dc.M;
-
+% ..............................................................................
 n_ky = finite_.dc.n_ky;
-ky_w_ = finite_.dc.ky_w_;
-
+ky_w_= finite_.dc.ky_w_;
+% ..............................................................................
 % compute each u_k_ independently (parfor-able)
 u_k = zeros( n*m,n_ky );
 for i_=1:n_ky
@@ -49,14 +49,14 @@ for i_=1:n_ky
 end
 % weighted stack
 u = (2/pi) * u_k * ky_w_(:,2);
-
+% ..............................................................................
 % field to data
 d = M * u;
 % error
 e_ = d - d_o;
 % reshape
 u = reshape(u, [n,m] );
-
+% ..............................................................................
 gerjoii_.dc.u = u;
 gerjoii_.dc.u_k = u_k;
 gerjoii_.dc.e_ = e_;

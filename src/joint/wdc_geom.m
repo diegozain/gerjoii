@@ -152,6 +152,9 @@ fprintf('m (no PML, no air) = %i \n',geome_.m);
 fprintf('air = %i \n',geome_.w.air);
 fprintf('nt = %i \n',geome_.w.nt);
 
-fprintf('\n\nwave cube will be of size %1d [Gb]\n',...
+fprintf('\n\nwave cube will be of size (double precision)          %1d [Gb]',...
           geome_.n*geome_.m*geome_.w.nt*8*1e-9);
+%
+fprintf('\nelectric potential will be of size (double precision) %1d [Gb]\n\n',...
+          geome_.n*geome_.m*8*1e-9);
 end

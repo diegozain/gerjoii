@@ -1,4 +1,4 @@
-function d_filt = filt_gauss(d,dt,f_low,f_high,steep)
+function [d_filt,gaussian_] = filt_gauss(d,dt,f_low,f_high,steep)
 % diego domenzain 2018.
 %
 % performs gaussian filter between f_low and f_high of data d:

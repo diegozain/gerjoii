@@ -10,7 +10,7 @@ function [BAf_,t_decon,Ba] = ifm_decon(Bs,As,c,f,dt,a)
 %       virtual gather Ba (in the frequency domain) is BAf_(:,:,a).
 % t_decon: deconvolution time of size 2t+1.
 % ---------------
-[nt,nb] = size(Bs);
+[nt,nb,~] = size(Bs);
 na = size(As,2);
 nt_xc = 2*nt-1;
 nt_0 = nt;
@@ -44,7 +44,7 @@ for fi=1:nf
   end
   % % regularize AC_
   % AC_ = AC_ + regu*eye(na,nc);
-  % sove for one frequency & sore
+  % solve for one frequency & sore
   BA_ = AC_\BC_;
   BAf_(fi,:,:) = BA_;
 end

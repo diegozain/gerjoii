@@ -21,15 +21,11 @@ param_wdc;
 % ------------------------------------------------------------------------------
 % permittivity
 % tmp_=load('../../image2mat/nature-synth/mat-file/epsi.mat');
-% tmp_=load('../../image2mat/nature-synth/initial-guess/epsi_smooth.mat');
-% tmp_=load('../../image2mat/nature-synth/initial-guess/epsi_smooth7.mat');
 tmp_=load('../output/wdc/epsi.mat');
 tmp_=tmp_.epsi;
 parame_.natu.epsilon_w = tmp_;
 % conductivity
 % tmp_=load('../../image2mat/nature-synth/mat-file/sigm.mat');
-% tmp_=load('../../image2mat/nature-synth/initial-guess/sigm_smooth5.mat');
-% tmp_=load('../../image2mat/nature-synth/initial-guess/sigm_smooth7.mat');
 tmp_=load('../output/wdc/sigm.mat');
 tmp_=tmp_.sigm;
 parame_.natu.sigma_w = tmp_;

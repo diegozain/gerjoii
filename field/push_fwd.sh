@@ -1,10 +1,11 @@
 #!/bin/bash
 # ------------------------------------------------------------------------------
-#               upload parameters of field data
+#               upload parameters of synthetic data
 # ------------------------------------------------------------------------------
 printf "\n\n%-3s-----------------"
 printf "\n%-4supload parameters"
-printf "\n%-4sof field data."
+printf "\n%-4sof synthetic data"
+printf "\n%-4sfor forward models."
 printf "\n%-3s-----------------\n\n\n"
 # ------------------------------------------------------------------------------
 echo which server \(sonic or lehmann or r2 or kestrel\)?
@@ -18,9 +19,12 @@ ls
 echo which big project \(eg, thor-finds-water or synthetic-3\)?
 read big_project_name
 # ------------------------------------------------------------------------------
-cd $big_project_name/
+echo which small project \(eg, t2 or s5\)?
+read small_project_name
 # ------------------------------------------------------------------------------
-push_path_="gerjoii/field/$big_project_name/"
+cd $big_project_name/model-generator/nature-synth/mat-file/$small_project_name/
+# ------------------------------------------------------------------------------
+push_path_="gerjoii/field/$big_project_name/$small_project_name/mat-file"
 # ------------------------------------------------------------------------------
 if [ "$server_name" == "sonic" ]
 then
@@ -52,7 +56,9 @@ then
   server_path="$server_path_/$push_path_"
 fi
 # ------------------------------------------------------------------------------
-echo $server_path
-scp -r data $server_path
-cd ..
+scp *.mat $server_path/
+# echo $server_path_
+# echo $server_path
+# ------------------------------------------------------------------------------
+cd ../../../../../
 # ------------------------------------------------------------------------------

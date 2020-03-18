@@ -1,4 +1,4 @@
-function [Ba, cg_a, t_corr] = ifm_dirty(d,dt,T_,a,f_low,f_high)
+function [Ba, cg_a, t_corr] = ifm_quick(d,dt,T_,a,f_low,f_high)
 % 
 % do a quick and dirty virtual gather: you don't have to think too much.
 % ---

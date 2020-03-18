@@ -1,5 +1,6 @@
 function [s,a] = w_wiener(d,d_o,s)
-% give estimate of source signature according to Pratt.
+% give estimate of source signature according to Pratt:
+% Seismic waveform inversion in the frequency domain, Part 1: Theory and verification in a physical scale model
 %
 % d and d_o are synthetic and observed shot gathers of size (nt by nr).
 % s is initial guess for source of size (nt by 1).

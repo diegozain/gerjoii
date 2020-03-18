@@ -9,7 +9,7 @@ printf "\n\n%-4sand objective function history of"
 printf "\n\n%-4smany inversions."
 printf "\n%-3s------------------------------------\n\n\n"
 # ------------------------------------------------------------------------------
-echo which server \(r2 or kestrel\)?
+echo which server \(r2 or kestrel or lehmann\)?
 read server_name
 # ------------------------------------------------------------------------------
 ls
@@ -32,6 +32,9 @@ then
 elif [ "$server_name" == "kestrel" ]
 then
   server_path_="diegodomenzain@kestrel.boisestate.edu:/home/diegodomenzain"
+elif [ "$server_name" == "lehmann" ]
+then
+  server_path_="diegozain@lehmann.mines.edu:/sonichome/diegozain"
 fi
 # ------------------------------------------------------------------------------
 # download path remote

@@ -14,18 +14,22 @@ cd(pwd_);
 % ------------------------------------------------------------------------------
 % build geometry and initial guess
 % ------------------------------------------------------------------------------
+pwd_ = pwd;
+cd ../../
 param_wdc;
+cd(pwd_);
+% ------------------------------------------------------------------------------
 [parame_,finite_,geome_] = wdc_geom(parame_);
 % ------------------------------------------------------------------------------
 % truth
 % ------------------------------------------------------------------------------
 % permittivity
-tmp_=load('../../image2mat/nature-synth/mat-file/epsi.mat');
+tmp_=load('../mat-file/epsi.mat');
 % tmp_=load('../output/w/epsi.mat');
 tmp_=tmp_.epsi;
 parame_.natu.epsilon_w = tmp_;
 % conductivity
-tmp_=load('../../image2mat/nature-synth/mat-file/sigm.mat');
+tmp_=load('../mat-file/sigm.mat');
 % tmp_=load('../output/w/sigm.mat');
 tmp_=tmp_.sigm;
 parame_.natu.sigma_w = tmp_;
@@ -118,5 +122,13 @@ toc;
 % gerjoii_.w.noise.f_low = -1e+1;
 % gerjoii_.w.noise.f_high = 1e+1;
 % noise__w;
-
-
+% ------------------------------------------------------------------------------
+% save the discretization
+% ------------------------------------------------------------------------------
+cd ../mat-file/
+x        =geome_.X;
+z        =geome_.Y;
+save('x','x')
+save('z','z')
+cd ../scripts/
+% ------------------------------------------------------------------------------

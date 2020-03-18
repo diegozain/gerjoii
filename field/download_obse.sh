@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 #               download observed data of synthetic example
 # ------------------------------------------------------------------------------
-printf "\n\n%-3s----------------------"
+printf "\n\n%-3s------------------------"
 printf "\n%-4sdownload observed data"
 printf "\n\n%-4sof synthetic example."
 printf "\n%-3s------------------------\n\n\n"
@@ -38,7 +38,7 @@ then
   server_name="diegozain@sonic.boisestate.edu:/home"
 elif [ "$server_name" == "lehmann" ]
 then
-  server_name="diegozain@lehmann.mines.edu:/sonichome"
+  server_name="diegozain@lehmann.mines.edu"
 elif [ "$server_name" == "r2" ]
 then
   server_name="ddomenzain@r2.boisestate.edu"
@@ -56,6 +56,10 @@ then
 elif [ "$server_name" == "diegodomenzain@kestrel.boisestate.edu" ]
 then
   server_path_="$server_name:/home/diegodomenzain"
+  server_path="$server_path_/$down_path_"
+elif [ "$server_name" == "diegozain@lehmann.mines.edu" ]
+then
+  server_path_="$server_name:/sonichome/diegozain"
   server_path="$server_path_/$down_path_"
 fi
 # ------------------------------------------------------------------------------

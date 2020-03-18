@@ -2,7 +2,7 @@ function d = dc_natur__(geome_,parame_,finite_,gerjoii_,i_e)
 % diego domenzain
 % fall 2017 @ BSU
 % ------------------------------------------------------------------------------
-% runs ER forward model for one source-sink pair (indexed by input 'i_e').
+% runs 2.5D ER forward model for one source-sink pair (indexed by input 'i_e').
 % this program reads sources and receivers made in experim_wdc.m or experim_dc.m.
 % it then goes on to shoot and record electric voltage data.
 % -
