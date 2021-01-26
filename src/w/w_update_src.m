@@ -27,8 +27,18 @@ dt = parame_.w.dt;
 s  = parame_.w.wvlets_(:,is);
 d_o= parame_.natu.w.d_2d;
 d  = gerjoii_.w.d_2d;
-% --
-s = w_pratt_src(d,d_o,s,dt,gaussian_);
-% --
-s = filt_gauss(s,dt,gerjoii_.w.regu.f_,gerjoii_.w.regu.f__,8);%[Hz]
+f_high = gerjoii_.w.regu.f__;
+% ..............................................................................
+% trim the data in case you only want to use part of it 
+% ..............................................................................
+if isfield(gerjoii_.w,'irx_keepx_')
+   irx_keepx_ = gerjoii_.w.irx_keepx_;
+   irx_keepx__= gerjoii_.w.irx_keepx__;
+   
+   d_o= d_o(:,irx_keepx_:irx_keepx__);
+   d  = d(:,irx_keepx_:irx_keepx__);
+end
+% ..............................................................................
+s = w_pratt_src(d,d_o,s,dt,gaussian_,f_high);
+fprintf('     source for shot-gather #%i was found\n',is)
 end

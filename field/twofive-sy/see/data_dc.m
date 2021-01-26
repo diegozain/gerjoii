@@ -109,6 +109,8 @@ if strcmp(save_,'y')
     path2save = strcat(path_,'pseudo/','observed');
   elseif strcmp(data_obre,'data-recovered')
     path2save = strcat(path_,project_);
+  elseif strcmp(data_obre,'data-synth')
+    path2save = strcat(path_,project_);
   end
   save(strcat(path2save,'-wen.mat'),'voltagram')
   % ----------------------------------------------------------------------------
@@ -149,6 +151,8 @@ if strcmp(save_,'y')
     path2save = strcat(path_,'pseudo/','observed');
   elseif strcmp(data_obre,'data-recovered')
     path2save = strcat(path_,project_);
+  elseif strcmp(data_obre,'data-synth')
+    path2save = strcat(path_,project_);
   end
   save(strcat(path2save,'-dd.mat'),'voltagram')
   % ----------------------------------------------------------------------------
@@ -166,6 +170,8 @@ if strcmp(save_,'y')
   if strcmp(data_obre,'data')
     path2save = strcat(path_,'pseudo/','observed');
   elseif strcmp(data_obre,'data-recovered')
+    path2save = strcat(path_,project_);
+  elseif strcmp(data_obre,'data-synth')
     path2save = strcat(path_,project_);
   end
   save(strcat(path2save,'-data.mat'),'d_o')

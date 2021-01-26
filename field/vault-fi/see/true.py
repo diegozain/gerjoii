@@ -14,7 +14,7 @@ sigm_ini = 'sigm_smooth5'#'sigm_hori'
 # ------------------------------------------------------------------------------
 title_e = "True permittivity ( )"
 title_s = "True conductivity (mS/m)"
-midi_e  = 7
+midi_e  = 15
 midi_s  = 2
 # ------------------------------------------------------------------------------
 maxi_e = -float('Inf')

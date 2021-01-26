@@ -37,22 +37,32 @@ param_dc;
 % truth
 % ------------------------------------------------------------------------------
 % permittivity
-tmp_=load('../output/wdc/epsi.mat');
-% tmp_=load('../../data/initial-guess/epsi.mat');
+% tmp_=load('../output/wdc/epsi.mat');
+tmp_=load('../../data/initial-guess/epsi.mat');
 tmp_=tmp_.epsi;
 parame_.natu.epsilon_w = tmp_;
 % conductivity
-tmp_=load('../output/wdc/sigm.mat');
-% tmp_=load('../../data/initial-guess/sigm.mat');
+% tmp_=load('../output/wdc/sigm.mat');
+tmp_=load('../../data/initial-guess/sigm.mat');
 tmp_=tmp_.sigm;
 parame_.natu.sigma_w = tmp_;
 parame_.natu.sigma_dc = parame_.natu.sigma_w.';
 % ------------------------------------------------------------------------------
-% % w
-parame_.w.epsilon = parame_.natu.epsilon_w;
-parame_.w.sigma   = parame_.natu.sigma_w;
-% dc
-parame_.dc.sigma  = parame_.natu.sigma_dc; 
+% % epsi & sigm from file
+% % -- w --
+% parame_.w.epsilon = parame_.natu.epsilon_w;
+% parame_.w.sigma   = parame_.natu.sigma_w;
+% % -- dc --
+% parame_.dc.sigma  = parame_.natu.sigma_dc; 
+% % expand to robin grid
+% [parame_,finite_] = dc_robin(geome_,parame_,finite_);
+% ------------------------------------------------------------------------------
+% epsi from file, sigm homogeneous
+% -- w --
+parame_.w.epsilon = parame_.natu.epsilon_w; 
+parame_.w.sigma   = ones(geome_.m,geome_.n)*2e-3;
+% -- dc --
+parame_.dc.sigma  = ones(geome_.n,geome_.m)*2e-3;
 % expand to robin grid
 [parame_,finite_] = dc_robin(geome_,parame_,finite_);
 % ------------------------------------------------------------------------------
@@ -86,7 +96,7 @@ copyfile(strcat(data_path_dc_,'s_i_r_d_std.mat'),data_path_dc__);
 gerjoii_ = struct;
 % no. of sources
 load(strcat(data_path_w__,'s_r.mat'));
-gerjoii_.w.ns = 3; % size(s_r,1);
+gerjoii_.w.ns = size(s_r,1);
 % mute?
 gerjoii_.w.MUTE = 'no_MUTE';
 % -- dc --
@@ -119,7 +129,7 @@ parpools = gcp('nocreate');
 if ~isempty(parpools)
   delete(gcp('nocreate'));
 end
-n_workers = load('../tmp/workers.txt');
+n_workers = load('../tmp/workers_fwd.txt');
 poolsize  = min([n_workers,gerjoii_.w.ns]); % gerjoii_.w.ns
 parpool( poolsize );
 fprintf('\n\n    ------------------------------\n');

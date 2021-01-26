@@ -31,7 +31,7 @@ field_.w.v_min   = 0.06; % m/ns
 field_.w.v_2d    = 0.13; % m/ns
 field_.w.t_o     = 20;   % ns 20
 % ------------------------------------------------------------------------------
-% do you want to mute?
+% do you want to mute? 'no_MUTE' or 'yes_MUTE'
 field_.w.MUTE = 'no_MUTE';
 % ------------------------------------------------------------------------------
 % push all receivers x_push to give the fwd solver some room

@@ -113,17 +113,27 @@ step_ = p_inv(26);
 % ------------------------------------------------------------------------------
 load('../../data/initial-guess/sigm.mat');
 load('../../data/initial-guess/epsi.mat');
-% -- dc --
-% parame_.dc.sigma  = ones(geome_.n,geome_.m)*sig_ini;
+% ------------------------------------------------------------------------------
+% % epsi & sigm from file
+% % -- dc --
+% parame_.dc.sigma  = sigm.';
 % parame_.dc.sigma_o= ones(geome_.n,geome_.m)*sig_bg;
-parame_.dc.sigma  = sigm.';
+% % expand to robin grid
+% [parame_,finite_] = dc_robin(geome_,parame_,finite_);
+% % -- w --
+% parame_.w.epsilon = epsi; 
+% parame_.w.sigma   = sigm;
+% ------------------------------------------------------------------------------
+% epsi from file, sigm homogeneous
+% -- dc --
+parame_.dc.sigma  = ones(geome_.n,geome_.m)*sig_ini;
 parame_.dc.sigma_o= ones(geome_.n,geome_.m)*sig_bg;
 % expand to robin grid
 [parame_,finite_] = dc_robin(geome_,parame_,finite_);
 % -- w --
 parame_.w.epsilon = epsi; 
-% parame_.w.sigma   = ones(geome_.m,geome_.n)*sig_ini;
-parame_.w.sigma   = sigm;
+% -
+parame_.w.sigma   = ones(geome_.m,geome_.n)*sig_ini;
 % ------------------------------------------------------------------------------
 % clean
 clear sigm
@@ -228,7 +238,7 @@ fprintf('    ------------------------------\n');
 % ------------------------------------------------------------------------------
 % dc 2.5d conversion stuff
 % ------------------------------------------------------------------------------
-kk_dc;
+% kk_dc;
 % ------------------------------------------------------------------------------
 %
 %                                     image
@@ -481,6 +491,8 @@ depsi    =gerjoii_.w.depsilon;
 dsigm_w  =gerjoii_.w.dsigma;
 dsigm_dc =gerjoii_.dc.dsigma.';
 dsigm    =gerjoii_.wdc.dsigma;
+bepsx    =gerjoii_.wdc.deps.b;
+bsigx    =gerjoii_.wdc.dsigx.b;
 x        =geome_.X;
 z        =geome_.Y;
 h_w      =gerjoii_.wdc.h_w_;
@@ -494,6 +506,8 @@ save('depsi','depsi')
 save('dsigm_w','dsigm_w')
 save('dsigm_dc','dsigm_dc')
 save('dsigm','dsigm')
+save('bepsx','bepsx')
+save('bsigx','bsigx')
 save('h_w','h_w')
 save('E','E')
 save('as','as')

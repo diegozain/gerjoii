@@ -1,0 +1,250 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\usepackage{titling}
+\setlength{\droptitle}{-6em}   % This is your set screw
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{Wave experiment\\{\normalsize Diego Domenzain}}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% before
+%-------------------
+\section*{Constants and units}
+\begin{table}[!h]
+\centering
+\begin{tabular}{ l  c | l }
+$\varepsilon_o = 8.85\cdot10^{-12}$ &  F/m & vacuum permittivity \\
+$\mu_o = 4\pi\cdot 10^{-7} $ & H/m & vacuum permeability \\
+$c=\frac{1}{\sqrt{\varepsilon_o\mu_o}}=299792458$ & m/s & light speed in vacuum \\
+\end{tabular}
+\caption{ Constants.}
+ \label{tbl:ctes}
+\end{table}
+%
+\begin{table}[!h]
+\centering
+\begin{tabular}{ r c l | l }
+ns & $\to$ & s & $\cdot 10^{-9}$ \\
+MHz & $\to$ & Hz & $\cdot 10^{6}$ \\
+GHz & $\to$ & Hz & $\cdot 10^{9}$ \\
+MHz & $\to$ & GHz & $\cdot 10^{-3}$ \\
+\end{tabular}
+\caption{ Unit conversions.}
+ \label{tbl:cnvs}
+\end{table}
+%-------------------
+% before
+%-------------------
+\section*{Before going to the field}
+\begin{itemize}
+\item Choose $f_o$ and maximum target permittivity $\varepsilon_{max}$.
+\item Compute $\lambda_o$,
+ \begin{align}
+\lambda_o &= \frac{c}{f_o\sqrt{\varepsilon_{max}}},\\
+ &\approx \frac{300}{f_{o,MHz}\sqrt{\varepsilon_{max}}} \;\;\;\; [1/m].
+\end{align}
+\item Choose $\Delta sr \geq \lambda_o$ and compute $\Delta r \leq \lambda_o/2$. For example, 
+\begin{align*}
+\Delta sr=\lambda_o+\text{odometer-wheel}
+\hspace{2em} \text{and} \hspace{2em}
+\Delta r = \lambda_o/4.
+\end{align*}
+\end{itemize}
+%
+\begin{table}[!h]
+\centering
+\begin{tabular}{ r | l | l}
+$f_o$ MHz & $\lambda_o$ m & $\lambda_o/4$ m \\
+\hline
+50 & 1 & 0.2 \\
+100 & 0.5 & 0.1 \\
+200 & 0.25 & 0.05 \\
+250 & 0.2 & 0.05 \\
+500 & 0.1 & 0.02 \\
+\hline
+\end{tabular}
+\caption{Approximate wavelengths (and spacings) for $\varepsilon_{max}$ = 30. You can do your own by computing $\lambda_o=300/f_{o,MHz}/\sqrt{\varepsilon_{max}}$.}
+ \label{tbl:wavelength}
+\end{table}
+%-------------------
+% after
+%-------------------
+\section*{After going to the field}
+\subsection*{Save data and time-shift: \texttt{ss2gerjoii\_w.m}}
+\begin{enumerate}
+\item Loop through done survey lines and save all of the data to \texttt{.mat} in disk, and store $r$ and $t$ as $r_{all}$ and $t_{all}$ in memory.
+\item Loop over all saved lines and rewrite them,
+\begin{enumerate}
+\item get $r$ and $t$ for line,
+\item correct for time-shift: $t\gets t-t_{all}(t=t_o)$, $d^o\gets d^o$ corrected,
+\item transform $\{r,t,\Delta t,\Delta r,\Delta sr, f_o\}$ to $m,ns$ and $GHz$,
+\item use $\Delta s$, $\Delta sr$ and $r_{all}$ to create source-receivers tuples $\{s,r\}$ in real coordinates.
+\end{enumerate}
+\item Store all $\{s,r\}$ to disk.
+\end{enumerate}
+%
+\subsection*{Quick-see and compute $\Delta t,\Delta x$: \texttt{datavis\_w.m}}
+\begin{enumerate}
+\item Choose data $d^o$ together with $\{r,t,\Delta t,\Delta r,\Delta sr, f_o\}$.
+\item Dewow.
+\item See $d^o$ in the frequency domain and filter out unwanted signal with a bandpass filter $[f_{min},\, f_{max}]$.
+\item Find first arrival event time $t_{fa}$ before which all recordings should be silent. For example, $t_{fa}=\Delta sr/c$.
+\item Choose up to which receivers the data looks good.
+\item Choose $v_{min}$ and compute $\varepsilon_{max} = (c/v_{min})^2$ to see if $v_{min}$ makes sense.
+\item Compute $\Delta x$ using the {\it wavelength condition},
+\begin{align}
+\Delta x &= \frac{v_{min}}{n_\lambda\cdot f_{max}}.
+\end{align}
+\item Choose $\varepsilon_{min}\geq1$ and compute $\Delta t_\bullet$ with the {\it cfl condition},
+\begin{align}
+v_{max} &= \frac{c}{\sqrt{\varepsilon_{min}}},\\
+ \Delta t_\bullet &= c_f \cdot \frac{1}{v_{max}\sqrt{1/\Delta x^2 + 1/\Delta z^2}}.
+\end{align}
+Most likely, $\Delta t_\bullet<\Delta t$ because the gpr system computes $\Delta t$ to satisfy the {\it Nyquist condition} on the frequency it can measure ($\approx 1.2\,GHz$). 
+\end{enumerate}
+%
+%
+\subsection*{Get the data ready for the fwi scheme: \texttt{data2fwi\_w.m}}
+\begin{enumerate}
+\item Choose data $d^o$ together with $\{r,t,\Delta t,\Delta r,\Delta sr, f_o\}$.
+\item Dewow $d^o$.
+\item Bandpass filter $d^o$ with $[f_{min},\, f_{max}]$.
+\item Remove unwanted receivers.
+\item Perform 2.5d$\to$2d conversion.
+\item Mute unwanted events. For example, everything before $t_{fa}$.
+\item Interpolate $d^o$ on time vector $t_\bullet=t(1):\Delta t_\bullet:t(n_t)$ and set,
+\begin{align}
+t &\gets t_\bullet \\
+ \Delta t &\gets \Delta t_\bullet.
+\end{align}
+The {\it spline} interpolation works best.
+\item Estimate source wavelet.
+\item Save $d^o$ to disk with its respective $\{s,r\}$ on binned coordinates in the new discretized vectors $x$ and $z$.
+\item Loop until all data has been preprocessed.
+\end{enumerate}
+%
+\subsection*{Get parameters ready for fwi scheme: \texttt{param2fwi\_w.m}}
+\begin{itemize}
+\item Complete structures,
+\begin{itemize}
+\item[$\circ$] \texttt{parame\_}
+\item[$\circ$] \texttt{geome\_}
+\item[$\circ$] \texttt{finite\_}
+\end{itemize}
+with the space and time parameters computed in \texttt{data2fwi\_w.m}.
+\end{itemize}
+%
+\subsection*{Complete \texttt{gerjoii\_} structure for inversion: \texttt{w\_load.m}}
+For one \texttt{radargram\_} structure,
+\begin{itemize}
+\item Load source location $[i_z, i_x]$ a $1\times 2$ vector.
+\item Load receiver locations $[i_x, i_z]$ an $n_r\times 2$ matrix.
+\item Modify source and receivers to account for PML and air.
+\item Build $M_w$.
+\item Load $d^o$ (of size $n_t\times n_r$) and $\operatorname{std}(d^o)$ (of size $n_t n_r\times 1$).
+\item Load source wavelet.
+\end{itemize}
+The source wavelet is updated and saved to disk in the \texttt{wvlets\_} structure after each iteration.
+%
+\subsection*{Inversion routine}
+\begin{enumerate}
+\item Begin while loop.
+\item Compute update,
+\begin{itemize}
+\item Begin for loop through experiments,
+\item load source-receivers, $d^o$, $\operatorname{std}(d^o)$ and wavelet,
+\item build $M_w$,
+\item forward run,
+\item evaluate objective function,
+\item compute gradient
+\item compute step-size,
+\item compute and store update,
+\item estimate source wavelet and store,
+\item end for loop.
+\end{itemize}
+Stack all updates into one update.
+\item Update.
+\item End while loop.
+\end{enumerate}
+%
+\subsection*{Extracting more information}
+\begin{enumerate}
+\item Build source-receiver matrix of size $n_s\times n_r$ on binned coordinates in discretized vectors $x$ and $z$.
+\item Interferometry.
+\item Velocity semblance.
+\item Source estimation. 
+\end{enumerate}
+%
+%
+%
+%------------
+% biblio
+%------------
+%\newpage
+\bibliographystyle{plainnat}
+\bibliography{interferometry-theory}
+%\nocite{*}
+\end{document}

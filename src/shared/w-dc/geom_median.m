@@ -7,22 +7,20 @@ function y = geom_median(r,guess)
 %
 % uses Weiszfeld's algorithm, 
 % which is just a potential energy minimizer.
-y = guess;
-nr = length(r(:,1));
-if nr==2
-  y = 0.5*[abs(r(1,1)-r(2,1)) abs(r(1,2)-r(2,2))];
-  return; 
-elseif nr==1
+nr = size(r,1);
+% y = guess;
+y = sum(r,1)/nr;
+if nr==1
   y = r;
   return;
 end
-numerator = 0;
-denominator = 0;
 iter = 0;
 c_ = 0;
 c__ = Inf;
 while (c__ > 1e-12 & iter < 1e+4)
   c = 0;
+  numerator = 0;
+  denominator = 0;
   for i = 1:nr
     norma = norm(r(i,:)-y);
     numerator = numerator + (r(i,:)/norma);

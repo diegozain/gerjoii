@@ -25,16 +25,16 @@ class fancy_image():
         self.nh = kwargs.get('nh', None)
         self.nh_r = kwargs.get('nh_r', None)
         self.nv_d = kwargs.get('nv_d', None)
-        self.nv = kwargs.get('nv', None)
+        self.nv   = kwargs.get('nv', None)
         # ......
         # text
         # ......
-        self.text   = kwargs.get('text', None)
+        self.text       = kwargs.get('text', None)
         self.font_type  = kwargs.get('font_type', None)
         self.font_size  = kwargs.get('font_size', None)
         self.font_color = kwargs.get('font_color', None)
         self.font_pos   = kwargs.get('font_pos', None)
-        self.text_   = kwargs.get('text_', None)
+        self.text_      = kwargs.get('text_', None)
     def openim(self):
         '''
         open image or read from file
@@ -88,6 +88,7 @@ class fancy_image():
         import numpy as np
         '''
         pad an image horizontally
+        
         '''
         # ......
         # open
@@ -96,18 +97,23 @@ class fancy_image():
         # ......
         # pad it
         # ......
-        im = np.asarray( im )
+        im   = np.asarray( im )
         size = im.shape
         nh_  = size[1]
         nh_l = self.nh - (nh_ + self.nh_r)
+        if nh_l<0:
+            print('horizontal target size to pad ',self.nh)
+            print('size of pic to be padded      ',nh_)
+            print('horizontal size of padding    ',self.nh_r)
         # right side
-        im_ = im[:,-2:-1,:]
+        im_ = im[:,-2:-1,:]*0
         im_ = np.tile(im_, (1, self.nh_r, 1))
-        im = np.concatenate( (im,im_) , 1 )
+        im  = np.concatenate( (im,im_) , 1 )
         # left side
         im_ = im[:,1:2,:]
+        im_[:,:,3] = 0 # this fucker is there if color pixels are touching the border of the picture
         im_ = np.tile(im_, (1, nh_l, 1))
-        im = np.concatenate( (im_,im) , 1 )
+        im  = np.concatenate( (im_,im) , 1 )
         # ......
         # return
         # ......
@@ -133,7 +139,6 @@ class fancy_image():
         im_ = im[-2:-1,:,:]
         im_ = np.tile(im_, (self.nv_d, 1, 1))
         im = np.concatenate( (im,im_) , 0 )
-        # left side
         # up side
         im_ = im[1:2,:,:]
         im_ = np.tile(im_, (nv_u, 1, 1))

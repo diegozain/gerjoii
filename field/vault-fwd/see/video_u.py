@@ -122,7 +122,7 @@ os.environ["vide_name"] = "wavefield"
 # ------------------------------------------------------------------------------
 # sips -g pixelWidth -g pixelHeight $file_name0.png
 # os.system('gifski -o $vide_name.gif -W 800 -H 400 --fps 1 $file_name*.png')
-os.system('gifski -o $vide_name.gif -W 780 -H 234 --fps 40 $file_name*.png')
+os.system('gifski -o $vide_name.gif -W 766 -H 332 --fps 40 $file_name*.png')
 # ------------------------------------------------------------------------------
 # os.system('ffmpeg -r 2 -i $file_name%d.png -c:v ffv1 -r 10 $vide_name.avi')
 # os.system('ffmpeg -r 2 -i $file_name%d.png -vf scale="600:-1" -r 10 $vide_name.gif')

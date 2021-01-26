@@ -2,32 +2,38 @@
 % parameters for preprocessing a common-shot gather.
 %                     I am file pp_csg_w.m
 % ------------------------------------------------------------------------------
+% project: bhrs
+% ------------------------------------------------------------------------------
 % constants. [], [], [m/ns]
 cf          = 0.9;
 nl          = 10;
 c           = 0.299792458;
 % bandpass. [GHz]
-f_low       = 0.01; % 0.05;
-f_high      = 0.1; % 0.5;
+f_low       = 0.01;
+f_high      = 0.1;
 % amputate receivers. relative distance [m]
 r_keepx_    = 5;
 r_keepx__   = rx(end)-rx(1);
 % first arrival time shift & velocity. [ns] & [m/ns]
-t_fa        = 55;% 55; % 26;
+t_fa        = 55;
 v_fa        = c;
 % ground time-window & velocity. [ns] & [m/ns]
-t_ground_   = 55;% 55; 75
-t_ground__  = 120;%120; 140
+% Since this is for a linear moveout,
+% choose these values WITHOUT ANY time-shift correction, that is, 
+% just as they look from the (filtered and 2.5D corrected) data.
+t_ground_   = 55;
+t_ground__  = 120;
 v_ground    = c;
 % stability of wave solver. [m/ns] & [GHz]
 v_min       = 0.05;
 f_max       = 0.2; % 1/radargram.dt/2; % 0.32% [GHz]
 % velocity for 2d transform. [m/ns]
 v_2d        = 0.13; 
+% muting parameters
+v_mute = v_ground;   % m/ns
+t_mute = t_ground_-2; % ns
 % ------------------------------------------------------------------------------
 %                               hyperbolic events
-% ------------------------------------------------------------------------------
-% project: bhrs
 % ------------------------------------------------------------------------------
 % line 1
 v_pick  = 0.057; % [m/ns]
@@ -76,11 +82,9 @@ radargram.v_pick    = v_pick;
 radargram.to_pick   = to_pick;
 % velocity for 2d transform. [m/ns]
 radargram.v_2d      = v_2d;
-% ----------------------
-% stuff that changed
-% ----------------------
-% dsr;
-% r;
-% d;
-% t;
+% linear mute
+radargram.v_mute = v_mute;
+radargram.t_mute = t_mute;
+% ------------------------------------------------------------------------------
+
 

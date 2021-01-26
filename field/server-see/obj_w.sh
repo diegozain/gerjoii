@@ -6,7 +6,7 @@ printf "\n%-3s---------------------------------------------\n\n\n"
 # ------------------------------------------------------------------------------
 rm *.mat
 # ------------------------------------------------------------------------------
-echo r2 or kes?
+echo r2 or kes or mio?
 read server_name
 # ------------------------------------------------------------------------------
 echo which project to download?
@@ -21,6 +21,9 @@ then
 elif [ "$server_name" == "kes" ]
 then
   server_name="diegodomenzain@kestrel.boisestate.edu:/home/diegodomenzain"
+elif [ "$server_name" == "mio" ]
+then
+  server_name="diegodomenzain@mio.mines.edu:/u/wy/ba/diegodomenzain"
 fi
 scp $server_name/gerjoii/field/$project/\
 $subproject/output/w/E.mat .

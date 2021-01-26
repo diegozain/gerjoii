@@ -1,0 +1,182 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{Stochastic gradient descent for GPR and ER}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% figures
+%-------------------
+%
+\tiny{
+\verbatiminput{../pics/A1.txt}
+}
+\begin{figure}[t!]
+\centering
+% left low right up
+\includegraphics[trim={120 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s.pdf}~
+\includegraphics[trim={120 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-final-joint.pdf}
+\\~\\
+\includegraphics[trim={100 250 110 295},clip,width=0.5\textwidth]{../pics/A1-Es-w.pdf}~
+\includegraphics[trim={100 250 110 295},clip,width=0.5\textwidth]{../pics/A1-Es-dc.pdf}
+\caption{{\bf Top left:} Target conductivity assuming permittivity is known and that it is 2 everywhere. 
+{\bf Top right:} Recovered conductivity using joint inversion. 
+For GPR, data is measured along {\it all} nodes on the ground-air interface. 
+Three sources were evenly spaced along the ground-air interface. 
+Regularization is done \`a la Kurzmann (filtering the gradient) with $c_{stab}=1e+1$ and 
+with the same ``blanket" taper as for the ER. 
+Step-size for the gradient has hyper-parameter $k_\sigma = 1e+0$. 
+For the ER, data is measured only on receiver nodes. 
+36 source-sink configurations were done. 
+Regularization is done by tapering the gradient with a gaussian ``blanket" down to $1\,[m]$. 
+Step-size for the gradient has hyper-parameter $k_\sigma = 1e-2$. 
+{\bf Bottom:} Objective functions history over iteration. Values are cumulative.
+}
+\label{fig:fig1}
+\end{figure}
+%
+\begin{figure}[t!]
+\centering
+% left low right up
+\includegraphics[trim={120 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-large.pdf}~
+\includegraphics[trim={120 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-final-joint-large.pdf}
+\\~\\
+\includegraphics[trim={100 250 110 295},clip,width=0.5\textwidth]{../pics/A1-Es-w-large.pdf}~
+\includegraphics[trim={100 250 110 295},clip,width=0.5\textwidth]{../pics/A1-Es-dc-large.pdf}
+\\~\\
+\includegraphics[trim={120 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-final-joint-large-sicodelica.pdf}
+\caption{{\bf Top left:} Target conductivity assuming permittivity is known and that it is 2 everywhere. 
+{\bf Top right:} Recovered conductivity using joint inversion. 
+For GPR, data is measured along {\it all} nodes on the ground-air interface. 
+Three sources were evenly spaced along the ground-air interface. 
+Regularization is done \`a la Kurzmann (filtering the gradient) with $c_{stab}=1e+1$ and 
+with the same ``blanket" taper as for the ER. 
+Step-size for the gradient has hyper-parameter $k_\sigma = 1e+0$. 
+For the ER, data is measured only on receiver nodes. 
+36 source-sink configurations were done. 
+Regularization is done by tapering the gradient with a gaussian ``blanket" down to $1\,[m]$. 
+Step-size for the gradient has hyper-parameter $k_\sigma = 1e-2$. 
+{\bf Middle:} Objective functions history over iteration. Values are cumulative. 
+{\bf Bottom:} Psycodelic picture of recovered conductivity.
+}
+\label{fig:fig2}
+\end{figure}
+%
+\begin{figure}[t!]
+\centering
+% left low right up
+\includegraphics[trim={120 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-large.pdf}
+\\~\\
+\includegraphics[trim={100 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-final-w-large.pdf}~
+\includegraphics[trim={100 250 110 295},clip,width=0.5\textwidth]{../pics/A1-Es-w-proper-large.pdf}
+\\~\\
+\includegraphics[trim={100 250 105 295},clip,width=0.5\textwidth]{../pics/A1-s-final-dc-large.pdf}~
+\includegraphics[trim={100 250 110 295},clip,width=0.5\textwidth]{../pics/A1-Es-dc-proper-large.pdf}
+\caption{{\bf Top:} Target conductivity assuming permittivity is known and that it is 2 everywhere. 
+{\bf Middle:} GPR inversion. Data is measured along {\it all} nodes on the ground-air interface. 
+Three sources were evenly spaced along the ground-air interface. 
+Regularization is done \`a la Kurzmann (filtering the gradient) with $c_{stab}=1e+1$ and 
+with the same ``blanket" taper as for the ER. 
+Step-size for the gradient has hyper-parameter $k_\sigma = 1e+0$. 
+{\bf Bottom:} ER inversion. Data is measured only on receiver nodes. 
+36 source-sink configurations were done. 
+Regularization is done by tapering the gradient with a gaussian ``blanket" down to $1\,[m]$. 
+Step-size for the gradient has hyper-parameter $k_\sigma = 1e-2$. 
+}
+\label{fig:fig3}
+\end{figure}
+%
+\begin{figure}[t!]
+\centering
+% left low right up
+\includegraphics[trim={120 300 105 320},clip,width=0.5\textwidth]{../pics/A1-s-large.pdf}~
+\includegraphics[trim={120 300 105 320},clip,width=0.5\textwidth]{../pics/A1-s-final-joint-large-1323.pdf}
+\\~\\
+\includegraphics[trim={100 300 110 320},clip,width=0.5\textwidth]{../pics/A1-Es-w-large-1323.pdf}~
+\includegraphics[trim={100 300 110 320},clip,width=0.5\textwidth]{../pics/A1-Es-dc-large-1323.pdf}
+\\~\\
+\includegraphics[trim={100 300 110 320},clip,width=0.5\textwidth]{../pics/A1-step-w-1323.pdf}~
+\includegraphics[trim={100 300 110 320},clip,width=0.5\textwidth]{../pics/A1-step-dc-1323.pdf}
+\\~\\
+\includegraphics[trim={110 300 105 320},clip,width=0.5\textwidth]{../pics/A1-s-final-joint-large-1323-clipped.pdf}~
+\includegraphics[trim={110 300 105 320},clip,width=0.5\textwidth]{../pics/A1-s-final-joint-large-sicodelica-1323-clipped.pdf}
+\caption{{\bf Top left:} Target conductivity assuming permittivity is known and that it is 2 everywhere. 
+{\bf Top right:} Recovered conductivity using joint inversion. 
+Hyper-parameters the same as Figure (\ref{fig:fig2}).  
+{\bf Middle top:} History of objective functions over iterations. 
+{\bf Middle bottom:} History of step sizes for gradient updates over iterations. 
+{\bf Bottom:} Pictures of recovered conductivity clipped to true values.
+}
+\label{fig:fig2}
+\end{figure}
+%\verbatiminput{../gd-stoch/A1-reality-s.txt}
+%
+%------------
+% biblio
+%------------
+%\newpage
+%\bibliographystyle{plainnat}
+%\bibliography{seis-flow}
+%\nocite{*}
+\end{document}

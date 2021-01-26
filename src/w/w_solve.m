@@ -1,5 +1,11 @@
 function gerjoii_ = w_solve(geome_,parame_,finite_,gerjoii_)
-
+% diego domenzain
+% fall 2018 @ BSU
+% ..............................................................................
+% inspired by the book: 
+% "the finite-difference time-domain method for 
+% electromagnetics with matlab simulations", Atef Z. Elsherbeni.
+% ..............................................................................
 Mw = gerjoii_.w.M;
 s_w = gerjoii_.w.s;
 wvlet_ = gerjoii_.w.wvlet_;

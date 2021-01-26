@@ -8,7 +8,7 @@ function dtu_ = dtu(u,dt)
 % 2nd degree accurate.
 %
 nt = numel(u);
-dtu = zeros(nt,1);
+dtu_ = zeros(nt,1);
 %
 dtu_(1)     = (1/(dt)) * ((-3/2)*u(1) + 2*u(2) - (1/2)*u(3));
 dtu_(2:nt-1) = (1/(dt)) * ((-1/2)*u(1:nt-2) + (1/2)*u(3:nt));

@@ -1,0 +1,80 @@
+% Author: Frantisek Burian
+\documentclass{minimal}
+\usepackage{tikz}
+\usetikzlibrary{trees}
+% ---------------------------------------------------------------------------------------
+\begin{document}
+\[% ---------------------------------------------------------------------------------------
+\tikzstyle{every node}=[draw=black,thick,anchor=west]
+\tikzstyle{selected}=[draw=red,fill=red!30]
+\tikzstyle{file}=[draw=blue,fill=blue!30]
+\tikzstyle{optional}=[dashed,fill=gray!50]
+% ---------------------------------------------------------------------------------------
+\begin{tikzpicture}[%
+  % -------------------------------------------------------------------------------------
+  grow via three points  ={one child at (0.5,-0.7) and two children at (0.5,-0.7) and (0.5,-1.4)},
+  edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+  % -------------------------------------------------------------------------------------
+  \node {models-ml}
+    child { node {base}
+    	child {node {main}
+	child {node [blue] {{\sffamily ml\_2l.py}}}
+	}
+	child [missing] {}
+	%
+	child {node {output}}
+    	child {node {tmp}}
+    }
+    child [missing] {}
+    child [missing] {}
+    child [missing] {}
+    child [missing] {}
+    %
+    child { node {param-ml}
+    	child {node [blue] {{\sffamily opti\_param.txt}}}
+    }
+    child [missing] {}
+    %
+    child { node {pics-ml}
+    	child {node [blue] {pics-data}}
+    }
+    child [missing] {}
+    %
+    child { node {projects}
+    	child {node {project\#}
+		child {node {main}
+		child {node [blue] {{\sffamily ml\_2l.py}}}
+		}
+		child [missing] {}
+		%
+		child {node {output}
+		child {node [red] {{\sffamily ml\_2l.h5}}}
+		child {node [red] {{\sffamily loss.npy}}}
+		}
+		child [missing] {}
+		child [missing] {}
+		%
+    		child {node {tmp}
+		child {node [blue] {{\sffamily param.txt}}}
+		}
+	}
+    }
+    child [missing] {}
+    %
+    child [missing] {}
+    child [missing] {}
+    child [missing] {}
+    child [missing] {}
+    child [missing] {}
+    %
+    child { node {slurm}
+    	child { node {mio}
+	child {node [file] {{\sffamily ml\_run.sh}}}
+	child {node [file] {{\sffamily ml\_continue.sh}}}
+	}
+    }				
+    ;
+\end{tikzpicture}
+% ---------------------------------------------------------------------------------------
+\]
+\end{document}

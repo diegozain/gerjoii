@@ -6,9 +6,25 @@ ground penetrating radar and electrical resistivity joint inversion (_gerjoii_)
 
 by _diego domenzain_
 
+https://diegozain.github.io/gerjoii
+
 ***
 
 eager to start? __scroll down for an example__.
+
+***
+
+### Publications
+
+* [Joint inversion of full-waveform GPR and ER data. Part 2: enhancing low frequencies with the envelope transform and cross-gradients](https://library.seg.org/doi/10.1190/geo2019-0755.1), __Diego Domenzain, John Bradford, and Jodi Mead__. _Geophysics, 85(6)_. 2020.
+
+* [Joint inversion of full-waveform GPR and ER data. Part 1](https://library.seg.org/doi/10.1190/geo2019-0754.1), __Diego Domenzain, John Bradford, and Jodi Mead__. _Geophysics, 85(6)_. 2020.
+
+* [Inversion of 2.5D electrical resistivity data using the discrete adjoint method](https://library.seg.org/doi/10.1190/segam2020-3417486.1), __Diego Domenzain, John Bradford, and Jodi Mead__. SEG Technical Program Expanded Abstracts 2020.
+
+* [Joint inversion of full-waveform GPR and ER data enhanced by the envelope transform and cross-gradients](https://library.seg.org/doi/10.1190/gpr2020-087.1), __Diego Domenzain, John Bradford, and Jodi Mead__. 18th International Conference on Ground Penetrating Radar, Golden, Colorado 2020.
+
+* [Joint inversion of GPR and ER data](https://library.seg.org/doi/10.1190/segam2018-2997794.1), __Diego Domenzain, John Bradford, and Jodi Mead__. SEG Technical Program Expanded Abstracts 2018.
 
 ***
 
@@ -21,7 +37,7 @@ __gerjoii__ does, for both radar and electrical resistivity:
 
 ### Forward modeling
 
-* 2d and 2.5d
+* 2D and 2.5D
 * linear & isotropic
 * __radar__ (or acoustic)
 	* finite difference time domain
@@ -36,7 +52,7 @@ __gerjoii__ does, for both radar and electrical resistivity:
 
 ### Inversion routines
 
-* 2d and 2.5d
+* 2D and 2.5D
 * gradient descent
 * __full-waveform inversion__ for radar
 	* instantaneous phase
@@ -53,7 +69,6 @@ __gerjoii__ does, for both radar and electrical resistivity:
 
 * waveform filtering
 * image filtering
-* DC filtering
 * velocity semblance
 * beamforming
 * radar source estimation
@@ -61,7 +76,7 @@ __gerjoii__ does, for both radar and electrical resistivity:
 
 ### Cuties
 
-* 2d velocity generator (.png to .mat file, __any__ .png will do)
+* 2D velocity generator (.png to .mat file, __any__ .png will do)
 * electrical resistivity sequence generator ready for [Syscal](http://www.iris-instruments.com/syscal-pro.html)
 	* dipole-dipole
 	* Wenner
@@ -91,7 +106,7 @@ For a quick example go to __field/example-sy/__.
 
 For a longer recipe read these steps:
 
-1. In local, go to __field/__ and run `cloner.sh` to create a new synthetic toy example.
+1. In local, go to __field/shells___ and run `cloner.sh` to create a new synthetic toy example.
 2. In the new folder __field/toy-sy/__ go to __image2mat/mat-file/__ to see the true parameters.
 3. In __image2mat/initial-guess/__ see the initial parameters.
 4. You can change both true and initial parameters as you wish. Read `build_model.pdf`.

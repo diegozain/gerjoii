@@ -10,13 +10,17 @@ clc
 % ------------------------------------------------------------------------------
 % images path
 image_path = 'nature-synth/images/';
-mat_path = 'nature-synth/mat-file/';
+mat_path   = 'nature-synth/mat-file/';
 % image extention
 image_exte = '.png'; % '.jpeg'; % '.png';
 % ------------------------------------------------------------------------------
 % images name
-eps_name = 'epsi';
-sig_name = 'sigm';
+ls(image_path)
+prompt = '\n\n    what last name (eg, -2 or whatever):  ';
+last_name = input(prompt,'s');
+% ------------------------------------------------------------------------------
+eps_name = strcat('epsi',last_name);
+sig_name = strcat('sigm',last_name);
 % ------------------------------------------------------------------------------
 % load images
 eps_path = strcat(image_path, eps_name, image_exte );
@@ -78,9 +82,9 @@ eps_rel = [4;  24];
 % conductivity
 sig_rgb = [10; 50];
 sig_ele = [1;  5]*1e-3;
-% -------------
+% ------------------------------------------------------------------------------
 % permittivity
-% -------------
+% ------------------------------------------------------------------------------
 p = polyfit(eps_rgb,eps_rel,numel(eps_rgb)-1);
 epsi = polyval(p,epsi);
 % positivity
@@ -93,9 +97,9 @@ epsi = sqrt(epsi.^2);
 % check
 eps_rgb = linspace(min(eps_rgb(:)),max(eps_rgb(:)),100);
 eps_rel = sqrt(polyval(p,eps_rgb).^2);
-% -------------
+% ------------------------------------------------------------------------------
 % conductivity
-% -------------
+% ------------------------------------------------------------------------------
 p = polyfit(sig_rgb,sig_ele,numel(sig_rgb)-1);
 sigm = polyval(p,sigm);
 % positivity

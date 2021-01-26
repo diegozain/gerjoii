@@ -77,3 +77,4 @@ name = strcat(data_path_dc,'s_i_r_d_std_nodata','.mat');
 save( name , 's_i_r_d_std' );
 % clear
 clear electr_real n_electrodes src i_o rec d_o std_o s_all r_all dr;
+% ------------------------------------------------------------------------------

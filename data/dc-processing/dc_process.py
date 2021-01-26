@@ -33,9 +33,9 @@ print('\n gonna do projec: ', project_)
 # os.system('mv bhrs32electrodes-.txt bhrs32electrodes.txt')
 # ------------------------------------------------------------------------------
 # open file
-# data columns are arranged in the following way:
-# header = ["El-array","Spa.1","Spa.2","Spa.3","Spa.4","Rho","Dev.","M","Sp","Vp",
-# "In","Spa.5","Spa.6","Spa.7","Spa.8"]
+# data columns are arranged in the following way (there are 14 columns):
+# header = 
+# ["El-array","Spa.1","Spa.2","Spa.3","Spa.4","Rho","Dev.","M","Sp","Vp","In","Spa.5","Spa.6","Spa.7","Spa.8"]
 data = pd.read_csv(data_name_,sep=separator_)
 # ------------------------------------------------------------------------------
 # get all of the data!!

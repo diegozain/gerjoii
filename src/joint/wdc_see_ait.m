@@ -79,3 +79,41 @@ plot(iter,be_do,'-','color','[0.5 0 0]','linewidth',5);
 plot(iter,be_up,'-','color','[0 0 0.5]','linewidth',5);
 hold off
 simple_figure()
+% ------------------------------------------------------------------------------
+% 
+% for field paper
+% 
+% ------------------------------------------------------------------------------
+% cross gradient weights
+% -- he >= de
+hs = 1.5e-3; 
+ds = 1e-4; 
+bs_ = ( hs*(adc./aw) - (hs-ds)*adc_ ).*aw;
+% -- he >= de
+he = 2e-3; 
+de = 8e-4; 
+be_ = ( he*(adc./aw) - (he-de)*adc_ ).*aw;
+% ------------------------------------------------------------------------------
+figure;
+subplot(211)
+hold on
+plot(iter,aw,'color','[0 0 0]','linewidth',5)
+plot(iter,adc,'color','[0.5 0.5 0.5]','linewidth',5)
+hold off
+axis tight
+ylabel('Weight value')
+% xlabel('Iteration #')
+simple_figure()
+subplot(212)
+hold on
+plot(iter,be_,'color','[0 0 0]','linewidth',5)
+plot(iter,bs_,'color','[0.5 0.5 0.5]','linewidth',5)
+hold off
+axis tight
+ylabel('Weight value')
+xlabel('Iteration #')
+simple_figure()
+% ------------------------------------------------------------------------------
+% save('weights/bs_.mat','bs_')
+% save('weights/be_.mat','be_')
+% ------------------------------------------------------------------------------

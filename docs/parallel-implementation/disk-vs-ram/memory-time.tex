@@ -1,0 +1,103 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{pdfpages}
+\usepackage{subfigure}
+\usepackage{dsfont}
+\usepackage[font={footnotesize,sf}]{caption}
+\usepackage{mathtools}
+\usepackage{url}
+%\usepackage[bw]{mcode}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+
+% \usepackage[top=1in, bottom=1.25in, left=0.5in, right=0.5in]{geometry}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps,.svg}
+
+
+
+%opening
+\title{Memory and time}
+\author{}
+\date{}
+
+\begin{document}
+ \maketitle
+%-----------------------------------------------------------------------------
+% memory
+%-----------------------------------------------------------------------------
+\section*{Memory needed per iteration per source}
+In one FWI iteration, for each source we have to,
+\begin{enumerate}
+\item compute the wavefield $u(x,z,t)$,
+\item compute the adjoint wavefield $a(x,z,t)$, ($a$ needs $u$ to be computed beforehand),
+\item compute $\dot{u}(x,z,t)$,
+\item compute the crosscorrelation of $u$ (or $\dot{u}$) and $a$.
+\end{enumerate}
+Let $|u|_{Gb}$ be the size in gigabytes of the wavefield $u(x,z,t)$, 
+\begin{align*}
+|u|_{Gb} &= 8\cdot\frac{n_x\cdot n_z\cdot n_t}{10^9},
+\end{align*}
+where the factor of 8 is for entries of type double.
+%-----------------------------------------------------------------------------
+% ram
+%-----------------------------------------------------------------------------
+\section*{Ram storage}
+In one FWI iteration, for each source,
+\begin{enumerate}
+\item compute the wavefield $u$ and store in ram,
+\item compute the adjoint wavefield $a(t_o)$ and cross-correlate with $u(t_o)$ for a fixed time on the fly,
+\item compute $\dot{u}$ by taking $u(x_{slice})$ slices and replacing variable $u$ (stored in ram) with entries of $\dot{u}$,
+\item compute the adjoint wavefield $a(t_o)$ and cross-correlate with $\dot{u}(t_o)$ for a fixed time on the fly.
+\end{enumerate}
+In any given time, at most there are 
+\begin{align*}
+|u|_{Gb}+|u_{x_{slice}}|_{Gb}&\approx |u|_{Gb}
+\end{align*}
+used in ram.
+\\\\
+Let $n_w$ be the number of workers available and $m_{ram}$ be the total ram available. In order to not get kicked out of the cluster we must have,
+\begin{align*}
+|u|_{Gb} \cdot n_w &< m_{ram}.
+\end{align*}
+This prohibits the number of workers, and thus the number of sources to be computed in parallel.
+%-----------------------------------------------------------------------------
+% disk
+%-----------------------------------------------------------------------------
+\section*{Disk storage}
+\begin{enumerate}
+\item Compute the wavefield $u(t_{slice})$ and store in disk. Repeat until all $t$ has been stored.
+\item Compute the adjoint wavefield $a(t_{slice})$. Repeat until all $t$ has been stored.
+\item Compute $\dot{u}(t_{slice})$ by taking $u(t_{slice})$ slices and storing in disk. Repeat until all $t$ has been stored.
+\item Compute crosscorrelation $\sum_t u(-t_{end\,slice})\odot a(t_{slice})$ for all $t$. Time slices are stored in ram one by one.
+\item Compute crosscorrelation $\sum_t \dot{u}(-t_{end\,slice})\odot a(t_{slice})$ for all $t$. Time slices are stored in ram one by one.
+\end{enumerate}
+In any given time, at most there are $2\cdot |u_{t_{slice}}|_{Gb}$ being used in ram: $u_{t_{slice}}$ and $\dot{u}_{t_{slice}}$ for step 3, or $u_{t_{slice}}$ (or $\dot{u}_{t_{slice}}$) and $a_{t_{slice}}$ for step 4 (or 5). 
+\\\\
+In order to not get kicked out of the cluster we must have,
+\begin{align*}
+2\cdot|u_{t_{slice}}|_{Gb}\cdot n_w &< m_{ram}
+\end{align*}
+used in ram.
+The time sliced wavefields can be tailored to be small, so more workers can participate. The memory trade off is the amount of disk space available,
+\begin{align*}
+3\cdot|u|_{Gb}\cdot n_s &< m_{disk}
+\end{align*}
+where the factor of three is for $u,\dot{u}$ and $a$, and $n_s$ is the number of sources.
+%-----------------------------------------------------------------------------
+% disk
+%-----------------------------------------------------------------------------
+\section*{Benchmark - aka pitch for buying an ssd}
+If the ssd is more than 2.5 times faster in writing-reading than the one we have now it would make sense to buy it (50min/20min = 2.5, see below).
+\\\\
+For one iteration, three source locations and three workers: 
+\begin{itemize}
+\item The ``ram code" takes 20min and at most 15Gb per worker. This method limits the number of workers.
+\item The ``disk code" takes 50min and at most 6Gb per worker (this amount of memory can be reduced by user). This method does not limit the number of workers, but limits the number of sources via the space on disk.
+\end{itemize}
+The wavefield size for this problem is ~7.5Gb ($n_x\approx1100,n_z\approx200,n_t\approx4500$), so the ``disk method" to make sense for larger problems would need $\approx$200Gb. The time varies on wether Gabe is using sonic or not. 
+\end{document}

@@ -1,4 +1,4 @@
-function [depsilon,step_w_e,Ee] = w_updateOBJ_e(geome_,parame_,finite_,gerjoii_,is)
+function [depsilon,step_w_e,Ee] = w_updateOBJf_e(geome_,parame_,finite_,gerjoii_,is)
 % diego domenzain.
 % boise state university, 2019.
 % ..............................................................................

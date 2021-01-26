@@ -21,7 +21,11 @@ ke = linspace(ke_,ke__,gerjoii_.w.nparabo).';
 Ee_=zeros(numel(ke),1);
 for i_=1:numel(ke)
   % fwd & obj fnc
-  Ee_(i_)   = w_objs_e(geome_,parame_,finite_,gerjoii_,ke(i_));
+  if isfield(gerjoii_.w,'AWI')==1
+    Ee_(i_)   = w_objsAWI_e(geome_,parame_,finite_,gerjoii_,ke(i_));
+  else
+    Ee_(i_)   = w_objs_e(geome_,parame_,finite_,gerjoii_,ke(i_));
+  end
 end
 % ------------------------------------------------------------------------------
 % bundle together

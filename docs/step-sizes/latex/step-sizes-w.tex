@@ -1,0 +1,135 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{tikz}
+\usepackage{titling}
+
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{Step sizes for $w$}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% main flow
+%-------------------
+\section*{A tale of units. Theory}
+The gradients of the objective function with respect to the parameters computed using the {\it fwi} scheme for electromagnetic waves are,
+\begin{align*}
+g_{\varepsilon} &= \int_0^T \dot{u}(-t)\cdot a_u(t) \; {\rm d}t, \\
+g_{\sigma,w} &= \int_0^T u(-t)\cdot a_u(t) \; {\rm d}t.
+\end{align*}
+The updates for the parameters will be of the form,
+\begin{align*}
+\Delta\varepsilon &= -\alpha_\varepsilon \, g_{\varepsilon}, \\
+\Delta\sigma &= -\alpha_{\sigma,w} \, g_{\sigma,w},
+\end{align*}
+and so $\Delta\varepsilon$ and $\Delta\sigma$ must have units of $\varepsilon$ and $\sigma$ respectively ($[F/m],\,[S/m]$). In units, the gradients take the form
+\begin{align*}
+[g_{\varepsilon}] &= \left[\frac{V}{s\,m}\right] \cdot \left[ \frac{V}{m} \right] \cdot [s]=\frac{m^2\,kg^2}{s^4\,A^2}, \\
+[g_{\sigma,w}] &= \left[\frac{V}{m}\right] \cdot \left[ \frac{V}{m} \right] \cdot [s] = \frac{m^2\,kg^2}{s^3\,A^2}.
+\end{align*}
+By taking the step sizes,
+\begin{align*}
+[\alpha_{\varepsilon}] &= \frac{1}{A^2} \cdot 
+\frac{s^6\,A^6}{m^3\,kg^3} \cdot
+\frac{s^2}{m^2} , \\
+[\alpha_{\sigma,w}] &= \frac{1}{A^2} \cdot 
+\frac{s^6\,A^6}{m^3\,kg^3} \cdot
+\frac{1}{m^2},
+\end{align*}
+we ensure the gradients have the right units. 
+\begin{align*}
+\left[\frac{F}{m}\right] = \frac{s^4\,A^2}{m^3\,kg}, \hspace{2em} 
+\left[\frac{S}{m}\right] = \frac{s^3\,A^2}{m^3\,kg}, \hspace{2em} 
+\left[\frac{H}{m}\right] = \frac{m\,kg}{s^2\,A^2}, \hspace{2em}
+\left[\frac{V}{m}\right] = \frac{m\,kg}{s^2\,A}.
+\end{align*}
+\begin{align*}
+\varepsilon_o &= 8.8541 \times 10^{-12} & [F/m],\\
+\mu_o &= 4\pi \times 10^{-7} & [H/m].
+\end{align*}
+\section*{A tale of units. Practice}
+In practice we compute,
+\begin{align*}
+g_{\varepsilon} &= \sum_t \dot{u}(-t)\odot a_u(t) \; \Delta t, \\
+g_{\sigma,w} &= \sum_t u(-t)\odot a_u(t) \; \Delta t,
+\end{align*}
+and correct for the right amplitudes by,
+\begin{align*}
+g_{\varepsilon} &\gets \frac{1}{i^2} \cdot \frac{\Delta t^2}{\varepsilon_o\,\mu_o^3\; \Delta x^2 } \cdot g_{\varepsilon}, \\
+g_{\sigma,w} &\gets \frac{1}{i^2} \cdot \frac{1}{\mu_o^3\; \Delta x^2} \cdot g_{\sigma,w}.
+\end{align*}
+The actual step sizes are computed using Pica,
+\begin{align*}
+\varepsilon_\bullet &= \varepsilon-k_\varepsilon g_\varepsilon, \\
+d_\bullet &= d(\varepsilon,\sigma)-d(\varepsilon_\bullet,\sigma), \\
+\alpha_\varepsilon &= k_\varepsilon \frac{d_\bullet(:)^\top \cdot e(:)}{d_\bullet(:)^\top \cdot d_\bullet(:)},
+\end{align*}
+with a similar equation for $\alpha_\sigma$.
+\section*{Finding $k_\varepsilon$}
+If $k_\varepsilon$ is too large, then $\varepsilon_\bullet$ falls off the stability region for the wave solver and $\alpha_\varepsilon$ becomes a NaN. If too small, $\alpha_\varepsilon$ is also too small and no relevant update is made on $\varepsilon$.
+\\\\
+To find the right $k_\varepsilon$, a heuristic search is performed scanning from large to small values of $k_\varepsilon$ and checking if $\varepsilon_\bullet$ falls the stability region or not.
+\\\\
+The implementation of this search is two while loops, the first loop searches in decreasing order on a coarse discretization of possible values of $k_\varepsilon$. The second loop sweeps a finer discretization of possible values of $k_\varepsilon$ in increasing order.
+%\nocite{*}
+\end{document}

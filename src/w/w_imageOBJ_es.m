@@ -23,6 +23,15 @@ end
 while (E_>tol_error & iter<tol_iter)
   E_ = 0;
   % ............................................................................
+  % source wavlet updating
+  % ............................................................................
+  if isfield(gerjoii_.w,'srcinv')
+    if strcmp(gerjoii_.w.srcinv,'y')
+      fprintf('\n gpr source estimation...\n\n');
+      parame_.w.wvlets_ = w_update_src_(geome_,parame_,finite_,gerjoii_);
+    end
+  end
+  % ............................................................................
   % permittivity first
   % ............................................................................
   gerjoii_ = w_updateOBJ_e_(geome_,parame_,finite_,gerjoii_);

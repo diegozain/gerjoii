@@ -54,12 +54,15 @@ H = sparse(m+n,n);
 for k=0:n-1
   H(1+k:m+k, k+1 ) = h;
 end
-% full convolution
+% same size as s
+% option 1. cut H
+% option 2. cut result d
+H = H(ceil((n-1)/2)+1-ceil(n/2)+m-ceil(m/2):end-ceil(m/2),:);
+% convolution
 d = H*s;
-% size of s convolution
-% d = d(ceil((m-1)/2)+1:m+n-1-floor((m-1)/2));
-% d = d(1:m+n-1-floor((m-1)/2)-ceil((m-1)/2));
-d = d(ceil((n-1)/2)+1-ceil(n/2)+m-ceil(m/2):end-ceil(m/2));
+
+% % option 2. cut result d
+% d = d(ceil((n-1)/2)+1-ceil(n/2)+m-ceil(m/2):end-ceil(m/2));
 end
 
 % example:
@@ -89,9 +92,9 @@ end
 % 
 % figure;
 % hold on
-% plot(s,'k.-','Linewidth',2);
-% plot(s_,'r.-','Linewidth',2);
-% plot(s__,'b.-','Linewidth',2);
+% plot(s,'k-','Linewidth',2);
+% plot(s_,'r-','Linewidth',2);
+% plot(s__,'b--','Linewidth',2);
 % hold off
 % axis tight
 

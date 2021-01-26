@@ -33,12 +33,14 @@ cd(pwd_);
 % here you could put whatever values for permittivity and conductivity 
 % but the max and min of permittivity also has to be declared in param_wdc.m
 % ------------------------------------------------------------------------------
-% permittivity
-% tmp_=load('../mat-file/epsi.mat');
+% % permittivity
+% % tmp_=load('../mat-file/epsi.mat');
+% tmp_=load('../../model-generator/nature-synth/mat-file/r1/epsi.mat');
 % tmp_=tmp_.epsi;
 % parame_.natu.epsilon_w = tmp_;
 % % conductivity
-% tmp_=load('../mat-file/sigm.mat');
+% % tmp_=load('../mat-file/sigm.mat');
+% tmp_=load('../../model-generator/nature-synth/mat-file/r1/sigm.mat');
 % tmp_=tmp_.sigm;
 % parame_.natu.sigma_w = tmp_;
 % parame_.natu.sigma_dc = parame_.natu.sigma_w.';
@@ -70,4 +72,20 @@ parame_.w.data_path_  = data_path_w;
 parame_.dc.data_path_ = data_path_dc;
 % ------------------------------------------------------------------------------
 parame_.dc.data_path__= '../data-recovered/dc/';
+% ------------------------------------------------------------------------------
+figure;
+fancy_imagesc(parame_.w.epsilon,geome_.X,geome_.Y)
+colormap(rainbow2(1))
+xlabel('Length (m)')
+ylabel('Depth (m)')
+title('Permittivity ( )')
+simple_figure()
+% ------------------------------------------------------------------------------
+figure;
+fancy_imagesc(parame_.w.sigma,geome_.X,geome_.Y)
+colormap(rainbow2(1))
+xlabel('Length (m)')
+ylabel('Depth (m)')
+title('Conductivity (mS/m)')
+simple_figure()
 % ------------------------------------------------------------------------------

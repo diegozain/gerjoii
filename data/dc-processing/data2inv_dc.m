@@ -5,7 +5,7 @@ clc
 %
 %                           get data ready for inversion
 %
-% after dc_process.py and datavis_dc2.m.
+% after dc_process.py and datavis_dc.m.
 % ------------------------------------------------------------------------------
 fprintf('\n --------------------------------------------------------')
 fprintf('\n   gonna make data ready for inversion')
@@ -38,23 +38,58 @@ fprintf('\n     max cut-off for apparent resistivities:     %d\n\n',rho_max_cut)
 % ------------------------------------------------------------------------------
 %                                 load data
 % ------------------------------------------------------------------------------
-% load abmn ( in index? )
+if exist(strcat(path_,'app_resi.npy'))==2
+  % read apparent resistivity
+  rhoa = readNPY(strcat(path_,'app_resi.npy'));
+  % read voltages
+  d_o  = readNPY(strcat(path_,'voltages.npy'));
+  % read std
+  std_ = readNPY(strcat(path_,'std.npy'));
+  % read currents
+  currents = readNPY(strcat(path_,'currents.npy'));
+else
+  % read apparent resistivity
+  rhoa = dlmread(strcat(path_,'app_resi.txt'));
+  % read voltages
+  d_o  = dlmread(strcat(path_,'voltages.txt'));
+  % read std
+  std_ = dlmread(strcat(path_,'std.txt'));
+  % read currents
+  currents = dlmread(strcat(path_,'currents.txt'));
+end
+% read src-rec pairs
 src_rec_dc = dlmread(strcat(path_,'abmn.txt'));
-n_shots    = size(src_rec_dc,1);
-src_rec_dc = binning(electr_real(:,1),src_rec_dc(:));
-src_rec_dc = double(src_rec_dc);
-src_rec_dc = reshape(src_rec_dc,[n_shots,4]);
-% % WARNING: change this for a look-up table on indicies!
-% src_rec_dc = 2*src_rec_dc -1;
 % ------------------------------------------------------------------------------
-% read apparent resistivity
-rhoa     = dlmread(strcat(path_,'app_resi.txt'));
-% read voltages
-d_o      = dlmread(strcat(path_,'voltages.txt'));
-% read std
-std_     = dlmread(strcat(path_,'std.txt'));
-% read currents
-currents = dlmread(strcat(path_,'currents.txt'));
+rhoa     = double(rhoa);
+d_o      = double(d_o);
+std_     = double(std_);
+currents = double(currents);
+% ------------------------------------------------------------------------------
+% remove electrodes larger than some number in meters.
+% This is because some people make shitty bin files, like John.
+elect_remove = max(electr_real(:,1));
+[elect_remove,~] = ind2sub(size(src_rec_dc),find(src_rec_dc>elect_remove));
+elect_remove = unique(elect_remove);
+src_rec_dc(elect_remove,:) = [];
+% -
+n_shots    = size(src_rec_dc,1);
+src_rec_dc = binning(electr_real,src_rec_dc(:));
+src_rec_dc = reshape(src_rec_dc,[n_shots,4]);
+dr         = min(diff(electr_real));
+% -
+rhoa(elect_remove) = [];
+d_o(elect_remove) = [];
+std_(elect_remove) = [];
+currents(elect_remove) = [];
+% ------------------------------------------------------------------------------
+% % load abmn ( in index? )
+% src_rec_dc = dlmread(strcat(path_,'abmn.txt'));
+% n_shots    = size(src_rec_dc,1);
+% src_rec_dc = binning(electr_real(:,1),src_rec_dc(:));
+% src_rec_dc = double(src_rec_dc);
+% src_rec_dc = reshape(src_rec_dc,[n_shots,4]);
+% % % WARNING: change this for a look-up table on indicies!
+% % src_rec_dc = 2*src_rec_dc -1;
 % ------------------------------------------------------------------------------
 %                                 pre-process
 % ------------------------------------------------------------------------------
@@ -68,10 +103,13 @@ src_rec_dc(iremove,:,:) = [];
 src = src_rec_dc(:,1:2);
 rec = src_rec_dc(:,3:4);
 % ------------------------------------------------------------------------------
+rec = double(rec);
+src = double(src);
+% ------------------------------------------------------------------------------
 % current normalization --> voltage normalization.
 prompt = '\n\n    Were the data collected with AGI (y or n):  ';
 AGI_SYS = input(prompt,'s');
-if strcmp(AGI_SYS,'n')
+if ~strcmp(AGI_SYS,'y')
   d_o = d_o./currents;
 end
 i_o = ones(size(currents));
@@ -118,17 +156,21 @@ parame_.bb = electr_real(n_electrodes,1) + x_push;
 parame_.cc = z_max;
 % ------------------------------------------------------------------------------
 % get values from wave solver
-prompt = '\n\n    do you want dx & dz from wave solver (y/n):  ';
+prompt = '\n\n    do you want dx & dz from wave solver (y/n): ';
 dxdz_w_ = input(prompt,'s');
 % ------------------------------------------------------------------------------
 if strcmp(dxdz_w_,'y')
   pp_=load(strcat('../raw/',project_,'/w-data/data-mat-fwi/parame_.mat'));
   parame_.dx = pp_.parame_.dx;
   parame_.dz = pp_.parame_.dz;
+  % -
+  parame_.aa = pp_.parame_.aa;
+  parame_.bb = pp_.parame_.bb;
+  parame_.cc = pp_.parame_.cc;
   clear pp_
 else
-  parame_.dx = dr*0.05; % *0.1 *0.05
-  parame_.dz = dr*0.05; % *0.1 *0.05
+  parame_.dx = dr*0.05; %  *0.05
+  parame_.dz = dr*0.05; %  *0.05
 end
 % ------------------------------------------------------------------------------
 parame_.x  = parame_.aa:parame_.dx:parame_.bb;
@@ -157,6 +199,12 @@ parame_.dc.rho_max     = rho_max;
 parame_.dc.rho_min     = rho_min;
 parame_.dc.rho_ave     = rho_ave;
 parame_.dc.rho_sur     = rho_sur;
+% ------------------------------------------------------------------------------
+fprintf('\n\n discretized domain will be of approx ** double ** size:  %1d [Gb]\n\n',...
+          numel(parame_.x)*numel(parame_.z)*8*1e-9);
+fprintf(' min apparent conductivity %2.2d (S/m)\n',1/rho_max)
+fprintf(' ave apparent conductivity %2.2d (S/m)\n',1/rho_ave)
+fprintf(' max apparent conductivity %2.2d (S/m)\n',1/rho_min)
 % ------------------------------------------------------------------------------
 %                                     save
 % ------------------------------------------------------------------------------

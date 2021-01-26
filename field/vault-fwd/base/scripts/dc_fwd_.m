@@ -145,8 +145,8 @@ natur__dc;
 % save the discretization
 % ------------------------------------------------------------------------------
 cd ../mat-file/
-x        =geome_.X;
-z        =geome_.Y;
+x  = geome_.X;
+z  = geome_.Y;
 save('x','x')
 save('z','z')
 cd ../scripts/

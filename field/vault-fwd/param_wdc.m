@@ -20,8 +20,8 @@ parame_ = struct;
 % domain limits
 %--------------
 parame_.aa = 0;
-parame_.bb = 35; % 10. 8. dispersion: 20
-parame_.cc = 10;  % 4. dispersion: 3
+parame_.bb = 39;  % 35
+parame_.cc = 10;  % 
 %--------------
 % material properties constants
 %--------------
@@ -54,17 +54,17 @@ parame_.natu.sig_fig_lxcenter = 1.6; parame_.natu.sig_fig_lzcenter = 0;
 parame_.natu.lx = lx; parame_.natu.lz = lz;
 clear lx lz a b c ax az bx bz cx cz;
 % number of air pixels
-parame_.w.air = 60;
+parame_.w.air = 300;
 % ------------------
 % max frequency and max time steps
 % ------------------
 parame_.w.fo = 50e6; % 250e6 270e6 300e6 400e6. dispersion: 400e6. % [Hz]
-parame_.w.nt = 4000; % 1500. 1900. 1050. dispersion: 4000.
+parame_.w.nt = 2500; % 1500. 1900. 1050. dispersion: 4000.
 % ------------------
 % pml padding
 % ------------------
-parame_.w.pml_w = 60;
-parame_.w.pml_d = 60;
+parame_.w.pml_w = 300;
+parame_.w.pml_d = 300;
 %------------------
 % robin padding
 %------------------

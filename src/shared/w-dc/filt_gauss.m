@@ -28,9 +28,9 @@ df = 1/dt/nt_;
 f = ((-nt_/2:nt_/2-1)*df).';
 
 % build filter in f domain
-width = f_high - f_low;
-middle = f_low + (width*0.5);
-gaussian_ = exp( -((f-middle).^steep) / ((df*0.5)*width^(steep-1)) );
+width_ = f_high - f_low;
+middle = f_low + (width_*0.5);
+gaussian_ = exp( -((f-middle).^steep) / ((df*0.5)*width_^(steep-1)) );
 % figure; plot(f,gaussian_,'.-','Markersize',8); pause
 gaussian_ = fftshift(gaussian_);
 gaussian_ = repmat(gaussian_,[1,nr]);

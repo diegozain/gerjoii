@@ -57,10 +57,15 @@ while ( E > 1e-20 & iter < 1500)
   if sum(isnan(p)) > 0
     p=p_buffer;
     fprintf('\n oh no... I got a NaN @ iter %i so I give you last not-NaN\n\n',iter);
-    figure;plot(t,real(J))
+    % figure;plot(t,real(J));
     break;
   end
   E_=[E_ E];
+  if iter>1 && E-E_(end-1)>0
+    fprintf('your gabor inversion stopped at iteration %i\n',iter)
+    p=p_buffer;
+    break
+  end
 end
 wo=p(1);
 bo=p(2);

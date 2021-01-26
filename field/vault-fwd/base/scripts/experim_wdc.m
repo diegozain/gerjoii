@@ -26,8 +26,8 @@ parame_.w.lo = ceil( parame_.w.lo/0.1 )*0.1;
 % optional: number of sources
 gerjoii_.w.ns = 20;%40;
 % if you want more types, input more string types: 
-% 'xLINEAR_TIGHT' , 'xLINEAR_SOME'
-gerjoii_.w.src_TYPE = {'xLINEAR_SOME'};
+% 'xLINEAR_TIGHT' , 'xLINEAR_SOME', 'xLINEAR_SRCS_RECS'
+gerjoii_.w.src_TYPE = {'xLINEAR_SRCS_RECS'};
 % build first source from left to right x-axis in (real [x,z] coordinates)
 gerjoii_.w.source_xz = [2 0];
 % build all source positions in real and binned coordinates

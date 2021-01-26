@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+<style type="text/css">
+.f { padding: 0.0cm 0.5cm 0.0cm 0.5cm; border-width: 2px; text-indent: 0cm; text-align: justify; }
+.b { color: red; font-weight: normal; }
+.red { color: red; }
+pre
+{
+	color: #00F;
+	font-size: 9pt;
+	font-family: monospace;
+	background-color: LemonChiffon ;
+	display:inline-block;
+	margin-right: 6.0em;
+}
+.black { color: black; font-size: 9pt; font-family: monospace; }
+hr.wide { color: #f00; background-color: #f00; height: 2px; width: 5%; margin-left: 0; }
+hr { color: #f0F; background-color: blue; width: 66%; height: 3px; }
+h5 { color: #f0F; }
+@media print { h6 { page-break-after: always; } }
+p.a { width: 6in; text-align: justify; margin: .5in; }
+/* usage <p class="a"> */
+pre.red { color: red; font-family: courier; font-size: small; }
+
+p { width: 6in; text-align: justify; margin: .25in; }
+p.pin0 { margin-left: 0.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin1 { margin-left: 2.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin2 { margin-left: 4.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin3 { margin-left: 6.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin4 { margin-left: 8.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin5 { margin-left: 10.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin6 { margin-left: 12.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin7 { margin-left: 14.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin8 { margin-left: 16.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin9 { margin-left: 18.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+p.pin10 { margin-left: 20.0em; margin-bottom: 0.0em; margin-top: 0.25em; }
+
+h3.hin0  {margin-left: 0.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin1  {margin-left: 2.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin2  {margin-left: 4.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin3  {margin-left: 6.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin4  {margin-left: 8.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin5  {margin-left: 10.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin6  {margin-left: 12.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin7  {margin-left: 14.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin8  {margin-left: 16.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin9  {margin-left: 18.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+h3.hin10 {margin-left: 20.0em; margin-bottom: 0.25em; margin-top: 0.5em;}
+
+span.b { color: red; }
+span.n { color: black; }
+span.g { color: blue; }
+hr { color: blue; background-color: blue; width: 66%; height: 3px; }
+b { color: red; }
+li { width: 6in; }
+li#a { width: 6in; list-style-type: none; }
+/* usage <li id="a">  to reference this id http://yourdomain.com#a */
+li.a { width: 6in; list-style-type: none; font-family: courier; font-size: small; white-space: pre; }
+/* usage <li class="a"> */
+/* note white-space: pre; attribute */
+h1 { font-size: large; margin-left: .15in; }
+h2 { font-size: medium; margin-left: .20in; }
+h3 { font-size: medium; margin-left: .25in; }
+h4 { font-size: large; text-align: center; width: 6in; }
+h5 { font-size: X-large; text-align: center; width: 6in; }
+dt { 
+    display: block;
+    margin-top: 1em;
+}
+div.scroll {
+    background-color: #00FFFF;
+    width: 100px;
+    height: 100px;
+    overflow: scroll;
+}
+
+div.hidden {
+    background-color: #00FF00;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
+
+  </style>
+	<title></title>
+	<meta name="generator" content="BBEdit 11.6" />
+</head>
+<body>
+<p>
+We have the IBM PowerAI machine learning framework available on Mio's Power8 GPU enabled nodes.  PowerAI release 3.4 provides software packages for several Deep Learning frameworks, supporting libraries, and tools:
+
+<ul>
+	<li>Bazel</li>
+	<li>Caffe - BVLC, IBM, and NVIDIA variants</li>
+	<li>Chainer</li>
+	<li>DIGITS</li>
+	<li>NCCL</li>
+	<li>OpenBLAS</li>
+	<li>TensorFlow</li>
+	<li>Theano</li>
+	<li>Torch</li>
+</ul>
+</p>
+<p>
+Information about this framework can be found at: <a href="https://www.ibm.com/us-en/marketplace/deep-learning-platform">https://www.ibm.com/us-en/marketplace/deep-learning-platform</a>.  If you have a look at this information you may notice that the framework is written for the Ubuntu version of Linux. We run CentOS on Mio.  To circumvent this problem we have done two things.  We have converted the OS on ppc002 to Ubuntu and we have installed the Singularity container on both ppc001 and ppc002.  
+</p>
+
+<h3>More on Containers and Singularity</h3>
+<p>
+From <a href="http://www.infoworld.com/article/3072929/linux/containers-101-linux-containers-and-docker-explained.html">InfoWorld</a> we have:
+
+<i>Linux containers are self-contained execution environments -- with their own, isolated CPU, memory, block I/O, and network resources -- that share the kernel of the host operating system. The result is something that feels like a virtual machine, but sheds all the weight and startup overhead of a guest operating system.</i>
+</p>
+
+<p>
+A container allows us to run an operating system on top of another.  More importantly, it allows us to run software written for a guest operating system on the host operating system.  In our case we can run Ubuntu on top of CentOS and thus run the  IBM PowerAI machine learning framework which will not normally run under CentOS.
+</p>
+
+<p>
+The Singularity container was developed at Lawrence Berkeley Lab for use in HPC.  For additional information see: <a href="http://singularity.lbl.gov/index.html">http://singularity.lbl.gov/index.html</a>
+</p>
+<p>
+You may be skeptical.  However we have run numerous tests. The startup time for Singularity is under 0.1 seconds.  We have not seen any performance degradation running TensorFlow examples under Singularity.
+</p>
+
+
+<p>
+As mentioned above ppc002 is currently running Ubuntu. So technically we do not need to run Singularity in order to run the framework.  However, this has allowed us to compare performance with/without using it.
+</p>
+
+<h3>Running on ppc002 without the container</h3>
+
+<p>
+Before looking at running inside of the container we will look at running natively on ppc002.
+</p>
+
+<p>
+If you are logged into Mio the following command will give you an interactive session on ppc002.
+</p>
+
+<pre>
+srun -N 1 --tasks-per-node=1 -p ppc --time=1:00:00 --gres=gpu:kepler:4 --nodelist=ppc002 --pty bash
+</pre>
+<p>
+After this we can see we are running Ubuntu:
+</p>
+<pre>
+joeuser@ppc002:~/scratch/ml$ <b>cat /etc/os-release</b>
+NAME="Ubuntu"
+VERSION="16.04.2 LTS (Xenial Xerus)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 16.04.2 LTS"
+VERSION_ID="16.04"
+HOME_URL="http://www.ubuntu.com/"
+SUPPORT_URL="http://help.ubuntu.com/"
+BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
+VERSION_CODENAME=xenial
+UBUNTU_CODENAME=xenial
+joeuser@ppc002:~/scratch/ml$ 
+</pre>
+
+<p>
+In order to use the packages in the framework some environmental variables need to be set up.  This is done by sourcing one of the following files: 
+</p>
+<ul>
+	<li>/opt/DL/bazel/bin/bazel-activate</li>
+	<li>/opt/DL/caffe/bin/caffe-activate</li>
+	<li>/opt/DL/caffe-bvlc/bin/caffe-activate</li>
+	<li>/opt/DL/caffe-ibm/bin/caffe-activate</li>
+	<li>/opt/DL/caffe-nv/bin/caffe-activate</li>
+	<li>/opt/DL/chainer/bin/chainer-activate</li>
+	<li>/opt/DL/digits/bin/digits-activate</li>
+	<li>/opt/DL/nccl/bin/nccl-activate</li>
+	<li>/opt/DL/openblas/bin/openblas-activate</li>
+	<li>/opt/DL/tensorflow/bin/tensorflow-activate</li>
+	<li>/opt/DL/theano/bin/theano-activate</li>
+	<li>/opt/DL/torch/bin/torch-activate</li>
+</ul>
+<p>
+For example:
+</p>
+<pre>
+joeuser@ppc002:~/scratch/ml$ source /opt/DL/tensorflow/bin/tensorflow-activate
+joeuser@ppc002:~/scratch/ml$ python
+Python 2.7.12 (default, Nov 19 2016, 06:48:10) 
+[GCC 5.4.0 20160609] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import tensorflow
+>>> 
+</pre>
+
+<p>
+We have two TensorFlow examples which are slight modifications of codes from the TensoFlow tutorials. 
+</p>
+
+<dl>
+	<dt><a href="./fully_connected_feed.py">fully_connected_feed.py</a><br><a href="./mnist.py">mnist.py</a></dt>
+		<dd> Handwritten digit classification<br> Original Source:https://www.tensorflow.org/get_started/mnist/mechanics</dd>
+	<dt><a href="./tf_test.py">tf_test.py</a></dt>
+		<dd>Trainable linear regression model<br>Original Source: https://www.tensorflow.org/get_started/get_started</dd>
+	<dt><a href="./tymer.py">tymer.py</a></dt>
+		<dd>Simple timing routine<br>./tymer.py -h will show usage</dd>
+</dl>
+<h3>Batch script for running natively on ppc002</h3>
+<p>
+<a href="./sbatch_simple">sbatch_simple</a> is a simple script for running a TensorFlow example natively on ppc002:
+</p>
+<pre>
+#!/bin/bash
+#SBATCH --time=01:00:00
+#SBATCH --partition=ppc
+#SBATCH --overcommit
+#SBATCH --exclusive
+#SBATCH <b>--nodelist=ppc002</b>
+#SBATCH --gres=gpu:4
+##SBATCH --ntasks=1
+#SBATCH --export=ALL
+#SBATCH --out=%J.out
+#SBATCH --err=%J.msg
+
+# Go to the directoy from which our job was launched
+cd $SLURM_SUBMIT_DIR
+
+#set up our environment
+source /etc/profile
+module purge
+
+#set up our environment
+source /opt/DL/tensorflow/bin/tensorflow-activate
+ulimit -c 0
+#this may help run better
+ulimit -u 4096
+
+
+#run a test
+python tf_test.py
+
+</pre>
+
+<p>
+The program fully_connected_feed.py will by default write to /tmp.  We don't want to do that but instead want to write to our local directory.  This can be done by adding command line arguments for the program.  So the command line to run this example is:
+</p>
+<pre>
+python fully_connected_feed.py --input_data_dir=./tmp --log_dir=./tmp 
+</pre>
+
+<h3>Running using the container</h3>
+
+<p>
+Running inside the container requires a file that contains the Ubuntu operating system.  
+On ppc001 this is at 
+</p>
+
+<pre>
+/software/apps/singularity/containers/IBM_mldl_ppc64el.img
+</pre>
+
+<p>
+on ppc002 it is at:
+</p>
+
+<pre>
+/data/IBM_mldl_ppc64el.img
+</pre>
+
+<p>
+If you are running a script you can select one or the other using the following logic.
+</p>
+
+
+<pre>
+if [ `hostname` = "ppc002" ]
+then
+  export CONTAINER_DIR=/data
+else
+  export CONTAINER_DIR=/software/apps/singularity/containers
+fi
+export COS=$CONTAINER_DIR/IBM_mldl_ppc64el.img
+</pre>
+
+<p>
+To start the new OS and get a bash shell you would run the command:
+</p>
+
+<pre>
+singularity exec $COS bash
+</pre>
+
+
+<p>
+The containers already have the environmental variables set to enable the framework so you do not need to source the files discussed above.
+</p>
+
+<h3>Batch script for running using the container</h3>
+<p>
+We can run using the script <a href="./sbatch_con">sbatch_con</a> on either ppc001 or ppc002. Our simple example from above becomes:
+</p>
+
+<pre>
+#!/bin/bash
+#SBATCH --time=01:00:00
+#SBATCH --partition=ppc
+#SBATCH --overcommit
+#SBATCH --exclusive
+#SBATCH --gres=gpu:4
+##SBATCH --ntasks=1
+#SBATCH --export=ALL
+#SBATCH --out=%J.out
+#SBATCH --err=%J.msg
+
+# Go to the directoy from which our job was launched
+cd $SLURM_SUBMIT_DIR
+
+#set up our environment
+source /etc/profile
+module purge
+
+#set up our environment
+if [ `hostname` = "ppc002" ]
+then
+  export CONTAINER_DIR=/data
+else
+  export CONTAINER_DIR=/software/apps/singularity/containers
+fi
+export COS=$CONTAINER_DIR/IBM_mldl_ppc64el.img
+
+ulimit -c 0
+#this may help run better
+ulimit -u 4096
+
+
+#run a test
+singularity exec $COS python tf_test.py
+</pre>
+
+<p>
+Our final batch script, <a href="./sbatch_script">sbatch_script</a>, adds a number of bells and whistles including timers.  If run on ppc002 it will run fully_connected_feed.py natively and inside of the container.  On ppc001 it will only run using the container.
+</p>
+
+<pre>
+#!/bin/bash
+#SBATCH --time=01:00:00
+#SBATCH --partition=ppc
+#SBATCH --overcommit
+#SBATCH --exclusive
+#SBATCH --nodes=1
+#SBATCH --gres=gpu:4
+##SBATCH --ntasks=1
+#SBATCH --export=ALL
+#SBATCH --out=%J.out
+
+# Go to the directoy from which our job was launched
+cd $SLURM_SUBMIT_DIR
+
+#set up our environment
+source /etc/profile
+module purge
+unset OMP_PROC_BIND
+
+
+#short variable for our Job number
+export JOB=$SLURM_JOBID
+ 
+#create a compy of our script
+cat $0 > $JOB.script
+
+#not important here but needed if we 
+#want to run parallel
+export MP_RESD=poe
+export MP_HOSTFILE=$JOB.list
+export MP_LABELIO=yes
+
+#save a copy of our environment
+printenv > $JOB.env
+
+
+#set the path to where our container is stored
+#it is in a different place on each of the two nodes
+if [ `hostname` = "ppc002" ]
+then
+  export CONTAINER_DIR=/data
+else
+  export CONTAINER_DIR=/software/apps/singularity/containers
+fi
+
+export COS=$CONTAINER_DIR/IBM_mldl_ppc64el.img
+
+ulimit -c 0
+#this may help run better
+ulimit -u 4096
+
+
+#start a timer
+./tymer.py time.$JOB running in container
+
+#run our program inside of the continer
+#the commented line below could be used to run another script
+#singularity exec $COS ./bash_script > sing_out.$JOB 2>sing_msg.$JOB
+
+singularity exec $COS python fully_connected_feed.py --input_data_dir=./tmp \
+                           --log_dir=./tmp  > sing_out.$JOB 2>sing_msg.$JOB
+
+#stop the timer
+./tymer.py time.$JOB done with container
+
+#I added timers to the program also 
+#here we move the time data to a new file
+mv mytimer mytimer_sing.$JOB
+
+
+#if we are running on ppc002 we can run natively, outside the container
+if [ `hostname` = "ppc002" ]
+then
+#set up our environment
+source /opt/DL/tensorflow/bin/tensorflow-activate
+
+#start a timer
+./tymer.py time.$JOB running native tf
+
+#run our program natively
+python fully_connected_feed.py --input_data_dir=./tmp --log_dir=./tmp   \
+       > native_out.$JOB 2>native_msg.$JOB
+
+#stop the timer
+./tymer.py time.$JOB done with native tf
+
+#I added timers to the program also 
+#here we move the time data to a new file
+mv mytimer mytimer_native.$JOB
+
+#if we are running on ppc001 we can't run outside of the container
+else
+./tymer.py time.$JOB running native tf
+echo "can't run native" > native_out.$JOB
+./tymer.py time.$JOB done with native tf
+fi
+./tymer.py time.$JOB done
+exit
+</pre>
+
+<h3>Notes</h3>
+<p>
+We have found that python is slower under the container on ppc001 than ppc002. 
+Python is also slower running interactively.  These two issues maybe related but we do not currently know what is causing this behavior. 
+When TensorFlow starts it dumps copious amounts of information describing the platform on which it is running to stdout.  You can redirect this to a file by adding 2>file to your command line.
+</p>
+
+<h3>Files:</h3>
+<p class="pin1"><a href="./bash_script">bash_script</a></p>
+<p class="pin1"><a href="./fully_connected_feed.py">fully_connected_feed.py</a></p>
+<p class="pin1"><a href="./mnist.py">mnist.py</a></p>
+<p class="pin1"><a href="./sbatch_con">sbatch_con</a></p>
+<p class="pin1"><a href="./sbatch_script">sbatch_script</a></p>
+<p class="pin1"><a href="./sbatch_simple">sbatch_simple</a></p>
+<p class="pin1"><a href="./tf_test.py">tf_test.py</a></p>
+<p class="pin1"><a href="./tymer.py">tymer.py</a></p></body>
+<p class="pin1"><a href="./fullset.tgz">fullset.tgz</a></p></body>
+</html>

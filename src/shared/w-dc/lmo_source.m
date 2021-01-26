@@ -8,10 +8,10 @@ function [s,d_muted,gaussian_] = lmo_source(d_lmo,t,t__,t_)
 
 [nt,nr]=size(d_lmo);
 
-width = t__-t_;
-middle = t_ + width/2;
-width = width^5;
-gaussian_ = exp(- ((t-middle).^6 / width ) );
+width_ = t__-t_;
+middle = t_ + width_/2;
+width_ = width_^5;
+gaussian_ = exp(- ((t-middle).^6 / width_ ) );
 % figure; plot(t,gaussian_); axis tight
 gaussian__ = repmat(gaussian_,[1,nr]);
 

@@ -1,0 +1,181 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+\renewcommand{\familydefault}{\sfdefault}
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\usepackage{titling}
+\setlength{\droptitle}{-10em}
+
+\title{2d inversion recipes}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% main flow
+%-------------------
+%
+%\begin{figure}[!h]
+%\centering
+%% left low right up
+%\includegraphics[trim={50 300 50 280},clip,width=1\textwidth]{pics/sig.pdf}
+%\caption{{\bf Top:} My inversion. {\bf Bottom:} Pygimli inversion.}
+%\end{figure}
+%
+% --------
+% 
+% --------
+\section*{ER inversion}
+This process is repeated for each experiment (i.e. each source $s$ and all its receivers),
+\begin{enumerate}
+\item compute synthetic data $d$ and error $e=d-d^o$,
+\item correct error amplitude by its variance,
+\[
+e\gets \frac{e}{1+\operatorname{std}\,(d^o)}
+\]
+\item compute $g=J^\top e$, filter out high spatial-frequencies and normalize by largest amplitude,
+\item compute $\sigma_{err}=\sigma-\sigma_{ref}$, filter out high spatial-frequencies and normalize by largest amplitude,
+\item $g\gets g+\beta\sigma_{err}$ and normalize $g$ by largest amplitude,
+\item compute step-size $\alpha_s$ using Pica and set $\Delta\sigma_s=-\alpha_s g$
+\item store $\Delta\sigma_s$ and $\alpha_s$.
+\end{enumerate}
+After all sources have their update direction,
+\begin{align*}
+\alpha &= \frac{1}{n_s} \sum\alpha_s \\
+\Delta\sigma &= \sum\Delta\sigma_s \\
+\Delta\sigma_{dc} &= \alpha\frac{\Delta\sigma}{\max | \Delta\sigma |}.
+\end{align*}
+The conductivity is updated as,
+\begin{align*}
+\sigma\gets\sigma\odot\exp\{\sigma\odot\Delta\sigma_{dc}\}.
+\end{align*}
+% --------
+% 
+% --------
+\section*{GPR inversion $\varepsilon$}
+This process is repeated for each experiment (i.e. each source $s$ and all its receivers),
+\begin{enumerate}
+\item compute synthetic data $d$ and error $e=d-d^o$,
+\item \color{red} how to treat noise in $e$?\color{black}
+\item compute $g_{\varepsilon}$ and apply Kurzmann preconditioner,
+\item on $g_{w,\varepsilon}$ filter out high spatial-frequencies and normalize by largest amplitude,
+\item compute step-size $\alpha$ using Pica and set $\Delta\varepsilon_s=-\alpha g_\varepsilon$
+\item store $\Delta\varepsilon_s$,
+\item invert for source wavelet with a Wiener filter,
+\begin{align*}
+\tilde{a}(\omega_o) &= \frac{d_{w_o}\cdot (d_{w_o}^o)^*}{d_{w_o}\cdot d_{w_o}^*} &
+\mbox{for all }\omega_o\in\omega,\\
+\tilde{s} &\gets \tilde{a}\odot\tilde{s}.
+\end{align*}
+\end{enumerate}
+After all sources have their update direction, 
+\begin{align*}
+\Delta\varepsilon &= \frac{1}{n_s} \sum\Delta\varepsilon_s.
+\end{align*}
+The permittivity is updated as,
+\begin{align*}
+\varepsilon\gets\varepsilon\odot\exp\{\varepsilon\odot\Delta\varepsilon\}.
+\end{align*}
+% --------
+% 
+% --------
+\section*{GPR inversion $\sigma$}
+This process is repeated for each experiment (i.e. each source $s$ and all its receivers),
+\begin{enumerate}
+\item compute synthetic data $d$ and error $e=d-d^o$,
+\item \color{red} how to treat noise in $e$?\color{black}
+\item compute $g_{w,\sigma}$ and apply Kurzmann preconditioner,
+\item on $g_{w,\sigma}$ filter out high spatial-frequencies and normalize by largest amplitude,
+\item compute step-size $\alpha$ using Pica and set $\Delta\sigma_s=-\alpha g_{w,\sigma}$
+\item store $\Delta\sigma_s$,
+\item invert for source wavelet with Wiener filter,
+\begin{align*}
+\tilde{a}(\omega_o) &= \frac{d_{w_o}\cdot (d_{w_o}^o)^*}{d_{w_o}\cdot d_{w_o}^*} &
+\mbox{for all }\omega_o\in\omega,\\
+\tilde{s} &\gets \tilde{a}\odot\tilde{s}.
+\end{align*}
+\end{enumerate}
+After all sources have their update direction, 
+\begin{align*}
+\Delta\sigma_w &= \frac{1}{n_s} \sum\Delta\sigma_s.
+\end{align*}
+The conductivity is updated as,
+\begin{align*}
+\sigma\gets\sigma\odot\exp\{\sigma\odot\Delta\sigma_w\}.
+\end{align*} 
+% --------
+% 
+% --------
+\section*{GPR+ER inversion $\sigma$}
+The update direction is 
+\begin{align*}
+\Delta\sigma\gets \frac{1}{2} (\Delta\sigma_w + \Delta\sigma_{dc}) 
+\end{align*} 
+and the update for {\it both} the GPR and ER is
+\begin{align*}
+\sigma\gets\sigma\odot\exp\{\sigma\odot\Delta\sigma\}.
+\end{align*} 
+%
+%------------
+% biblio
+%------------
+%\newpage
+% \bibliographystyle{plainnat}
+% \bibliography{w-2d-25d-src}
+%\nocite{*}
+\end{document}

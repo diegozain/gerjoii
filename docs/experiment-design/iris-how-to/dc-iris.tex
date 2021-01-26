@@ -1,0 +1,172 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{Iris-Syscal for Dummies\\{\normalsize Diego Domenzain}}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% on/off
+%-------------------
+\section*{Turn {\it Syscal} on}
+\begin{enumerate}
+\item If using external battery, connect it to $\pm$ sockets in the {\it Tx} panel and push small lever to ``ext".
+\item Pull out the break button on the right side.
+\item Next to the {\it Rx} panel, push small lever to ``on".
+\item Turn knob under on/off lever and leave it a bit open (for ventilation of internal system).
+\end{enumerate}
+%-------------------
+% before
+%-------------------
+\section*{Before field campaign}
+\begin{enumerate}
+\item Create survey type as file \texttt{abmn.txt}. This file is a list of {\it all} source-receiver pairs with $xyz$ coordinates for each electrode. The joint-inversion Matlab package {\bf gerjoii} can do this: \texttt{gerjoii2iris\_dc.m}.
+\item Turn {\it Syscal} and laptop on.
+\item Connect laptop to {\it Syscal} through USB and port ``com 1" in the {\it Rx} panel.
+\item In laptop open {\it Electrepro} and follow,
+\item \texttt{Open$\to$abmn.txt},
+\item \texttt{Upload}. There is a shortcut button for \texttt{Upload} that looks like $\equiv\square$.
+\item In {\it Syscal} follow \texttt{Sequence$\to$Upload PC} and write down the memory \#.
+\end{enumerate}
+%-------------------
+% during
+%-------------------
+\section*{During field campaign}
+\begin{enumerate}
+\item Plug in electrode cable and turn {\it Syscal} on. 
+\\\\
+NOTE: {\it Syscal} reads the cable \texttt{1-36} beginning from electrode furthest of {\it Syscal}, so if survey consists of $n_{elect}<36$ then start counting from the end of the cable onwards and leave remaining entries in cable without electrode connection.
+\item In the main menu: \texttt{Config$\to$Mode$\to$Change$\to$Automatic sequence$\to$Choose survey}.
+\item Put in your sequence (from the \texttt{abmn.txt} file) and choose \texttt{Switch type} to \texttt{internal switch pro}.
+\item In the main menu: \texttt{Config$\to$Name} and put your name, i.e. \texttt{ASTERIX}.
+\item Check specific parameters in \texttt{Config$\to$},
+\begin{itemize}
+\item \texttt{Stack} and choose \texttt{Quality factor}.
+\item \texttt{Options} and choose source type (ip or er) and \texttt{signed/un-signed} voltage values.
+\item \texttt{Tx.param} and choose $\rho$ and time of injection.
+\item \texttt{Tx.param$\to$Vab requested} fixed in 800V.
+\item \texttt{El. array} (i.e. \texttt{ASTERIX}) and choose,
+\begin{align*}
+&\texttt{mixed/poly dip}\\
+&\texttt{no channel: 10}.
+\end{align*}
+\item \texttt{Skip elect} and choose,
+\begin{align*}
+&\texttt{first: 1, last: $n_{elect}$} 
+\end{align*}
+where $n_{elect}$ is total number of electrodes. 
+\end{itemize}
+\item DO NOT do: \texttt{Config$\to$Load default}.
+\item In menu press \texttt{Tools$\to$RS-CHECK}, then press \texttt{START} (on the keyboard!!) and write down memory \#. This will initiate the survey.
+\end{enumerate}
+%-------------------
+% electrode malfunction
+%-------------------
+\clearpage
+\section*{\texttt{RS-CHECK} gets stuck}
+In the case \texttt{RS-CHECK} gives 999.99 kOhms for all electrodes, chances are either your cable and/or cable-connector are broken. To trouble-shoot this issue:
+\begin{enumerate}
+\item Connect a banana cable to electrode position {\it P2} in the {\it Syscal} top panel.
+\item In the {\it Syscal} menu go to \texttt{Check Switch$\to$Check each electrode} and check each electrode position on your cable with the other end of the banana cable.
+\end{enumerate}
+Keep in mind that {\it Syscal} counts electrodes in reverse from the {\it Syscal}. If you are using one 36 electrode cable {\it Syscal} will look for electrodes 36-19 and NOT 1-18.
+%-------------------
+% after
+%-------------------
+\clearpage
+\section*{After field campaign}
+\begin{enumerate}
+\item Turn {\it Syscal} and laptop on and connect them with USB to ``com 1".
+\item In laptop open {\it Prosys II} and do: \texttt{Communication$\to$Data Download$\to$Syscal Pro}.
+\item In {\it Syscal} open \texttt{Memory$\to$Explore} and find memory interval \#'s where the data was written.
+\item Write memory interval in {\it Prosys II}.
+\item In {\it Syscal} do: \texttt{Memory$\to$Data Download}.
+\item Rename your \texttt{csv} output file to \texttt{your-survey.csv}.
+\end{enumerate}
+%-------------------
+% pre-processing
+%-------------------
+\section*{Looking at the data}
+\begin{enumerate}
+\item Turn your laptop on and go to \texttt{ER-gerjoii/raw/your-survey/dc-data/} and put \texttt{your-survey.csv} there.
+\item Edit \texttt{your-survey.csv} file to have no spaces in the first column and save it as \texttt{your-survey.txt}.
+\item Open two terminals in directory \texttt{ER-gerjoii/dc-processing/}: one with Matlab and one plain.
+\item Edit \texttt{dc\_process.py} to match your directory and file names.
+\item In the plain terminal do \texttt{python dc\_process.py}.
+\item Edit \texttt{datavis\_dc2.m} for the std cutoff and $a$-spacing you want to plot for the dipole-dipole surveys.
+\item In the Matlab terminal do \texttt{datavis\_dc2;}.
+\item Comment on how the data looks while drinking coffee and discuss cut-off std.
+\item Once you are ready to use it in the inversion, in the Matlab terminal do \texttt{iris2gerjoii\_dc;}.
+\end{enumerate}
+%
+%
+%
+%------------
+% biblio
+%------------
+%\newpage
+\bibliographystyle{plainnat}
+\bibliography{interferometry-theory}
+%\nocite{*}
+\end{document}

@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../../src/shared/graphics/graphics_py/')
+sys.path.append('../../src/shared/graphics/graphics_py/')
 from fancy_figure import fancy_figure
 # ------------------------------------------------------------------------------
 import numpy as np

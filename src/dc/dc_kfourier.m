@@ -21,17 +21,22 @@ dx = finite_.dx;
 % sig_o = gerjoii_.dc.sig_o;
 % ------------------------------------------------------------------------------
 % constants for optimization
-% ---------------------------
+% ------------------------------------------------------------------------------
 % set the maximum number of iterations for the optimization routine
 itsmax = 25;
 % Number of linesearch steps
-lsnum = 10;
+lsnum = 20;
 % linesearch lower bound
 ls_low_lim = 0.01;
 % linesearch upper bound
 ls_up_lim =0.9;
 %  objective function history
 obj = [];
+% regularization terms
+beta_v   = 1e-8;  % 1e-8
+beta_g   = 1e-8;  % 1e-8
+beta_dky = 1e-8;  % 1e-8
+beta_wky = 5e-8;  % 0
 % ------------
 % distances
 % ------------
@@ -75,12 +80,12 @@ kyr = r * kyo';
 kyr_= r_ * kyo';
 % Calculate the K matrix
 K = (2/pi) * R.*real(besselk(0,kyr) - besselk(0,kyr_));
-% ----------------------------------
+% ------------------------------------------------------------------------------
 % Estimate v for the given ky values
-% ----------------------------------
+% ------------------------------------------------------------------------------
 % UNO vector. uno means one in spanish.
 UNO = ones(size(K,1),1);
-v = K*( (K'*K + 1e-7*eye(n_ky)) \ (K'*UNO) ); % 1e-8
+v = K*( (K'*K + beta_v*eye(n_ky)) \ (K'*UNO) ); % 1e-8, 1e-7
 % Evaluate the objective function for the initial guess
 obj = [obj (1-v)'*(1-v)];
 % -------------------------------------------------------
@@ -92,36 +97,38 @@ stopper = 0; % Stopping toggle in case A becomes illconditioned
 reduction = 1; % Variable to ensure sufficent decrease between iterations
 % Optimization terminates if objective function is not
 % reduced by at least 5% at each iteration
-while obj > 1e-5 & its<itsmax & stopper == 0 & reduction > 0.05; 
+while obj > 1e-5 & its<itsmax & stopper == 0 & reduction > 0.05;
+  ky_=ky;
   % ------------------------------
   % Create the derivative matrix
   % ------------------------------
   J = zeros(size(K));
-  for i = 1:n_ky;
+  for ii = 1:n_ky;
     k_ = ky;
-    k_(i) = 1.05*k_(i);
+    k_(ii) = 1.05*k_(ii);
     % kyr values matrix   
     kyr = r * k_';
     kyr_ = r_ * k_';
     % Calculate the K matrix
     K_ = (2/pi) * R.*real( besselk(0,kyr) - besselk(0,kyr_) );
     % Estimate v for the given k_ values
-    v_ = K_ * ( (K_'*K_ + 1e-8*eye(n_ky)) \ (K_'*UNO) );
+    v_ = K_ * ( (K_'*K_ + beta_v*eye(n_ky)) \ (K_'*UNO) );
     % Calculate the derivative for the appropriate column
-    J(:,i) = (v_-v) / (k_(i)-ky(i));
+    J(:,ii) = (v_-v) / (k_(ii)-ky(ii));
   end % for: derivative matrix
   % ------------------------------------
   % Apply some smallness regularization
   % ------------------------------------
-  grad = J'*(1-v) + 1e-8*eye(n_ky)*ky;
-  dky = ( J'*J + 1e-8*eye(n_ky) ) \ grad;
+  grad = J'*(1-v) + beta_g*ky;
+  dky = ( J'*J + beta_dky*eye(n_ky) ) \ grad;
   % ------------------------------------------------
   % Perform a line-search to maximize the descent 
   % ------------------------------------------------
   ls_ = linspace(ls_low_lim,ls_up_lim,lsnum);
+  ls_res=zeros(lsnum,1);
   warning off;
-  for j=1:lsnum
-    k_ = ky + ls_(j)*dky;    
+  for jj=1:lsnum
+    k_ = ky + ls_(jj)*dky;    
     % ------------------------
     % Calculate the K matrix
     % ------------------------
@@ -133,17 +140,17 @@ while obj > 1e-5 & its<itsmax & stopper == 0 & reduction > 0.05;
     % ----------------------------------
     % Estimate v for the given k_ values
     % ----------------------------------
-    v_ = K_*( (K_'*K_ + 1e-8*eye(n_ky)) \ (K_'*UNO) );
+    v_ = K_*( (K_'*K_ + beta_v*eye(n_ky)) \ (K_'*UNO) );
     objt = (1-v_)'*(1-v_);
-    ls_res(j,:) = [objt ls_(j)];
+    ls_res(jj) = objt;
   end % for line-search
   warning on;
   % Find the smallest objective function from the line-search
-  [b,c] = (min(ls_res(:,1)));
+  [~,jj] = min(ls_res);
   % ---------------------------
   % Create a new guess for ky
   % ---------------------------
-  ky = ky + ls_(c)*dky;
+  ky = ky + ls_(jj)*dky;
   % ------------------------
   % Calculate the K matrix
   % ------------------------
@@ -155,7 +162,7 @@ while obj > 1e-5 & its<itsmax & stopper == 0 & reduction > 0.05;
   % ----------------------------------
   % Estimate v for the given ky values
   % ----------------------------------
-  v = K*( (K'*K + 1e-8*eye(n_ky)) \ (K'*UNO) );
+  v = K*( (K'*K + beta_v*eye(n_ky)) \ (K'*UNO) ); % 1e-8
   % eval obj funct
   obj= [obj (1-v)'*(1-v)];
   reduction = (obj(its) / obj(its+1)) - 1;         
@@ -166,7 +173,7 @@ while obj > 1e-5 & its<itsmax & stopper == 0 & reduction > 0.05;
   %       correctly solved for!
   % ------------------------------------
   if or(rcond(K'*K) < 1e-15,sum(isnan(v))~=0); % 1e-15
-    ky = ky - ls_(c)*dky;
+    ky = ky_;
     stopper = 1;
   end
 end % while
@@ -186,7 +193,7 @@ kyr = r * ky';
 kyr_ = r_ * ky';
 % Calculate the K matrix
 K = (2/pi) * R.*real(besselk(0,kyr) - besselk(0,kyr_));
-w_ky = (K'*K + 0*eye(n_ky)) \ (K'*UNO);
+w_ky = (K'*K + beta_wky*eye(n_ky)) \ (K'*UNO);
 finite_.dc.ky_w_ = [ ky*dx , w_ky ];
 % figure;
 % plot(v,'k.','Markersize',10);axis tight

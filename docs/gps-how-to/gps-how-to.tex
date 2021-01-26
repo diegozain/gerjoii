@@ -1,0 +1,121 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\usepackage{titling}
+\setlength{\droptitle}{-5em}   % This is your set screw
+\renewcommand{\familydefault}{\sfdefault}
+
+\title{Trimble GPS for Dummies\\{\normalsize Diego Domenzain}}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% on/off
+%-------------------
+\section*{Begin survey}
+\begin{enumerate}
+\item Turn {\it Trimble} on.
+\item Check connection to antenna and leave running on the background.
+\item Click on {\it Tera Sync} button and wait for satellites signal to be received.
+\item Click on {\it Data} button and choose:
+\begin{itemize}
+\item Rover
+\item File name
+\item Tornado antenna
+\item Specify height of antenna to the ground
+\item Data attributes refer to what it collects: {\it point} or {\it line}.
+\end{itemize}
+\item Turn {\it Trimble} off.
+\end{enumerate}
+%-------------------
+% after
+%-------------------
+\section*{Process data}
+\begin{enumerate}
+\item Open program {\it GPS Path Finder}.
+\item Click on {\it Data Transfer} button,
+\begin{itemize}
+\item click {\it Add} then {\it Transfer}.
+\end{itemize}
+\item Click {\it Differential Corrections} button,
+\begin{itemize}
+\item reference station = base station.
+\end{itemize}
+\item Export as ASCII file,
+\begin{itemize}
+\item configure ASCII output format.
+\end{itemize}
+\item Plot on a map to see if it worked.
+\end{enumerate}
+%
+%
+%
+%------------
+% biblio
+%------------
+%\newpage
+\bibliographystyle{plainnat}
+\bibliography{interferometry-theory}
+%\nocite{*}
+\end{document}

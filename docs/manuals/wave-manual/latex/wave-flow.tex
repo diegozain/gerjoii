@@ -1,0 +1,455 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{bbm}
+\usepackage{xcolor}
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+\renewcommand{\labelitemii}{$\circ$}
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{\Huge{
+\color{nblue}g\color{nred}er\color{ngreen}j\color{nblue}o\color{nred}i\color{moradoAmor}i}
+\color{black}\\
+Imaging using EM waves \\ \small{summer 2017}}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% fwd
+%-------------------
+\section{Forward}
+Using the finite difference scheme solve for $u$,
+\begin{align*}
+\mathbf{v} &= (H_z,\; -H_x)^\top & u=E_y \\
+ {\bf s}&=(0,\;0,\;-J_y)^\top & {\bf w=(v,}\;u)^\top
+\end{align*}
+%
+%
+%
+\begin{align*}
+%
+\underbrace{
+\begin{bmatrix}
+\mu_o \mathbbm{1}_2 & 0 \\
+0 & \varepsilon
+\end{bmatrix}
+}_{A}
+%
+{\bf \dot{w}}
+&=
+%
+\underbrace{
+\begin{bmatrix}
+0 & \nabla^\top \\
+\nabla & 0
+\end{bmatrix}
+}_{\mathrm{D}}
+%
+{\bf w} -
+%
+\underbrace{
+\begin{bmatrix}
+0 & 0 \\
+0 & \sigma
+\end{bmatrix}
+}_B
+%
+{\bf w} +
+%
+{\bf s},\\
+\mathcal{L} &= A-{\rm D}+B.
+\end{align*}
+over a rectangular region $\Omega$ (simulating a slice in depth of the earth) with absorbing boundary 
+conditions everywhere. Matrix $A$ controls {\it velocity}, matrix $B$ controls {\it attenuation}.
+\\\\
+Below is a brief list/explanation of what each method does. Some methods do more than explained here, 
+take more parameters, and output more stuff. This is just for a comprehensive idea.
+\begin{itemize}
+\item Build geometric parameters from target material properties and chosen characteristic frequency,
+\begin{align*}
+\varepsilon,\, \sigma, \,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}
+&= 
+\texttt{w\_geom}(c_o,\, \varepsilon,\,\sigma,\, f_{Ny},\, xz_{\text{plane}})
+\end{align*}
+%
+\item Build $M$. In this case, $M$ are just coordinates of receivers,
+\[
+Mu = u_r.
+\]
+%
+\item Compute wave and error,
+\begin{align*}
+u, \, e,\,
+\left\{
+\begin{matrix}
+c{\bf J},\,c{\bf E},\,c{\bf H} \\
+\text{cpml}\,{\bf E},\, \text{cpml}\,{\bf H}
+\end{matrix}
+\right\}
+&= 
+\texttt{w\_fwd}\left(
+\varepsilon,\,\sigma,\, {\bf s},\, M,\, d^o,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+this method needs some lengthy constructs before it actually solves the wave. the order is as below.
+\begin{itemize}
+%
+\item Expand $\varepsilon,\sigma$ to be in PML,
+\begin{align*}
+\varepsilon,\,\sigma
+&= 
+\texttt{w\_exp2pml}\left(
+\varepsilon,\,\sigma,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+%
+\item Build PML and ${\bf H,E}$ finite difference coefficients in PML,
+\begin{align*}
+\left\{
+\begin{matrix}
+\text{cpml}\,{\bf E} \\
+\text{cpml}\,{\bf H}
+\end{matrix}
+\right\}
+&= 
+\texttt{w\_cpml}\left(
+\varepsilon,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+%
+\item Build coefficients for fields in finite difference scheme,
+\begin{align*}
+c{\bf J},\,c{\bf E},\,c{\bf H}
+&= 
+\texttt{w\_coeff}\left(
+\varepsilon,\,\sigma,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+%
+\item Solve for wave
+\begin{align*}
+u
+&= 
+\texttt{w\_solve}\left(
+M,\, {\bf s}, \,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\} ,\,
+\left\{
+\begin{matrix}
+c{\bf J},\,c{\bf E},\,c{\bf H} \\
+\text{cpml}\,{\bf E},\, \text{cpml}\,{\bf H}
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+this last method propagates the wave. At each time-step $t$, 
+\begin{align*}
+d_t &= Mu_t \hspace{2em} \to \hspace{2em} d = \{d_t \, \text{ for all }t \}.
+\end{align*}
+\item Compute $e$,
+\begin{align*}
+e &= d-d^o.
+\end{align*}
+\end{itemize}
+\end{itemize}
+%-------------------
+% inv
+%-------------------
+\section{Inverse}
+Our continuous objective function is
+\begin{align*}
+{\sf E}(\varepsilon,\,\sigma) = \int_{0}^\top
+(\underbrace{
+d(\varepsilon,\,\sigma,\,t)-d^{o}(t)
+}_{e})^2
+\; {\rm d}t
+\end{align*}
+We optimize ${\sf E}$ by setting $\frac{{\rm d}}{{\rm d}\varepsilon}{\sf E}$ and 
+$\frac{{\rm d}}{{\rm d}\sigma}{\sf E}$ equal to zero and solving for the parameters,
+\begin{align*}
+&\frac{{\rm d}}{{\rm d}\varepsilon}{\sf E} = \int_{0}^{T} \lambda \dot{u} \; {\rm d}t 
+&\frac{{\rm d}}{{\rm d}\sigma}{\sf E} = \int_{0}^{T} \lambda u \; {\rm d}t
+\end{align*}
+where $\lambda$ is the {\it adjoint} wavefield and $e^*$ is the {\it time reversed error},
+\[
+\mathcal{L}^* \lambda = e^*, \hspace{2em} \lambda(T)=\dot{\lambda}(T)=0.
+\]
+%
+Below is a brief list/explanation of what each method does. Some methods do more than explained here, 
+take more parameters, and output more stuff. This is just for a comprehensive idea.
+%
+\begin{itemize}
+\item Compute $\nabla_{\sigma}{\sf E}^\top$ using cross-correlation of $u$ and its adjoint field $\lambda$,
+\begin{align*}
+g_{\sigma}
+&= 
+\texttt{w\_grad}\left(
+u,\, e,\,
+M,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}, \,
+\left\{
+\begin{matrix}
+c{\bf J},\,c{\bf E},\,c{\bf H} \\
+\text{cpml}\,{\bf E},\, \text{cpml}\,{\bf H}
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+%
+\begin{itemize}
+\item Solve for $\lambda$. Source is error $e$ but time-reversed (${\bf s}=e^*$)
+\begin{align*}
+\lambda
+&= 
+\texttt{w\_solve}\left(
+\varepsilon,\,\sigma,\, e^*, \,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\} ,\,
+\left\{
+\begin{matrix}
+c{\bf J},\,c{\bf E},\,c{\bf H} \\
+\text{cpml}\,{\bf E},\, \text{cpml}\,{\bf H}
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+At each time-step $t$, 
+\begin{align*}
+g_{t} &= u^{*}_{t} \odot \lambda_{t} &
+g_{\sigma} \gets g_{t} + g_{t-1}.
+\end{align*}
+\end{itemize}
+%
+\item Compute derivative of $u$ with resect to time,
+\begin{align*}
+\dot{u} &= \texttt{w\_dt}\left(u,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+\item Compute $\nabla_{\varepsilon}{\sf E}^\top$ using cross-correlation of $\dot{u}$ and its adjoint field 
+$\lambda$,
+\begin{align*}
+g_{\varepsilon}
+&= 
+\texttt{w\_grad}\left(
+\dot{u},\, e,\,
+\varepsilon,\,\sigma,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\}, \,
+\left\{
+\begin{matrix}
+c{\bf J},\,c{\bf E},\,c{\bf H} \\
+\text{cpml}\,{\bf E},\, \text{cpml}\,{\bf H}
+\end{matrix}
+\right\}
+\right).
+\end{align*}
+\item Compute step size $\alpha$ for update. Requires one extra forward run for each.
+\begin{align*}
+\alpha_\sigma &= \texttt{w\_pica\_s.m}
+\left(
+\varepsilon,\,\sigma,\, {\bf s},\, M,\, d^o,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\},\,
+e,\, g_\sigma,\, k_\sigma
+\right), \\
+%
+\alpha_\varepsilon &= \texttt{w\_pica\_e.m}
+\left(
+\varepsilon,\,\sigma,\, {\bf s},\, M,\, d^o,\,
+\left\{
+\begin{matrix}
+\Delta x,\, \Delta z, \, \Delta t \\
+n,\, m, \, nt \\
+x, \, z, \, t
+\end{matrix}
+\right\},\,
+e,\, g_\varepsilon,\, k_\varepsilon
+\right).
+\end{align*}
+%
+For example, 
+\begin{align*}
+d_\bullet & = d(\varepsilon,\, \sigma + k_\sigma g_{\sigma})-d(\varepsilon,\,\sigma), \\
+\alpha_\sigma &= 
+k_\sigma
+\frac{d_\bullet(:)^\top \cdot e_w(:)}{d_\bullet(:)^\top \cdot d_\bullet(:)},
+\end{align*}
+where $a(:)$ is borrowed from the Matlab command that turns matrix $a$ to vector form.
+\end{itemize}
+%-------------------
+% file names
+%-------------------
+\newpage
+\section{File names}
+{\bf Constructors}
+\begin{itemize}
+\item \texttt{w\_geom.m} builds geometric parameters.
+\item \texttt{w\_epsilon.m} build $\varepsilon$.
+\item \texttt{w\_sigma.m} build $\sigma$.
+\item \texttt{w\_magmat.m} build magnetic parameters (constant and homogeneous) 
+$\sigma_{\text{mag}},\mu$.
+\item \texttt{w\_exp2pml.m} expand $\varepsilon,\sigma$ inside PML.
+\item \texttt{w\_cpml.m} build PML and coefficients for ${\bf E,\, H}$.
+\item \texttt{w\_coeff.m} build finite difference coefficients for ${\bf E,\, H,\, J}$.
+\item \texttt{w\_s.m} specify source position in index form.
+\item \texttt{w\_M.m} specify receiver positions in index form.
+\end{itemize}
+{\bf Procedures}
+\begin{itemize}
+\item \texttt{w\_wavelet.m} compute source wavelet.
+\item \texttt{w\_solve.m} propagates the wave $u$. This method has local functions,
+\begin{itemize}
+\item \texttt{new\_Ez.m} + \texttt{new\_Ez\_pml.m} updates $u$,
+\item \texttt{new\_H.m} + \texttt{new\_H\_pml.m} updates ${\bf v}$.
+\end{itemize}
+\item \texttt{w\_fwd.m} computes $u,e$.
+\item \texttt{w\_dt.m} computes $\dot{u}$.
+\item \texttt{w\_grad.m} computes adjoint $\lambda$ and cross-correlates $u$ with $\lambda$. 
+This method does not reference \texttt{w\_solve.m}, it redoes its work, so it also has local functions,
+\begin{itemize}
+\item \texttt{new\_Ez.m} + \texttt{new\_Ez\_pml.m} updates $u$,
+\item \texttt{new\_H.m} + \texttt{new\_H\_pml.m} updates ${\bf v}$.
+\end{itemize}
+\item \texttt{w\_gd\_s.m} performs gradient descent on ${\sf E}$ solving for $\sigma$.
+\item \texttt{w\_gd\_e.m} performs gradient descent on ${\sf E}$ solving for $\varepsilon$.
+\item \texttt{w\_pica\_s.m} computes descent stepsize for $g_\sigma$.
+\item \texttt{w\_pica\_e.m} computes descent stepsize for $g_\varepsilon$.
+\item \texttt{w\_gd\_s\_stoch.m} performs stochastic gradient descent on ${\sf E} = \sum_i{\sf E}_i$ solving for $\sigma$.
+\item \texttt{w\_gd\_e\_stoch.m} performs stochastic gradient descent on ${\sf E} = \sum_i{\sf E}_i$ solving for $\varepsilon$.
+\end{itemize}
+{\bf Examples}
+\begin{itemize}
+ \item \texttt{w\_run.m}
+\item \texttt{w\_run\_many.m}
+\item \texttt{w\_inv.m}
+\item \texttt{w\_inv\_many.m}
+\end{itemize}
+
+%------------
+% biblio
+%------------
+%\newpage
+%\bibliographystyle{plainnat}
+%\bibliography{seis-flow}
+%\nocite{*}
+\end{document}

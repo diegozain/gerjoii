@@ -38,6 +38,10 @@ elif fi_=="deps":
     data  = file_['depsi']
     title = "Update permittivity"
     midi = 0
+elif fi_=="migr":
+    data  = file_['migra']
+    title = "Migration image"
+    midi = 0
 # ------------------------------------------------------------------------------
 nz,nx=data.shape
 print('min ',data.min())
@@ -47,8 +51,8 @@ print('shape ',nz,nx)
 fancy_figure(data=data,
 x_ticklabels='off',y_ticklabels='off',
 midi=midi,
-# vmax=9,   # 9 4
-# vmin=4,
+#vmax=10,   # 9 4
+#vmin=-10,
 title=title,
 xlabel="Length (m)",
 ylabel="Depth (m)",

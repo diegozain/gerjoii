@@ -25,12 +25,10 @@ cd(pwd_);
 % ------------------------------------------------------------------------------
 % permittivity
 tmp_=load('../mat-file/epsi.mat');
-% tmp_=load('../output/w/epsi.mat');
 tmp_=tmp_.epsi;
 parame_.natu.epsilon_w = tmp_;
 % conductivity
 tmp_=load('../mat-file/sigm.mat');
-% tmp_=load('../output/w/sigm.mat');
 tmp_=tmp_.sigm;
 parame_.natu.sigma_w = tmp_;
 % ------------------------------------------------------------------------------
@@ -74,6 +72,7 @@ gerjoii_.w.MUTE = 'no_MUTE';
 % parame_.w.lo = parame_.w.c/( sqrt( max(parame_.natu.epsilon_w(:)) ))/parame_.w.fo;
 % % round to nearest-bigger decimal (e.g. 0.561924 -> 0.6)
 % parame_.w.lo = ceil( parame_.w.lo/0.1 )*0.1;
+% ------------------------------------------------------------------------------
 % set paths
 parame_.w.data_path_  = data_path_w;
 % ------------------------------------------------------------------------------

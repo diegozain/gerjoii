@@ -1,0 +1,108 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{pdfpages}
+\usepackage{subfigure}
+\usepackage{dsfont}
+\usepackage[font={footnotesize,sf}]{caption}
+% \usepackage{hyperref}
+
+
+% \usepackage[top=1in, bottom=1.25in, left=0.5in, right=0.5in]{geometry}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps,.svg}
+
+\usepackage{titling}
+\setlength{\droptitle}{-10em}   % This is your set screw
+
+\renewcommand{\familydefault}{\sfdefault}
+
+
+%opening
+\title{$\varepsilon,\, \sigma$ \& $\omega$}
+\author{Diego Domenzain}
+\date{}
+
+\begin{document}
+ \maketitle
+For the EM wave with attenuation (Ohm's law for ${\bf J}$) and the plane wave approximation we get
+\begin{align*}
+ k_{*}^{2} &= \mu\varepsilon\omega^2 + i\mu\sigma\omega & k_{*} = a+ib,
+\end{align*}
+for some $a,b\in\mathbb{R}$. $a$ controls velocity and $b$ controls attenuation. We now suppose $\varepsilon,\sigma\in\mathbb{C}$ (\color{red}why??\color{black}) with
+\begin{align*}
+ \varepsilon &= \varepsilon' - i\varepsilon'' & \sigma = \sigma' + i\sigma'',
+\end{align*}
+so we now have
+\begin{align*}
+ k_{*}^{2} &= \mu\omega\underbrace{(\varepsilon'\omega - \sigma'')}_{\varepsilon_e\omega} \; + \;
+i\mu\omega\underbrace{(\varepsilon''\omega + \sigma')}_{\sigma_e}
+\end{align*}
+where $\varepsilon_e,\sigma_e$ are {\it effective} electrical properties, which are the ones we 
+are actually sensitive to in nature (\color{red}right?\color{black}). We have
+\begin{align*}
+\varepsilon_e &= \varepsilon' - \frac{\sigma''}{\omega} &
+\sigma_e=\sigma' + \varepsilon''\omega,
+\end{align*}
+from which we now take limits on $\omega$,
+\begin{center}
+\begin{tabular}{c | c}
+ low $\omega$ & high $\omega$ \\
+\hline
+$\varepsilon_e\approx -\frac{\sigma''}{\omega}$ & \hspace{-3.5em}$\varepsilon_e\approx\varepsilon'$ \\
+\hspace{-0.6em}$\sigma_e\approx\sigma_{dc}$ & $\sigma_e\approx\sigma_{dc}+\varepsilon''\omega$
+\end{tabular}
+\end{center}
+% --
+Horrible formulas for $a$ and $b$,
+\begin{align*}
+a &= \omega\sqrt{\frac{\mu\varepsilon}{2}}
+\left( \sqrt{1 + \left( \frac{\sigma}{\omega\varepsilon} \right)^{2}} + 1 \right)^{1/2}  \\
+b &= \omega\sqrt{\frac{\mu\varepsilon}{2}}
+\left( \sqrt{1 + \left( \frac{\sigma}{\omega\varepsilon} \right)^{2}} - 1 \right)^{1/2},\\
+|k_*| &= 
+\omega\sqrt{\varepsilon\omega\sqrt{1+\left(\frac{\sigma}{\varepsilon\omega}\right)^2}}
+\end{align*}
+We now assume the low-loss approximation 
+$\sigma_e<<\omega\varepsilon_e$ and use the Taylor expansion for $\sqrt{x+1}$ to get
+\begin{align*}
+ b &= \frac{\sigma_e}{2}\sqrt{\frac{\mu}{\varepsilon_e}} \\
+ &= \frac{\sigma_{dc} + \varepsilon''\omega}{2} \sqrt{\frac{\mu}{\varepsilon'}} & \leftarrow \mbox{for high } \omega.
+\end{align*}
+\iffalse
+And now I get a bit lost with $Q^*$ and Cole-Cole, so I will try to make a detour.
+\\\\
+What we are inverting for is what we are sensitive to, and what we are sensitive to from GPR is $\varepsilon_e$ and 
+$\sigma_e$ (\color{red}right?\color{black}), while from ER we are sensitive to $\sigma_{dc}$. 
+\\\\
+So we need a way to translate ER data into GPR data, that is we need to find $\varepsilon''$ since 
+$\sigma_e\approx \sigma_{dc}+\varepsilon''\omega$. I thought of three ways,
+\begin{itemize}
+\item Assuming we know $b,\,\varepsilon'\approx\varepsilon_e$ and $\sigma_{dc}$ for a given $\omega$, we have
+\begin{align*}
+ \varepsilon'' &= \frac{2b\sqrt{\frac{\varepsilon'}{\mu}}-\sigma_{dc}}{\omega} \\
+b &= \ln K + \frac{1}{v\Delta t}\ln\frac{A_r}{A_t} & \leftarrow\mbox{from your EAGENS ppt}
+\end{align*}
+\color{red}where $v$ is taken from the previous $\varepsilon$ distribution in our Newton scheme? 
+what is $K$ and how do we know $\Delta t$ without time picking? 
+or maybe get $b$ in another way?\color{black}
+\item We could also just use previous $\sigma_e,\,\sigma_{dc}$ in our Newton scheme and write
+\begin{align*}
+ \varepsilon'' &= \frac{\sigma_e - \sigma_{dc}}{\omega} \;\; \rightarrow
+\;\; \sigma_e\approx \sigma_{dc} + \underbrace{(\sigma_e - \sigma_{dc})}_{\mbox{previous}}.
+\end{align*}
+This way $\omega$ cancels out and is no longer an issue.
+\item Ignore frequency attenuation altogether and write $\sigma_e=\sigma_{dc}$.
+\item Link time frequency $\omega$ to space frequency $k$ somehow,
+\begin{align*}
+\sigma_e &= \sigma_{dc} + \varepsilon'' \omega, & \omega = vk, \\
+\sigma_e &= \sigma_{dc} + \varepsilon'' vk, \\
+\color{red}k\color{black} &= \frac{\sigma_e - \sigma_{dc}}{\varepsilon'' v}.
+\end{align*}
+This value for $k$ constrains $\sigma_e$ and $\sigma_{dc}$.
+\end{itemize}
+\fi
+\end{document}
+

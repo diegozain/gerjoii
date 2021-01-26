@@ -1,0 +1,211 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+\usepackage{bbm}
+\usepackage{dsfont}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+%\maketitle
+%-------------------
+% main flow
+%-------------------
+\section*{2d to 2.5d transform}
+We assume that in nature there is no lateral variation along the $y$ axis $(\partial_y=0)$, and we model the synthetic dc electric potential in a true 2-dimensional setting. In 3d, we want to model
+\begin{align}
+-\nabla\cdot\sigma(x,z)\nabla\,u(x,y,z) &= s(x,y,z).
+\label{eqn:dc-2-5d}
+\end{align}
+In the Fourier $k_y$-domain we have,
+\begin{align}
+-\nabla\cdot\sigma\nabla\,\tilde{u}(x,k_y,z) + k_y^2\,\sigma\,\tilde{u}(x,k_y,z) &= \frac{1}{2}s(x,y,z).
+\end{align}
+The 3d solution on the $xz$-plane is thus
+\begin{align}
+u(x,y=0,z) &= \frac{2}{\pi}\int_0^\infty \tilde{u}\,{\rm d}k_y.
+\end{align}
+Discretized, we have
+\begin{align}
+u = \frac{2}{\pi}\sum_i \tilde{u}(k_{i})\,\omega_i,
+\label{eqn:u-uky}
+\end{align}
+but what are $k_{i}$ and $\omega_i$? We follow \cite{pidlisecky2008fw2_5d} and proceed to find them by noting that the Green's function solution (for homogeneous $\sigma$) of (\ref{eqn:dc-2-5d}) on the half $xz$-plane is 
+\begin{align}
+u(x,y=0,z) &= \frac{{\bf i}}{2\pi\sigma}
+\underbrace{\left(\frac{1}{\underbrace{||x-s_+||_2}_{r+}} - \frac{1}{\underbrace{||x-s_-||_2}_{r-}}\right)}_{1/R},
+\label{eqn:u-solu}
+\end{align}
+bringing back to the Fourier domain,
+\begin{align}
+\tilde{u} &= \int_0^\infty u\,\cos(y\,k_y)\;{\rm d}y = \frac{{\bf i}}{2\pi\sigma}(B_o(k_y r_{+}) - B_o(k_y r_{-})),
+\label{eqn:uky-solu}
+\end{align}
+where $B_o$ is the zero order modified Bessel function of the second kind. By plugging in equations \ref{eqn:u-solu} and \ref{eqn:uky-solu} into equation \ref{eqn:u-uky} we discretize by 
+\begin{align}
+1&\approx \sum_j \, \underbrace{\frac{2R}{\pi}\{B_o(k_j\,r_+) - B_o(k_j\,r_-)\}}_{K_{ij}} \,\omega_j \\
+K &= \frac{2}{\pi}R\left\{ B_o(k\,r_+) - B_o(k\,r_-) \right\} \\
+v &\approx K\omega,
+\label{eqn:Kwv}
+\end{align}
+where $K=K(k,\,s)$ is a matrix of size $(n_R\times n_k)$, $v$ is a vector of length $n_R$ whose entries should approximate $1$, and $k=(k_{yi})$, $\omega=(\omega_i)$ are vectors of length $n_k$. We minimize
+\[
+\Phi(k) = || 1 - \underbrace{K\underbrace{(K^TK)^{-1}K^T}_{\omega}}_{v(k)} ||_2^2 = 
+||1-v(k)||_2^2,
+\]
+using a regularized Newton method. Note that both $k$ and $\omega$ are geometry dependent and not parameter dependent.
+\subsection*{Finding $k_y$ and $\omega$ for a given $s$}
+\begin{enumerate}
+\item initial guess for $k=(\text{some numbers})\cdot\Delta x$ and build $K(k,s)$.
+\item $v\gets K(K^\top K)^{-1}K^\top \cdot 1$,
+\item compute $J=\nabla_k v$ using $n_k$ finite differences,
+\item $ \nabla_k \Phi^\top \gets J^\top(1-v)+\beta k$,
+\item $\Delta k = (J^\top J+\beta I)^{-1}\cdot \nabla_k \Phi^\top$,
+\item $k\gets k+\alpha\,\Delta k$,
+\item build $K(k,s)$
+\item check if $v$ is almost $1$, 
+\item repeat $2-8$
+\item $\omega=(K^\top K)^{-1}K^\top \cdot 1$,
+\item \color{red}correct for flatness $k\gets k\cdot\Delta x$ \color{black}
+\item return $k$ and $\frac{2}{\pi}\omega$.
+\end{enumerate}
+%
+\subsection*{Finding the 2.5d electric potential $u$ for given $s$ and $\sigma$}
+Given a source $s$ and conductivity $\sigma$, the forward model is computed as follows,
+\begin{enumerate}
+\item retrieve from memory (or compute) $k$ and $\omega$,
+\item choose $k_i\in k$ and build $L_i$ with the right boundary conditions for that $k_i$,
+\begin{align*}
+L^{i} &\approx -\nabla\cdot\sigma\nabla,\\
+L_{i} &= L^{i} + k_i^2\,\sigma,
+\end{align*}
+\item solve $L_{i}\tilde{u}_{i}=\frac{s}{2}$ for $\tilde{u}_{i}$ and store,
+\item repeat 3-4 until all $k$ has been used,
+\item $u=\sum_i \omega_i \,\tilde{u}_{i} \to d=Mu \to e=d-d^o$.
+\end{enumerate}
+% ----------------
+% 2.5d inversion
+% ----------------
+\section*{2.5d inversion}
+Each 2d forward model is,
+\begin{align*}
+L_{i} &= L^{i} + k_i^2\,\sigma, \\
+L_{i} \tilde{u}_{i} &= \frac{s}{2}, \\
+\tilde{d}_{i} &= M\tilde{u}_{i}.
+\end{align*}
+We can write the 2.5d data and its Jacobian as a linear combination of each 2d problem,
+\begin{align*}
+d &= M\underbrace{\sum_i \omega_i \tilde{u}_i}_{u} = \sum_i \omega_i \underbrace{M\tilde{u}_i}_{\tilde{d}_i} = \sum_i \omega_i \tilde{d}_i, \\
+\nabla_\sigma d &= \underbrace{\sum_i \omega_i J_i}_{J},
+\end{align*}
+where
+\begin{align*}
+J_i &= ML_i^{-1}S_i^{\top}, \hspace{2em}\text{and}\hspace{2em}
+S_i = -\left( (\nabla_\sigma L^i)\tilde{u}_i \right)^{\top} - k_i^2 \; \mbox{diag}(\tilde{u}_i)^{\top}.
+\end{align*}
+We can now write the gradient of the 2.5d data as a linear combination of the 2d gradients,
+\begin{align*}
+g &= \left( \sum_i \omega_i J_i \right)^\top e = \sum_i \omega_i \underbrace{J_i^\top e}_{g_i} = 
+\sum_i \omega_i g_i, 
+\end{align*}
+where
+\begin{align*}
+g_i &= S_i a_i, \hspace{2em}\text{and}\hspace{2em}
+L_i^{\top}a_i = M^\top e.
+\end{align*}
+%i
+\subsection*{Finding $g$ for given $s$ and $\sigma$}
+Given a source $s$, conductivity $\sigma$ and weights $\{k,\omega\}$ the gradient is computed as follows,
+\begin{enumerate}
+\item compute the 2.5d forward model to get $\{\tilde{u}_{i}\}$ and $e$,
+\item choose $k_i\in k$,
+\item build $L_{i}$ and $S_{i} = -\left( (\nabla_\sigma L^i)\tilde{u}_{i} \right)^{\top} - k_i^2\; \mbox{diag}(\tilde{u}_{i})^{\top}$,
+\item solve $L_{i}^{\top}a_{i} = M^\top e$ for $a_{i}$,
+\item compute and store $g_{i} = S_{i} a_{i}$,
+\item repeat 2-5 until all $k$ has been used,
+\item $g=\frac{2}{\pi}\sum_i \omega_i \,g_{i}$.
+\end{enumerate}
+%
+\section*{Routines}
+\begin{itemize}
+\item \color{boiseBlue}\texttt{dc\_kfourier.m} \color{black} for given source $s$ outputs $\{k,\omega\}$.
+\item \color{boiseBlue}\texttt{dc\_fwd2\_5d.m} \color{black} for a given source $s$ and for each $k_i\in k$ performs \color{rojoAmor}\texttt{dc\_fwd\_k.m} \color{black} and solves $u$ by weight-stacking $\{\tilde{u}_{k_i}\}$. Outputs $L$, $u$, $\{\tilde{u}_{k_i}\}$, $d=Mu$ and $e=d-d^o$.
+%
+\begin{itemize}
+\item[\textbullet] \color{rojoAmor}\texttt{dc\_fwd\_k.m} \color{black} for a given source $s$ and a given $k_i\in k$ solves the 2d fwd problem $L_{k_i}\tilde{u}_{k_i}=s$. Outputs $L$ and $\tilde{u}_{k_i}$.
+\end{itemize}
+%
+\item \color{boiseBlue}\texttt{dc\_gradient2\_5d.m} \color{black} for a given source $s$, its weights $\{k,\omega\}$, its 2d potentials $\{\tilde{u}_{k_i}\}$, its matrix $L$ and its 2.5d error $e$, outputs $g$ as a weighted stack of $\{g_{k_i}\}$.
+\end{itemize}
+%
+\section*{Verification with analytical models}
+anal-homo and anal-bi.
+%
+%------------
+% biblio
+%------------
+%\newpage
+\bibliographystyle{plainnat}
+\bibliography{dc-2d-25d-src}
+%\nocite{*}
+\end{document}

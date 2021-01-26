@@ -51,10 +51,4 @@ gerjoii_ = dc_geomefactor_2d(parame_,finite_,gerjoii_);
 % collect observed data (and apparent resistivities for geometric factor)
 d_o = gerjoii_.dc.d_2d;
 rhoa_o = gerjoii_.dc.d_2d .* gerjoii_.dc.k_2d;
-% % dcgram
-% dcgram.d = gerjoii_.dc.d_2d;
-% dcgram.k = gerjoii_.dc.k_2d; % rhoa_o=d.*k 
-% % save
-% name = strcat(data_path_,'line',num2str( i_e ),'.mat');
-% save( name , 'dcgram' );
 end

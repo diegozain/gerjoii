@@ -1,4 +1,4 @@
-function d = linear_mute(d,drx,t,to,vel_)
+function [d,mute_] = linear_mute(d,drx,t,to,vel_)
 % 
 % d is a shot gather of size (time by receivers)
 % to is where the mute begins,

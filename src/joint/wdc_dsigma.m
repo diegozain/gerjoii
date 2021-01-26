@@ -55,15 +55,15 @@ fprintf('         the amplitude for dsigma_dc = %d\n',dcdsig_);
 % amp = amp(amp_i);
 % ------------------------------------------------------------------------------
 % max of amp
-amp = max(amp);
 % ------------------------------------------------------------------------------
-%  average
+% % This one worked for the complicated example (Part 2 paper)
+% amp = max(amp);
 % ------------------------------------------------------------------------------
-% amp = geomean(amp)*step_;
-% amp = geomean(amp);
-% amp = geomean(amp)*5e-2;
-% amp = geomean(amp)*1e+1; % was 1e+1, try 5e+1 if mean dont work
-% amp = mean(amp);         % does not work
+%  geometric average
+% ------------------------------------------------------------------------------
+% This one worked for the box (Part 1 paper).
+% Maybe it worked for the original BHRS inversion, not sure :(
+amp = geomean(amp);
 % ------------------------------------------------------------------------------
 fprintf('         the amplitude for dsigma    = %d\n\n',step_ * amp);
 % update

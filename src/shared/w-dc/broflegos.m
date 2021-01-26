@@ -1,4 +1,4 @@
-function H_ = broflegos(H,q,y)
+function H = broflegos(H,q,y)
 % diego domenzain
 % fall 2018 @ BSU
 % ..............................................................................
@@ -14,7 +14,8 @@ function H_ = broflegos(H,q,y)
 %
 % q = p_ - p
 % y = g_ - g
+% ..............................................................................
 Hq = H*q;
 qtH = q'*H;
-H_ = H - ( (Hq * qtH) / (q'*H*q) ) + ( (y*y') / (y'*q) );
+H = H - ( (Hq * qtH) / (q'*H*q) ) + ( (y*y') / (y'*q) );
 end

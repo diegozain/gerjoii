@@ -1,0 +1,119 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+
+\title{Code-flow for joint inversion of radar and electrical resistivity}
+\author{Diego Domenzain}
+\date{}							% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+\section{Overview}
+This document explains the code-flow for a joint inversion of {\it ground penetrating radar } (GPR) and {\it electrical resistivity} (ER) data using the package {\bf gerjoii}. 
+\\\\
+The name {\bf gerjoii} stands for {\bf g}round penetrating radar and {\bf e}lectrical {\bf r}esistivity {\bf jo}int {\bf i}nversion and {\bf i}nterferometry. 
+\\\\
+Our inversion recovers electrical permittivity ($\varepsilon$) and conductivity ($\sigma$) of the subsurface. It assumes a 2.5D subsurface geometry and uses gradient-descent.
+\\\\
+Job submission is done by shell scripts, and visualization is done with Python. The heavy-lifting code is written in Matlab.
+\section{Inside {\it gerjoii}}
+The main directory {\bf gerjoii} has sub-directories {\tt data, docs, field} and {\tt src}. 
+\\\\
+Projects for specific data-sets live in {\tt field}. Inside a particular project in {\tt field} there are sub-directories where inversions with different hyper-parameters were done. 
+\\\\
+For example, the directory {\tt field/groningen2-fi/g0/} holds the needed scripts for running an inversion on the Groningen data. 
+\\\\
+Inside each {\tt g\#} there is a directory {\tt scripts}. This directory has Matlab scripts that set-up global variables needed in the inversion. 
+\\\\
+The next section details what happens next. We go through an inversion-flow whose data claims a very large domain, so we divide it in tiny sub-domains.
+
+\section{Down the rabbit hole - Matlab}
+Assume we are in {\tt field/groningen2-fi/g0/scripts/}. The inversion has the following code-flow:
+
+\begin{enumerate}
+\item {\bf Run the inversion with {\tt wdc\_begin\_disk\_.m}},
+\begin{itemize}
+\item load the inversion hyper-parameters, 
+\item load the initial $\varepsilon$ and $\sigma$ models,
+\item build the tiny sub-domains,
+\item load the parallel profile for Matlab,
+\item perform the inversion ({\tt wdc\_imageOBJe2\_5d\_disk.m})
+\item save the results of the inversion.
+\end{itemize}
+\item {\bf The inversion {\tt wdc\_imageOBJe2\_5d\_disk.m}}. A while-loop that iterates the following,
+\begin{itemize}
+\item Compute cross-gradient updates for $\sigma$. Not computationally expensive and not done in parallel.
+\item Compute updates for $\sigma$ using the GPR data. Depending on the choice of hyper-parameters, this is done in one of two ways: {\tt w\_update\_s\_disk\_.m} or {\tt w\_updateOBJ\_s\_disk\_.m}. We only review the former,
+\begin{itemize}
+\item[$\circ$] {\tt w\_update\_s\_disk\_.m} begins a Matlab {\tt parfor} that runs on the number of experiments of the data. The {\tt parfor} runs {\tt w\_update\_s\_disk.m},
+\begin{itemize}
+\item Loads data on a tiny version of the entire 2D domain. Every step that follows uses just this tiny sub-domain.
+\item Solves the GPR forward model, that is Maxwell's 2D wave equation using a finite difference time domain solver. It also saves the entire wavefield (up to 20Gb), a matrix of dimensions length $\times$ depth $\times$ time. This step is CPU and memory intensive. 
+\item Solves the GPR forward model using the residual as source, and at each time-step cross-correlates with the recorded wavefield. Once this step is done, the wavefield is deleted. The result of the cross-correlation is the sought update for our gradient-descent. 
+\item Finds a step-size for this gradient. The forward model needs to be solved again. It is now an update.
+\item Saves this update (which is the size of the tiny domain) in disk.
+\end{itemize}
+\item[$\circ$] Read all updates that were saved to disk and sum them up to get an update on the entire domain. We now have a GPR update for $\sigma$.
+\end{itemize}
+\item Compute updates for $\sigma$ using the ER data, {\tt dc\_update2\_5d\_\_.m}.
+\begin{itemize}
+\item[$\circ$] {\tt dc\_update2\_5d\_\_.m} begins a Matlab {\tt parfor} that runs on the number of experiments of the data. The {\tt parfor} runs {\tt dc\_update2\_5d.m},
+\begin{itemize}
+\item Loads data in the entire 2D domain.
+\item Solves the ER forward model, that is Maxwell's 2.5D steady state equation with {\tt dc\_fwd2\_5d.m},
+\begin{itemize}
+\item {\tt dc\_fwd2\_5d.m} begins a for-loop of 4 iterations. Each iteration solves and saves in memory a 2D electric potential. These forward models consist of a linear solver and are not CPU nor memory intensive. 
+\item Once finished it performs a linear combination of these 2D electric potentials to give one 2.5D electric potential. The 2D electric potentials need to remain saved in memory.
+\end{itemize}
+\item {\tt dc\_gradient2\_5d.m} computes the 2.5D gradient,
+\begin{itemize}
+\item {\tt dc\_gradient2\_5d.m} begins a for-loop of 4 iterations. Each iteration solves the ER forward model using the residuals as 2D sources and then multiplying by a special sparse matrix that uses the 2D electric potentials stored in memory.
+\item Once finished it performs a linear combination of these 2D gradients to give one 2.5D gradient. The 2D electric potentials are deleted.
+\end{itemize}
+\item Find a step size for the gradient. This entails solving the 2.5D forward model again for different values of $\sigma$, so all the parts from {\tt dc\_fwd2\_5d.m} are repeated. The gradient is now an update.
+\item Save the update in memory. 
+\end{itemize}
+\item[$\circ$] Sum all updates from all source-receiver pairs together. We now have an ER update for $\sigma$.
+\end{itemize}
+\item Join $\sigma$ updates from GPR and ER in a special way. This step is not computationally expensive and not done in parallel.
+\item Compute cross-gradient updates for $\varepsilon$. Not computationally expensive and not done in parallel.
+\item Compute updates for $\varepsilon$ using the GPR data. Depending on the choice of hyper-parameters, this is done in one of two ways: {\tt w\_update\_e\_disk\_.m} or {\tt w\_updateOBJ\_e\_disk\_.m}. These are very similar to those for $\sigma$. The main difference is the number of times the forward model is called when finding the step-size.
+\item The while-loop is terminated when the number of iterations wanted is achieved.
+\end{itemize}
+\end{enumerate}
+
+\section{Notes on time}
+Below is a table with approximate timings for the Groningen field data forward models. Each timing is per core per experiment, i.e. one shot-gather (GPR) on one core, or one source-receiver pair (ER) on one core.
+\\\\
+The times per iteration the forward models are called in the main while-loop ({\tt wdc\_imageOBJe2\_5d\_disk.m}) are also given. We assume we are using {\tt w\_update\_[s,e]\_disk\_.m}. For {\tt w\_updateOBJ\_[s,e]\_disk\_.m} the times the forward models are called is double.
+\begin{center}
+%\caption{Caption below table.}
+\begin{tabular}{| l | c | c | c | c |}
+\hline
+forward model & time it takes & $\sigma$ update & $\varepsilon$ update & times used\\
+\hline
+2D    GPR & 20min & \checkmark & &  2\\
+2.5D ER &  3min & \checkmark & - &  3 \\
+2D    GPR & 20min & & \checkmark &  3\\
+\hline
+\end{tabular}
+\end{center}
+The total number of experiments in the GPR and ER data are 56 and 234 respectively.
+\\\\
+Recall that {\tt w\_update\_s\_disk.m} demands 20Gb per experiment when computing the gradient. This means that out of the 56 experiments we can only do a fraction $f$ at a time, so 20Gb $\times f$ does not exceed memory limits.
+\end{document}  
+
+
+
+
+
+
+
+
+
+

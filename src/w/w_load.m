@@ -48,6 +48,12 @@ function [parame_,gerjoii_] = w_load(parame_,gerjoii_,is)
   % ............................................................................
   % assign source wavelet
   gerjoii_.w.wvlet_ = wvlets_(:,is);
+  % ............................................................................
+  % use only part of the data for the source estimation
+  if isfield(radargram,'irx_keepx_')
+    gerjoii_.w.irx_keepx_ = radargram.irx_keepx_;
+    gerjoii_.w.irx_keepx__= radargram.irx_keepx__;
+  end
   % % ..........................................................................
   % % receiver at src
   % gerjoii_.w.Jy = Jy;

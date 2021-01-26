@@ -5,9 +5,19 @@ from fancy_figure import fancy_figure
 import numpy as np
 import glob
 # -----------------------------------------------------
-file__= glob.glob('obs_line*.mat')
-file__ = file__[0]
-file__ = file__[0:9]
+obs_reco = input('observed or recovered? (obs or rec) ')
+if obs_reco=='obs':
+    # -----------------------------------------------------
+    file__= glob.glob('obs_line*.mat')
+    file__ = file__[0]
+    file__ = file__[0:9]
+    title='GPR Observed'
+elif obs_reco=='rec':
+    # -----------------------------------------------------
+    file__= glob.glob('line*.mat')
+    file__ = file__[0]
+    file__ = file__[0:5]
+    title='GPR Recovered'
 # -----------------------------------------------------
 # names
 # -----------------------------------------------------
@@ -21,9 +31,10 @@ rx,_,_ = fancy_figure.bring_struct('',file__,struct_,'r',0,0)
 t,_,_ = fancy_figure.bring_struct('',file__,struct_,'t',0,0)
 dr,_,_ = fancy_figure.bring_struct('',file__,struct_,'dr',0,0)
 # -----------------------------------------------------
-mini_obse = 0.015*mini_obse
-maxi_obse = 0.015*maxi_obse
-t = t*1e+9
+mini_obse = 1*mini_obse
+maxi_obse = 1*maxi_obse
+# # if not field data, uncomment this line
+# t = t*1e+9
 # -----------------------------------------------------
 print('max_obse = ',maxi_obse)
 midi = 0
@@ -41,12 +52,17 @@ size=[6,6]
 # -----------------------------------------------------
 # data w
 # -----------------------------------------------------
-plt_=fancy_figure(data=d_obse,extent=extent_,
+plt_=fancy_figure(
+data=d_obse,
+extent=extent_,
 x=rx,y=t,
-aspect='auto',figsize=size,
+aspect='auto',
+figsize=size,
 # y_ticklabels='off',#x_ticklabels='off',
 midi=midi,vmin=mini_obse,vmax=maxi_obse,
-title="Observed GPR",xlabel='Receivers (m)',ylabel='Time (ns)',
+title=title,
+xlabel='Receivers (m)',
+ylabel='Time (ns)',
 holdon='on',
 guarda_path=guarda_path,
 guarda=120).matrix()

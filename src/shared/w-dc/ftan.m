@@ -1,5 +1,5 @@
 function [disper_g_vf, disper_g_ft, dro_snr] = ftan(dro,dt,f,v,alph,dsr)
-	
+
 % Apply frequency-time analysis (FTAN) to a seismic dro. All
 % preprocessing (e.g., windowing) should be done prior to calling this
 % function.
@@ -21,12 +21,12 @@ function [disper_g_vf, disper_g_ft, dro_snr] = ftan(dro,dt,f,v,alph,dsr)
 % check the shape of dro input
 %
 if size(dro,1) ~= 1
-  dro = transpose( dro );
+ dro = transpose( dro );
 end
 
 nt   = numel( dro ); 
-nfft  = nt; % number of points in FFT: must be the same as nt
-w  = 2 * pi * makeFFTvector( dt, nfft); 
+nfft = nt; % number of points in FFT: must be the same as nt
+w    = 2 * pi * makeFFTvector( dt, nfft); 
 t = ( 0 : nt-1 ) .* dt; 
 
 nf = numel(f); 
@@ -52,19 +52,19 @@ dro = dro .* taper';
 for ii = 1 : nf 
 	% [rad] central frequency of Guassian
 	%
-  wo =  2 * pi * f(ii); 
-  % make the narrowband filter (Gaussian as in Levshin's work)
+ wo =  2 * pi * f(ii); 
+ % make the narrowband filter (Gaussian as in Levshin's work)
 	% equation 6 in Bensen et al. (2007)
 	%
-  gfl = exp( -alph * ( ( ( w - wo ) ./ wo ).^2 ) );
+ gfl = exp( -alph * ( ( ( w - wo ) ./ wo ).^2 ) );
 	% fft of analytic signal
 	%
-  dro_ = fft( hilbert(dro), nfft ) ./ nfft;
+ dro_ = fft( hilbert(dro), nfft ) ./ nfft;
 	% multiply by narrowband filter and inverse FFT
 	% Equation 5 in Bensen et al. (2007)
 	%
 	dro_ = ifft( dro_ .* gfl, nfft);
-  disper_g_ft( ii, : ) = dro_;
+ disper_g_ft( ii, : ) = dro_;
 	% interpolate from time to velocity using a spline
 	% spline( x, y(x), new x ) = new y( new x )
 	%

@@ -18,6 +18,7 @@ class fancy_figure():
         self.plt_   = kwargs.get('plt_', None)
         self.holdon = kwargs.get('holdon', 'off')
         self.ax_    = kwargs.get('ax_', None)
+        self.overlay   = kwargs.get('overlay','false')
         # ......
         # text
         # ......
@@ -59,6 +60,11 @@ class fancy_figure():
         self.margin = kwargs.get('margin',(0.,0.))
         self.origin = kwargs.get('origin',None)
         self.markersize = kwargs.get('markersize',None)
+        self.no_frame = kwargs.get('no_frame','off')
+        self.linestyle= kwargs.get('linestyle','-')
+        self.frameon= kwargs.get('frameon',False)
+        self.colo_place= kwargs.get('colo_place','bottom')
+        self.colo_posi= kwargs.get('colo_posi','horizontal')
         # ......
         # color
         # ......
@@ -69,6 +75,7 @@ class fancy_figure():
         self.colop = kwargs.get('colop',None)
         self.scatter_colo = kwargs.get('scatter_colo',None)
         self.cololabel    = kwargs.get('cololabel',10)
+        self.alpha = kwargs.get('alpha',None)
         # ......
         # save
         # ......
@@ -83,7 +90,7 @@ class fancy_figure():
         file and variable have to be named the same!
         '''
         if name__==None:
-            name__ = name_
+            name__ = name_#+'.mat'
         file_  = path_ + name_ + '.mat'
         file_  = sio.loadmat(file_)
         file_  = file_[name__]
@@ -101,8 +108,10 @@ class fancy_figure():
         file_  = path_ + name_ + '.mat'
         file_  = sio.loadmat(file_)
         file_  = file_[struct_]
-        fields = file_.dtype
-        file_ = file_[field_].item()
+        # fields = file_.dtype
+        field_ = field_.split('.')
+        for i_ in range(len(field_)):
+            file_ = file_[field_[i_]].item()
         file__ = file_[~np.isnan(file_)]
         mini_ = file__.min()
         maxi_ = file__.max()
@@ -140,27 +149,30 @@ class fancy_figure():
         ax.set_xlabel(self.xlabel)
         ax.set_ylabel(self.ylabel)
         if self.super_title is not None:
-            fig.suptitle(self.super_title,fontweight='bold',fontsize=20)
+            fig.suptitle(self.super_title,fontweight='bold',fontsize=20,va='bottom')
     @staticmethod
     def cute_ticks(self,ax):
         if isinstance(self.yticks, list):
             ax.set_yticks(self.y)
-            ax.set_yticklabels(self.yticks,fontsize='10')
+            ax.set_yticklabels(self.yticks,fontsize='14')
         if isinstance(self.xticks, list):
             ax.set_xticks(self.x)
-            ax.set_xticklabels(self.xticks,fontsize='10')
+            ax.set_xticklabels(self.xticks,fontsize='14')
     @staticmethod
     def cute_axis(self,ax):
         if self.y_ticklabels=='off':
             ax.set_yticklabels([])
         if self.x_ticklabels=='off':
             ax.set_xticklabels([])
+        if self.no_frame=='on':
+            ax.set_axis_off()
     @staticmethod
     def disp_plt(self,plt):
         if self.super_title is not None:
             plt.tight_layout(rect=[0, 0.03, 1, 0.95]) # 0, 0.03, 1, 0.95
         else:
-            plt.tight_layout()
+            if self.overlay=='false':
+                plt.tight_layout()
         if self.holdon=='off':
             plt.show()
         elif self.holdon=='close':
@@ -171,9 +183,9 @@ class fancy_figure():
             if isinstance(self.legend_coord,tuple):
                 ax.legend(labels=self.legends,frameon=False,#
                 bbox_to_anchor=self.legend_coord,#
-                loc='center left',bbox_transform=ax.transData)
+                loc='center left',bbox_transform=ax.transData,borderaxespad=0.)
             else:
-                ax.legend(labels=self.legends,frameon=False)
+                ax.legend(labels=self.legends,frameon=self.frameon,facecolor='white')
     @staticmethod
     def save_me(self,fig):
         # .................
@@ -191,7 +203,8 @@ class fancy_figure():
             fig_name = self.guarda_path + self.fig_name + ".png"
             fig_name = fig_name.replace(" ", "-")
             fig.savefig(fig_name, format='png', dpi=self.guarda,#
-            bbox_inches='tight',transparent=self.transparent)
+            bbox_inches='tight',
+            transparent=self.transparent,pad_inches=0.05)
     # --------------------------------------------------------------------------
     def matrix(self):
         from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -202,7 +215,6 @@ class fancy_figure():
         simple example: 
             fancy_figure(data=data,
             x_ticklabels='off',y_ticklabels='off',
-            midi=midi,
             midi=1,vmax=4,vmin=1,
             title=title,
             guarda=120).matrix()
@@ -222,7 +234,7 @@ class fancy_figure():
         else:
             ax = self.ax_
         im = ax.imshow(self.data,cmap=colo,norm=norm,extent=self.extent,#
-        aspect=self.aspect,origin=self.origin)
+        aspect=self.aspect,origin=self.origin,alpha=self.alpha)
         # .................
         # title and labels
         # .................
@@ -232,18 +244,18 @@ class fancy_figure():
         # .................
         self.cute_ticks(self,ax)
         # .................
-        # fix colorbar position (¬_¬)
+        # fix colorbar position (so annoying)
         # .................
         if self.aspect is None:
             ax.axis('image')
         if self.colorbaron=='on':
             if self.xlabel == None:
-                pad=0.2
+                pad=0.2#0.2
             else:
                 pad=0.6
             divider = make_axes_locatable(ax)
-            cax = divider.append_axes('bottom', size=0.15, pad=pad)
-            cb=plt.colorbar(im, cax=cax,orientation='horizontal',#
+            cax = divider.append_axes(self.colo_place, size=0.15, pad=pad)
+            cb=plt.colorbar(im, cax=cax,orientation=self.colo_posi,#
             format=self.colo_accu)
             cb.set_label(self.colo_title,fontsize=15)
         # .................
@@ -266,7 +278,7 @@ class fancy_figure():
     def pmatrix(self):
         from mpl_toolkits.axes_grid1 import make_axes_locatable
         '''
-        plot a matrix as imagesc
+        plot a matrix as pcolor
         '''
         fig,plt = self.get_fig(self)
         # .................
@@ -298,7 +310,7 @@ class fancy_figure():
         # .................
         self.cute_ticks(self,ax)
         # .................
-        # fix colorbar position (¬_¬)
+        # fix colorbar position (so annoying)
         # .................
         if self.aspect is None:
             ax.axis('image')
@@ -443,7 +455,7 @@ class fancy_figure():
             ax.invert_yaxis()
         ax.margins(self.margin[0],self.margin[1]) 
         # .................
-        # fix colorbar position (¬_¬)
+        # fix colorbar position (so annoying)
         # .................
         if self.colorbaron=='on':
             pad=0.2
@@ -637,14 +649,23 @@ class fancy_figure():
         '''
         do a cool colormap
         '''
+        import numpy as np
         if self.colo == 'br':
-            import numpy as np
             from matplotlib import cm
             from matplotlib.colors import ListedColormap
             colo   = cm.get_cmap('Blues_r', 128)
             colo_  = cm.get_cmap('Reds', 128)
             # colo   = cm.get_cmap('YlOrRd_r', 128)
             # colo_  = cm.get_cmap('PuBuGn', 128)
+            colo   = np.vstack((colo(np.linspace(0, 1, 128)),
+                                   colo_(np.linspace(0, 1, 128))))
+            colo = ListedColormap(colo)
+        # -------------------------
+        if self.colo == 'kkrr':
+            from matplotlib import cm
+            from matplotlib.colors import ListedColormap
+            colo   = cm.get_cmap('Greys_r', 128)
+            colo_  = cm.get_cmap('Reds', 128)
             colo   = np.vstack((colo(np.linspace(0, 1, 128)),
                                    colo_(np.linspace(0, 1, 128))))
             colo = ListedColormap(colo)
@@ -661,9 +682,109 @@ class fancy_figure():
         if self.colo == 'Blues':
             colo='Blues'
         # -------------------------
+        if self.colo == 'plasma':
+            colo='plasma'
+        # -------------------------
+        if self.colo == 'viridis':
+            colo='viridis'
+        # -------------------------
+        if self.colo == 'RdGy':
+            colo='RdGy'
+        # -------------------------
+        if self.colo == 'cool':
+            colo='cool'
+        # -------------------------
+        if self.colo == 'b-gb':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0),(0,1,1)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'r-rgb':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0.5,0,0),(0.5,1,1)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'rb-rg':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(1,0,1),(1,1,0)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'b-gb':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0),(0,1,1)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'r-rg':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(1,0,0),(1,1,0)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'kgr':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0),(0,1,0),(1,0,0)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'kr':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0),(1,0,0)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'kb':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0),(0,0,1)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'kg':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0),(0,1,0)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
         if self.colo == 'cafe':
             from matplotlib.colors import LinearSegmentedColormap
             colo  = [(1,1,1),(0.5098,0.2667,0.0902)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'y-b':
+            from matplotlib.colors import LinearSegmentedColormap
+            # colo  = [(0.8275,0.7922,0.0745),(0.865,0.865,0.865),(0.1176,0.2980,0.5882)]
+            colo  = [(0.8275,0.7922,0.0745),(0.865,0.865,0.865),(0.1549,0.5471,0.7372)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'johns':
+            # john's favorite velocity colormap
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0,0,0.9608),(0.2353,1,0),(0.8824,0,0)]
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'groundwater':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0.8275,0.7922,0.0745),(0.4 ,0.2 ,0)]
+            # colo_ = [(0.865,0.865,0.865), (0.2039,0.4824,0.8980),(0.0353,0.2784,0.6392)]
+            colo_ = [(0.865,0.865,0.865), (0.2039,0.4824,0.8980),(0.3765,0.0353,0.6196)]
+            colo = colo + colo_
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'groundwater_':
+            from matplotlib.colors import LinearSegmentedColormap
+            # colo  = [(0.3765,0.0353,0.6196),(0.2039,0.4824,0.8980)]
+            colo  = [(0.3765,0.0353,0.6196),(0.0275,0.7647,0.9882)]
+            colo_ = [(0.865,0.865,0.865),(0.4 ,0.2 ,0),(0.8275,0.7922,0.0745)]
+            colo = colo + colo_
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'crazy_mellow':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0.3765,0.0353,0.6196),(0.8980,0.3059,0.0706)]
+            colo_ = [(0.865,0.865,0.865),(0.2510,0.5490,0.2549),(0.8275,0.7922,0.0745)]
+            colo = colo + colo_
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'crazy_light':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0.0353,0.8824,0.9569),(0.4824,0.1961,0.6588)]
+            colo_ = [(0.865,0.865,0.865), (0.9882,0.6000,0.0196),(0.0353,0.9569,0.2353)]
+            # colo_ = [(0.865,0.865,0.865), (0.9569,0.9882,0.0196),(0.0353,0.9569,0.2353)]
+            colo = colo + colo_
             colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
         # -------------------------
         if self.colo == 'apbcv':
@@ -683,12 +804,15 @@ class fancy_figure():
             colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
         # -------------------------
         if self.vmin is None:
-            self.vmin = self.data.min()
+            # self.vmin = self.data.min()
+            self.vmin = np.nanmin(self.data)
         if self.vmax is None:
-            self.vmax = self.data.max()
+            # self.vmax = self.data.max()
+            self.vmax = np.nanmax(self.data)
         if self.midi is None:
             self.midi = 0.5*(self.vmin + self.vmax)  
         norm = MidpointNormalize(midpoint=self.midi,vmin=self.vmin,vmax=self.vmax)
+        # -------------------------
         return colo, norm
 # ------------------------------------------------------------------------------
 import matplotlib.colors as colors

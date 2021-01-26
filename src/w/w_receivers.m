@@ -95,6 +95,35 @@ for i_source = 1:ns
       receivers_real_l = flip(receivers_real_l);
     end
     receivers_real{i_source} = [receivers_real_l ; receivers_real_r];
+  elseif strcmp(rec_TYPE,'xLINEAR_TIGHT_')
+    % 
+    %     lo        lo/4     lo/4
+    % s -------- r ------ r ------ r
+    %
+    
+    % ----------
+    % right of x-axis
+    % ----------
+    % length to the end of x (right of x-axis)
+    x_length_r = abs(source_xz(1)-parame_.bb);
+    
+    % # of receivers for this source
+    % exact is +1 instead of -3, 
+    % but -3 is to leave an extra wavelength in the model 
+    nr_r = fix( (4/lo)*(x_length_r - lo) - 3 );
+    
+    if nr_r>0
+      receivers_real_r = zeros(nr_r,2);
+      % first receiver 
+      receivers_real_r(1,1) = source_xz(1) + lo;
+      % rest of receivers
+      for i=2:nr_r
+        receivers_real_r(i,1) = receivers_real_r(i-1,1) + lo4;
+      end
+    else 
+      receivers_real_r = [];
+    end
+    receivers_real{i_source} = receivers_real_r;
   elseif strcmp(rec_TYPE,'xLINEAR_ALL')
     %
     %

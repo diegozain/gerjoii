@@ -4,7 +4,8 @@ clc
 addpath('read-data');
 % ------------------------------------------------------------------------------
 % WARNING:
-% run after datavis_w3.m and field_w.m
+% run after datavis_w.m and field_w.m
+fprintf('\n WARNING: run after datavis_w.m and field_w.m\n\n')
 % ------------------------------------------------------------------------------
 fprintf('\n --------------------------------------------------------')
 fprintf('\n   Get all source-signatures.')
@@ -23,8 +24,16 @@ prompt = '    tell me 2nd# of interval of lines you want, eg: if 2:8 write 8: ';
 iline__ = input(prompt,'s'); 
 iline__=str2double(iline__);
 % -
+prompt = '\n    do you want to invert for the source wavelet (y) or leave it be (empty): ';
+swvlet_inv = input(prompt,'s');
+% -
 prompt = '    is this gerjoii synthetic data, (y or n):  ';
 synthetic_ = input(prompt,'s');
+% ------------------------------------------------------------------------------
+% WARNING: I'm an idiot. sorry
+if strcmp(project_name,'bhrs')
+  fprintf('\n\n                         you chose the bhrs data.\n\n                         you have to change line 147 and 148 so it sums the term t_sr.\n\n')
+end
 % ------------------------------------------------------------------------------
 % load field_ structure
 load(strcat('../raw/',project_name,'/w-data/',project_name,'_w.mat'));
@@ -71,6 +80,8 @@ gaussians_= cell(1,ns);
 % ------------------------------------------------------------------------------
 figure;hold on
 for is=1:ns;
+  is_= is;
+  is = source_no(is);
   fprintf('source for line # %i\n',is)
   load(strcat(data_path_,data_name_,num2str(is),'.mat'));
   d   = radargram.d;
@@ -87,6 +98,11 @@ for is=1:ns;
   v_ground   = radargram.v_ground;
   r_keepx_   = radargram.r_keepx_;
   r_keepx__  = radargram.r_keepx__;
+  % ----------------------------------------------------------------------------
+  % % polarity flip
+  % if isfield(radargram,'flip_polarity')
+  %   d = -d;
+  % end
   % ----------------------------------------------------------------------------
   fny = 1/dt/2;
   nt = numel(t);
@@ -125,9 +141,11 @@ for is=1:ns;
   d_lmo = lmo(d,t,rx,v_ground);
   % ground velocity
   t_sr = dsr/v_ground; % [ns]
-  % ground wave 
-  t_  = t_ground_  + t_sr; % [ns]
-  t__ = t_ground__ + t_sr; % [ns]
+  % ground wave
+  % the BHRS data needs to have the t_sr term summed.
+  % for all other, the t_sr term does NOT have to be summed.
+  t_  = t_ground_  ;%+ t_sr; % [ns]
+  t__ = t_ground__ ;%+ t_sr; % [ns]
   % stack linear moveout
   [s_wvlet,d_muted,gaussian_] = lmo_source(d_lmo,t,t__,t_);
   % get time-sr in time-index
@@ -143,7 +161,7 @@ for is=1:ns;
   % get amplitudes from peak of lmo wave
   % [a_o,~] = max(d_muted); 
   a_o = abs(min(d_muted));
-  a_o=a_o.';
+  a_o = a_o.';
   % window-mean the amplitudes
   cc=5; % 5 samples to mean 
   [a_o,~] = window_mean(a_o,cc);
@@ -152,7 +170,7 @@ for is=1:ns;
   % --------------------------------------------------------------------------
   % fit hyperbola
   [dd,bb,cc] = fit_hyperbola2(a_o,sR,[1; 1; 1]);
-  fprintf('   c=%d\n',cc);
+  fprintf('   power of amplitude hyperbola = %d\n',cc);
   % amplitude at sR=0 (where source is)
   a_ = dd./(bb).^cc;
   % a_ = a_/0.44;
@@ -165,14 +183,14 @@ for is=1:ns;
   gaussians_{is} = gaussian_;
   % ----------------------------------------------------------------------------
   % set colors for sections of the survey
-  if is<=fix(ns/3)
+  if is_<=fix(ns/3)
     colo = [1 0 0];
-  elseif and(is>=fix(ns/3),is<=fix(2*ns/3))
+  elseif and(is_>=fix(ns/3),is_<=fix(2*ns/3))
     colo = [0 1 0];
-  elseif is>fix(2*ns/3)
+  elseif is_>fix(2*ns/3)
     colo = [0 0 1];
   end  
-  plot(t(1:fix(nt*0.2)),s_wvlet(1:fix(nt*0.2)),'color',colo )
+  plot(t(1:fix(nt*0.4)),s_wvlet(1:fix(nt*0.4)),'color',colo )
 end
 hold off
 axis tight
@@ -200,7 +218,7 @@ amax_ = amax(1:min(good_lines,ns));
 figure;
 hold on
 plot(amax,'.-','markersize',30)
-plot(mean(amax_)*ones(size(amax_)),'-.','markersize',30)
+plot(geomean(amax_)*ones(size(amax_)),'-.','markersize',30)
 hold off
 grid on
 xlabel('Line #')
@@ -212,24 +230,36 @@ simple_figure()
 % ------------------------------------------------------------------------------
 gaussian_=mean(gaussians_(:,1:min(good_lines,ns)),2);
 swvlet = mean(s_wvlets(:,1:min(good_lines,ns)),2);
-amax_  = mean(amax_);
+amax_  = geomean(amax_);
 % ------------------------------------------------------------------------------
 swvlet = normali(swvlet);
 % ------------------------------------------------------------------------------
-[~,tau_] = max(swvlet);
-tau_ = t(tau_);
-[wo,tau_]=fit_ricker(swvlet,t,[2.2*fo; tau_],'n');
-[wo,bo,tau_,E_] = fit_gabor(swvlet,t,[wo; 20; tau_],'n');
-fprintf('\n   fo=%d',wo/2/pi);
-fprintf('\n   tau=%d\n\n',tau_);
-% s = ( 1-0.5*(wo^2)*(t-tau_).^2 ) .* exp( -0.25*(wo^2)*(t-tau_).^2 );
-s = exp(-((t-tau_).^2)./(bo^2)) .* cos(wo*(t-tau_));
+if strcmp(swvlet_inv,'y')
+  [~,tau_] = max(swvlet);
+  tau_ = t(tau_);
+  [wo,tau_]=fit_ricker(swvlet,t,[2.2*fo; tau_],'n');
+  [wo,bo,tau_,E_] = fit_gabor(swvlet,t,[wo; 20; tau_],'n');
+  [wo,bo,to,co,E_] = fit_gabor_(swvlet,t,[wo,bo,tau_,1],'n')
+  fprintf('\n   fo  = %d (GHz)',wo/2/pi);
+  fprintf('\n   tau = %d (ns)\n\n',tau_);
+  % ----------------------------------------------------------------------------
+  % ricker
+  % s = ( 1-0.5*(wo^2)*(t-tau_).^2 ) .* exp( -0.25*(wo^2)*(t-tau_).^2 );
+  % gabor
+  % s = exp(-((t-tau_).^2)./(bo^2)) .* cos(wo*(t-tau_));
+  % gabor with kink
+  s = exp(-((t-tau_).^2)./(bo^2)) .* cos(wo*(t-tau_)+co);
+  % ----------------------------------------------------------------------------
+  s = s/abs(min(s));
+  s = amax_*s;
+end
 % ------------------------------------------------------------------------------
 swvlet = swvlet/abs(min(swvlet));
 swvlet = amax_*swvlet;
 % ------------------------------------------------------------------------------
-s = s/abs(min(s));
-s = amax_*s;
+if ~strcmp(swvlet_inv,'y')
+  s = swvlet;
+end
 % ------------------------------------------------------------------------------
 % yee grid source
 s_ = integrate(s,dt,0);
@@ -237,10 +267,10 @@ s_ = - gaussian_.*s_;
 % ------------------------------------------------------------------------------
 figure;
 hold on
-plot(t(1:fix(nt*0.2)),swvlet(1:fix(nt*0.2)),'k-','linewidth',5)
-% plot(t(1:fix(nt*0.2)),s_(1:fix(nt*0.2)),'-.','linewidth',5)
-plot(t(1:fix(nt*0.2)),s(1:fix(nt*0.2)),'-.','linewidth',5)
-plot(t(1:fix(nt*0.2)),gaussian_(1:fix(nt*0.2))*max(s),'-.','linewidth',5)
+plot(t(1:fix(nt*0.3)),swvlet(1:fix(nt*0.3)),'k-','linewidth',5)
+% plot(t(1:fix(nt*0.3)),s_(1:fix(nt*0.3)),'-.','linewidth',5)
+plot(t(1:fix(nt*0.3)),s(1:fix(nt*0.3)),'-.','linewidth',5)
+plot(t(1:fix(nt*0.3)),gaussian_(1:fix(nt*0.3))*max(s),'-.','linewidth',5)
 hold off
 axis tight
 xlabel('Time (ns)')
@@ -273,4 +303,5 @@ if strcmp(src_yn,'y')
 else
   fprintf('\n    ok, source wavelet is not saved.\n\n',is)
 end
+% ------------------------------------------------------------------------------
 

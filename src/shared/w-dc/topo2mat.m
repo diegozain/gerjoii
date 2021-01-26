@@ -1,4 +1,8 @@
 function [u_,z] = topo2mat(u,x,z,x_,z_,val)
+% ------------------------------------------------------------------------------
+% diego domenzain
+% @ BSU fall 2019
+% ------------------------------------------------------------------------------
 % u is a matrix that needs topographic adjusment
 % x is discretized length for u
 % z is discretized depth for u

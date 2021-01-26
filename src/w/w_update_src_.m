@@ -16,6 +16,6 @@ ns = gerjoii_.w.ns;
 wvlets_ = zeros(size(parame_.w.wvlets_));
 parfor is=1:ns
   wvlets_(:,is) = w_update_src(geome_,parame_,finite_,gerjoii_,is);
-  fprintf('   found source wavelet for source #%i\n',is)
 end
+fprintf('\n')
 end

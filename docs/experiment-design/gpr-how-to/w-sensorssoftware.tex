@@ -1,0 +1,143 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\usepackage{titling}
+\setlength{\droptitle}{-5em}   % This is your set screw
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{Fiber optic GPR for Dummies\\{\normalsize Diego Domenzain}}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% on/off
+%-------------------
+\section*{Making it work}
+\begin{enumerate}
+\item Assemble antennas
+\begin{itemize}
+\item Make sure they turn on by pushing the on/off button and watching a bright red light appear on their led thingy
+\item Turn them off
+\end{itemize}
+\item Connect antennas to DVL
+\begin{itemize}
+\item Tx (source) is lower entry in DVL:
+\begin{itemize}
+\item Top plug (light gray) goes to ``input" in antenna (dark gray)
+\item Do NOT connect low plug
+\end{itemize}
+%
+\item Rx (receiver) is upper entry in DVL:
+\begin{itemize}
+\item Top plug (light gray) goes to ``input" in antenna (dark gray)
+\item Low plug (dark gray) goes to ``output" in antenna (light gray)
+\end{itemize}
+\item You SHOULD check which cable is which by putting light in one end and seeing on which end comes out. {\it Some} people label them flipped.
+\end{itemize}
+\item Turn DVL on
+\item Under \texttt{GPR Parameters} choose \texttt{Pulser setting} to \texttt{PE100 1K}
+\end{enumerate}
+%
+\begin{table}[!h]
+\centering
+\begin{tabular}{ r | l | l}
+$f_o$ MHz & $\lambda_o$ m & $\lambda_o/4$ m \\
+\hline
+50 & 2 & 0.5 \\
+100 & 1 & 0.2 \\
+200 & 0.5 & 0.1 \\
+250 & 0.5 & 0.1 \\
+500 & 0.2 & 0.05 \\
+\hline
+\end{tabular}
+\caption{Approximate wavelengths for $\varepsilon_{max}$ = 9 ($v_{min}$ = 0.1 m/ns). You can do your own by computing $\lambda_o=300/f_{o,MHz}/\sqrt{\varepsilon_{max}}$.}
+ \label{tbl:wavelength}
+ \end{table}
+%
+%
+%
+\begin{table}[!h]
+\centering
+\begin{tabular}{ r | l | l}
+$f_o$ MHz & $\lambda_o$ m & $\lambda_o/4$ m \\
+\hline
+50 & 1 & 0.2 \\
+100 & 0.5 & 0.1 \\
+200 & 0.25 & 0.05 \\
+250 & 0.2 & 0.05 \\
+500 & 0.1 & 0.02 \\
+\hline
+\end{tabular}
+\caption{Approximate wavelengths for $\varepsilon_{max}$ = 30 ($v_{min}$ = 0.05 m/ns). You can do your own by computing $\lambda_o=300/f_{o,MHz}/\sqrt{\varepsilon_{max}}$.}
+ \label{tbl:wavelength}
+ \end{table}
+%
+%
+%------------
+% biblio
+%------------
+%\newpage
+\bibliographystyle{plainnat}
+\bibliography{interferometry-theory}
+%\nocite{*}
+\end{document}

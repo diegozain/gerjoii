@@ -1,0 +1,74 @@
+\documentclass[10pt]{article}
+\usepackage[usenames]{color} %used for font color
+\usepackage{amssymb} %maths
+\usepackage{amsmath} %maths
+\usepackage[utf8]{inputenc} %useful to type directly diacritic characters
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,decorations.pathreplacing}
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}\begin{document}
+\begin{align*}\begin{tikzpicture}[decoration={brace}]
+\draw[gray] (0,0) -- (2,0);
+\draw[gray] (2,0) -- (4,0);
+\draw[gray] (4,0) -- (4,2);
+\draw[gray] (2,2) -- (4,2);
+\draw[gray] (0,2) -- (2,2);
+\draw[gray] (0,0) -- (0,2);
+\draw[gray] (2,0) -- (2,2);
+\node[] at (1,1)  (i) {$\bullet$};
+\node[] at (1.3,0.7)  (ii) {$i$};
+\node[] at (-1,1)  (j1) {$\bullet$};
+\node[] at (1,-1)  (j2) {$\bullet$};
+\node[] at (1,3)  (j3) {$\bullet$};
+\node[] at (3,1)  (j) {$\bullet$};
+\node[] at (3.3,0.7)  (jj) {$j$};
+\draw (1,1) -- (-1,1);
+\draw (1,1) -- (1,-1);
+\draw (1,1) -- (1,3);
+\draw (1,1) -- (3,1);
+%\node[] at (0.3,1.7)  (omegai) {$\Omega_i$};
+%\node[] at (3.7,1.7)  (omegai) {$\Omega_j$};
+%\node[] at (2.5,1.3)  (gambot) {$\gamma_{j}^{\bot}$};
+%\node[] at (2.3,0.5)  (gam) {$\gamma_{j}$};
+\draw [decorate] (3,-1.3) -- (1,-1.3) ;
+\node[] at (2,-1.7)  () {$\Delta_{j}^{\bot}$};
+\draw [decorate] (4.3,2) -- (4.3,0) ;
+\node[] at (4.7,1)  () {$\Delta_{j}$};
+%
+\begin{scope}[shift={(7,0)}]
+\draw[gray] (0,0) -- (2,0);
+\draw[gray] (2,0) -- (4,0);
+\draw[gray] (4,0) -- (4,2);
+\draw[gray] (2,2) -- (4,2);
+\draw[gray] (0,2) -- (2,2);
+\draw[gray] (0,0) -- (0,2);
+\draw[gray] (2,0) -- (2,2);
+\node[] at (1,1)  (i) {$\bullet$};
+\node[] at (1.3,0.7)  (ii) {$\sigma_i$};
+\node[] at (0.7,0.7)  (ii) {$\varphi_i$};
+\node[] at (3,1)  (j) {$\bullet$};
+\node[] at (3.3,0.7)  (jj) {$\sigma_j$};
+\node[] at (2.7,0.7)  (gambot) {$\varphi_j$};
+\draw (1,1) -- (3,1);
+%\node[] at (0.3,1.7)  (omegai) {$\Omega_i$};
+%\node[] at (3.7,1.7)  (omegai) {$\Omega_j$};
+\node[] at (2.4,1.5)  (gam) {$\sigma_{ij}^{*}$};
+\node[] at (2,1)  (gam) {$*$};
+\end{scope}
+\end{tikzpicture}\end{align*}
+\end{document}
