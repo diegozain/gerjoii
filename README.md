@@ -10,7 +10,7 @@ https://diegozain.github.io/gerjoii
 
 ***
 
-eager to start? __scroll down for an example__.
+eager to start? __scroll down for an example__. (under construction, sorry)
 
 ***
 
@@ -138,6 +138,6 @@ For a longer recipe read these steps:
 
 # Author
 
-Diego Domenzain diegodomenzain@u.boisestate.edu
+Diego Domenzain domenzain.diego@gmail.com
 
 ***
