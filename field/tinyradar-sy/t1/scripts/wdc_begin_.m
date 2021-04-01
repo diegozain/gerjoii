@@ -79,7 +79,7 @@ toc;
 % --------------------------
 % wave + noise
 % --------------------------
-gerjoii_.w.noise.prcent = 0.1; % 0.05
+gerjoii_.w.noise.prcent = 0.1;
 gerjoii_.w.noise.f_low = -1e+1;
 gerjoii_.w.noise.f_high = 1e+1;
 noise__w;
@@ -285,7 +285,7 @@ gerjoii_.w.nparabo = nparabo;
 gerjoii_.w.keprct_  = 0.05; % 0.05; 0.1;
 gerjoii_.w.keprct__ = 0.5;
 % percentage of bound k_s to try for 3 point parabola
-gerjoii_.w.ksprct_  = 1e-2; % 0.005, 1e-2 (try 0.02 with the reflector in place)
+gerjoii_.w.ksprct_  = 1e-2;
 gerjoii_.w.ksprct__ = 1;
 % -----------------------
 % automatic k_e(s) finder
