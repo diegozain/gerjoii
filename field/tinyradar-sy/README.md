@@ -83,3 +83,7 @@ The entire example is customizable too.
    
    
 ---
+
+### True model
+
+[![](see/pics/model-data.png)](./)

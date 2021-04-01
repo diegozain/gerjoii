@@ -79,7 +79,7 @@ toc;
 % --------------------------
 % wave + noise
 % --------------------------
-gerjoii_.w.noise.prcent = 0.1; % 0.05
+gerjoii_.w.noise.prcent = 0.1;
 gerjoii_.w.noise.f_low = -1e+1;
 gerjoii_.w.noise.f_high = 1e+1;
 noise__w;
@@ -285,7 +285,7 @@ gerjoii_.w.nparabo = nparabo;
 gerjoii_.w.keprct_  = 0.05; % 0.05; 0.1;
 gerjoii_.w.keprct__ = 0.5;
 % percentage of bound k_s to try for 3 point parabola
-gerjoii_.w.ksprct_  = 1e-2; % 0.005, 1e-2 (try 0.02 with the reflector in place)
+gerjoii_.w.ksprct_  = 1e-2;
 gerjoii_.w.ksprct__ = 1;
 % -----------------------
 % automatic k_e(s) finder
@@ -333,11 +333,11 @@ disp(['objective function is ',gerjoii_.dc.obj_FNC])
 % ..............
 % step size
 % ..............
-gerjoii_.dc.k_s = [1e-10 1e+3]; % [1e-7 1e+5]
+gerjoii_.dc.k_s = [1e-10 1e+3];
 fprintf('\ndc pica k_s somewhere between %2.2d and %2.2d\n',...
 gerjoii_.dc.k_s(1),gerjoii_.dc.k_s(2));
 % percentage of bound k_s to try for 3 point parabola
-gerjoii_.dc.kprct_  = 1e-3; % 0.005 1e-2 5e-4 8e-3
+gerjoii_.dc.kprct_  = 1e-3;
 gerjoii_.dc.kprct__ = 0.5;
 % -----------------------
 % automatic k_s finder

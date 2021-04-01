@@ -1,2 +1,2 @@
-4 1e-5 1e-20 10 1e-3 0 10e-3 1e-3 4 0 5e-1 0.9 0.6 3 5e-1 5e-1 0.15 3 2 5 0.9 5e-1 1e-1 8e-1 4e-1 1
+2 1e-5 1e-20 10 1e-3 0 10e-3 1e-3 4 0 5e-1 1.2 0.2 3 5e-1 5e-1 0.15 3 2 5 0.9 5e-1 1e-1 8e-1 4e-1 1
 % iterations error-tolerance xgrad-tolerance gpr-shots sig_ini sig_bg sig_max_ sig_min_ eps_ini beta_dc momentum_dc kk_factor_dc kk_factor_w nparabo g_e_weight g_s_weight adc_ da_dc dEdc da_w dEw h_eps d_eps h_sig d_sig step_

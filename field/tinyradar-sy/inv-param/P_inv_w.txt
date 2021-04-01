@@ -1,9 +1,3 @@
 20 1e-5 3 0.4 1e-1 1e-1
 20 1e-5 3 0.4 1e-2 1e-2
-20 1e-5 3 0.4 0 0
-20 1e-5 2 0.5 0 0
-20 1e-5 2 0.4 0 0
-20 1e-5 2 0.1 0 0
-20 1e-5 2 0.1 0 0
-20 1e-5 2 0.1 0 0
 % iterations error-tolerance nparabo smooth-factor envelope-permi envelope-sigm

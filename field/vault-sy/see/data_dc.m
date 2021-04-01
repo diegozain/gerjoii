@@ -6,7 +6,7 @@ fprintf('\n --------------------------------------------------------')
 fprintf('\n   I will show you the dc-data!')
 fprintf('\n --------------------------------------------------------\n\n')
 % ------------------------------------------------------------------------------
-dr  =1; % m
+dr  =0.5; % m
 a   =1;
 colo=1;
 % ------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ prompt = '\n\n    do you want to save wenner pseudo-section (y/n):  ';
 save_ = input(prompt,'s');
 % ------------------------------------------------------------------------------
 if strcmp(save_,'y')
-  if strcmp(data_obre,'data')
+  if strcmp(data_obre,'data-synth')
     path2save = strcat(path_,'pseudo/','observed');
   elseif strcmp(data_obre,'data-recovered')
     path2save = strcat(path_,project_);
@@ -145,7 +145,7 @@ prompt = '\n\n    do you want to save dipole-dipole pseudo-section (y/n):  ';
 save_ = input(prompt,'s');
 % ------------------------------------------------------------------------------
 if strcmp(save_,'y')
-  if strcmp(data_obre,'data')
+  if strcmp(data_obre,'data-synth')
     path2save = strcat(path_,'pseudo/','observed');
   elseif strcmp(data_obre,'data-recovered')
     path2save = strcat(path_,project_);
@@ -163,7 +163,7 @@ prompt = '\n\n    do you want to save voltage data (y/n):  ';
 save_ = input(prompt,'s');
 % ------------------------------------------------------------------------------
 if strcmp(save_,'y')
-  if strcmp(data_obre,'data')
+  if strcmp(data_obre,'data-synth')
     path2save = strcat(path_,'pseudo/','observed');
   elseif strcmp(data_obre,'data-recovered')
     path2save = strcat(path_,project_);

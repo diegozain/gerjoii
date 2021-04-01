@@ -21,34 +21,10 @@ param_wdc;
 % wdc_geom  gives dx,dz with wave criteria.
 % wdc_geom_ gives dx,dz arbitrarilly.
 % ------------------------------------------------------------------------------
-% [parame_,finite_,geome_] = wdc_geom(parame_);
+[parame_,finite_,geome_] = wdc_geom(parame_);
 % ------------------------------------------------------------------------------
-dx=0.05;
-[parame_,finite_,geome_] = wdc_geom_(parame_,dx);
-% ------------------------------------------------------------------------------
-% overwrite eps and sig with a cute box in the middle.
-% here you could put whatever values for permittivity and conductivity 
-% but the max and min of permittivity also has to be declared in param_wdc.m
-% ------------------------------------------------------------------------------
-% permittivity
-tmp_=load('../../image2mat/nature-synth/mat-file/epsi.mat');
-tmp_=tmp_.epsi;
-parame_.natu.epsilon_w = tmp_;
-% conductivity
-tmp_=load('../../image2mat/nature-synth/mat-file/sigm.mat');
-tmp_=tmp_.sigm;
-parame_.natu.sigma_w = tmp_;
-parame_.natu.sigma_dc = parame_.natu.sigma_w.';
-% ------------------------------------------------------------------------------
-% truth
-% ------------------------------------------------------------------------------
-% w
-parame_.w.epsilon = parame_.natu.epsilon_w;
-parame_.w.sigma = parame_.natu.sigma_w;
-% dc
-parame_.dc.sigma = parame_.natu.sigma_dc;
-% expand to robin grid
-[parame_,finite_] = dc_robin(geome_,parame_,finite_);
+% dx=0.05;
+% [parame_,finite_,geome_] = wdc_geom_(parame_,dx);
 % ------------------------------------------------------------------------------
 %
 %                       generate synthetic data
@@ -64,3 +40,8 @@ parame_.dc.data_path_ = data_path_dc;
 % ------------------------------------------------------------------------------
 parame_.dc.data_path__= '../data-recovered/dc/';
 % ------------------------------------------------------------------------------
+% save x and z so you can run the image2gerjoii stuff
+x=geome_.X;
+z=geome_.Y;
+save('../../image2mat/nature-synth/mat-file/x.mat','x')
+save('../../image2mat/nature-synth/mat-file/z.mat','z')

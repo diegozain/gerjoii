@@ -22,21 +22,14 @@ param_wdc;
 % but the max and min of permittivity also have to be declared in param_wdc.m
 % ------------------------------------------------------------------------------
 % permittivity
-% - sharp boundaries
 tmp_=load('../../image2mat/nature-synth/mat-file/epsi.mat');
-% - smooth boundaries
-% tmp_=load('../../image2mat/nature-synth/mat-file/epsi3.mat');
 % ------------------------------------------------------------------------------
 tmp_=tmp_.epsi;
 parame_.natu.epsilon_w = tmp_;
 % ------------------------------------------------------------------------------
 % conductivity
-% - sharp boundaries
 tmp_=load('../../image2mat/nature-synth/mat-file/sigm.mat');
-% - smooth boundaries
-% tmp_=load('../../image2mat/nature-synth/mat-file/sigm3.mat');
 tmp_=tmp_.sigm;
-% ------------------------------------------------------------------------------
 parame_.natu.sigma_w = tmp_;
 parame_.natu.sigma_dc = parame_.natu.sigma_w.';
 % ------------------------------------------------------------------------------
@@ -69,7 +62,7 @@ if ~isempty(parpools)
   delete(gcp('nocreate'));
 end
 n_workers = load('../tmp/workers.txt');
-poolsize  = min([n_workers,gerjoii_.w.ns]); % gerjoii_.w.ns
+poolsize  = min([n_workers,gerjoii_.w.ns]);
 parpool( poolsize );
 fprintf('\n\n    ------------------------------\n');
 fprintf('    things are going parallel now.\n');
@@ -86,7 +79,7 @@ toc;
 % --------------------------
 % wave + noise
 % --------------------------
-gerjoii_.w.noise.prcent = 0.1; % 0.05
+gerjoii_.w.noise.prcent = 0.1;
 gerjoii_.w.noise.f_low = -1e+1;
 gerjoii_.w.noise.f_high = 1e+1;
 noise__w;
@@ -210,28 +203,6 @@ gerjoii_.dc.weird_me = 1;
 % here you could put whatever values for permittivity and conductivity 
 % but the max and min of permittivity also has to be same as in parame_w
 % ------------------------------------------------------------------------------
-% conductivity: smooth
-% load('../../image2mat/nature-synth/initial-guess/sigm_smooth.mat');
-% --
-% permittivity: smooth
-% conductivity: interpolated from above permittivity (to match boundaries)
-% load('../../image2mat/nature-synth/initial-guess/sigm_smooth5.mat');
-% load('../../image2mat/nature-synth/initial-guess/epsi_smooth.mat');
-% --
-% permittivity: reomove top layer, then smooth, then insert top layer.
-% conductivity: interpolated from above permittivity (to match boundaries)
-% load('../../image2mat/nature-synth/initial-guess/sigm_smooth6.mat');
-% load('../../image2mat/nature-synth/initial-guess/epsi_smooth6.mat');
-% --
-% permittivity: reomove top layer, then smooth, then insert top layer, then smooth.
-% conductivity: interpolated from above permittivity (to match boundaries)
-% load('../../image2mat/nature-synth/initial-guess/sigm_smooth7.mat');
-% load('../../image2mat/nature-synth/initial-guess/epsi_smooth7.mat');
-% --
-% permittivity: reomove top layer, then smooth, then reduce magnitude, then insert top layer.
-% conductivity: interpolated from above permittivity (to match boundaries)
-% load('../../image2mat/nature-synth/initial-guess/sigm_smooth8.mat');
-% load('../../image2mat/nature-synth/initial-guess/epsi_smooth8.mat');
 % --
 load('../../image2mat/nature-synth/initial-guess/sigm_init.mat');
 load('../../image2mat/nature-synth/initial-guess/epsi_init.mat');
@@ -314,7 +285,7 @@ gerjoii_.w.nparabo = nparabo;
 gerjoii_.w.keprct_  = 0.05; % 0.05; 0.1;
 gerjoii_.w.keprct__ = 0.5;
 % percentage of bound k_s to try for 3 point parabola
-gerjoii_.w.ksprct_  = 1e-2; % 0.005, 1e-2 (try 0.02 with the reflector in place)
+gerjoii_.w.ksprct_  = 1e-2;
 gerjoii_.w.ksprct__ = 1;
 % -----------------------
 % automatic k_e(s) finder
@@ -362,11 +333,11 @@ disp(['objective function is ',gerjoii_.dc.obj_FNC])
 % ..............
 % step size
 % ..............
-gerjoii_.dc.k_s = [1e-10 1e+3]; % [1e-7 1e+5]
+gerjoii_.dc.k_s = [1e-10 1e+3];
 fprintf('\ndc pica k_s somewhere between %2.2d and %2.2d\n',...
 gerjoii_.dc.k_s(1),gerjoii_.dc.k_s(2));
 % percentage of bound k_s to try for 3 point parabola
-gerjoii_.dc.kprct_  = 1e-3; % 0.005 1e-2 5e-4 8e-3
+gerjoii_.dc.kprct_  = 1e-3;
 gerjoii_.dc.kprct__ = 0.5;
 % -----------------------
 % automatic k_s finder
@@ -557,7 +528,3 @@ if strcmp(gerjoii_.linker.yn,'y')
   dlmwrite(strcat(gerjoii_.linker.path_,'tol-iter.txt'),gerjoii_.linker.tol_iter);
   dlmwrite(strcat(gerjoii_.linker.path_,'iter.txt'),gerjoii_.wdc.iter);
 end
-
-
-
-
