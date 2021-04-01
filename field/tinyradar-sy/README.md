@@ -62,12 +62,17 @@ The entire example is customizable too.
 1. Go into ```t1/scripts/``` of this new directory and run *```wdc_begin_.m```*.
    * **This will generate the synthetic observed data,**
    * **and run the joint inversion.**
-1. For the model presented here running on a *MacBook Pro 2010* with *2 CPUs* and an old version of *Matlab*,
-   * 4 minutes for 10 radar *forward models*
-   * 2 minutes for 64 DC *forward models*
-   * 1.5Gb of memory at most during the *joint inversion*
-   * these 1.5Gb equal 7Gb per CPU during the **radar gradient computation**
-   * 0.5Gb were used during the **DC gradient computation**
+1. Memory requirements,
+   * 0.7Gb of memory per CPU at most during the *joint inversion*
+   * 0.5Gb during the **DC gradient computation**
+1. For the model presented here running on
+   * a *MacBook Pro 2010* with *2 CPUs* and *Matlab 2014a*,
+     * 4 minutes for 10 radar *forward models*
+     * 2 minutes for 64 DC *forward models*
+     * 1.5Gb of memory at most during the *joint inversion*
+   * the *University cluster* with *10 nodes* and *Matlab 2020a*,
+     * 13 seconds for 10 radar *forward models*
+     * 4 seconds for 64 DC *forward models*
 
 ### Visualize the results
 
@@ -81,9 +86,8 @@ The entire example is customizable too.
    * ```data_dc.m```
    * ```data_w.m``` and ```data_w.py```
    
-   
 ---
 
 ### True model
 
-[![](see/pics/model-data.png)](./)
+[![](see/pics/true.png)](./)[![](see/pics/shot1.png)](./)[![](see/pics/observed-wen.png)](./)
