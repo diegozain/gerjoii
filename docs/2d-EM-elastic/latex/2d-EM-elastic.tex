@@ -1,0 +1,333 @@
+\documentclass[a4paper,12pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{amsmath,esint}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{sansmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{caption}
+
+\usepackage{tikz}
+
+
+\definecolor{boiseBlue} {RGB}{29,72,159}
+\definecolor{rojoAmor} {RGB}{171,13,4}
+\definecolor{moradoAmor} {RGB}{93,8,113}
+\definecolor{verdeAmor} {RGB}{98,158,31}
+\definecolor{negro} {RGB}{10,10,10}
+\definecolor{lgreen} {RGB}{180,210,100}
+\definecolor{dblue}  {RGB}{20,66,129}
+\definecolor{ddblue} {RGB}{11,36,69}
+\definecolor{lred}   {RGB}{220,0,0}
+\definecolor{nred}   {RGB}{224,0,0}
+\definecolor{norange}{RGB}{230,120,20}
+\definecolor{nyellow}{RGB}{255,221,0}
+\definecolor{ngreen} {RGB}{98,158,31}
+\definecolor{dgreen} {RGB}{78,138,21}
+\definecolor{nblue}  {RGB}{28,130,185}
+\definecolor{jblue}  {RGB}{20,50,100}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+	       backgroundcolor=\color{black!5}\ttfamily,
+                keywordstyle=\color{nblue}\ttfamily,
+                stringstyle=\color{nred}\ttfamily,
+                commentstyle=\color{ngreen}\ttfamily,
+                morecomment=[l][\color{moradoAmor}]{\#}
+}
+
+\newenvironment{rcases}{\left.\begin{aligned}}{\end{aligned}\right\rbrace}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+% \specialcell{Foo\\bar}
+
+\title{Two-dimensional waves\\{\normalsize Diego Domenzain, Spring 2021}}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\maketitle
+%-------------------
+% main flow
+%-------------------
+\section*{2D wave equation}
+Let $\nabla=(\partial_x,\partial_z)$ be a row vector.
+\begin{align}
+{\bf C}\dot{{\bf v}} &= \nabla u - {\bf A}{\bf v} + {\bf g}\\
+c\dot{u} &= \nabla\cdot{\bf v} - a u + f
+\end{align}
+Velocity is determined by ${\bf C}$ and $c$. Intrinsic attenuation is determined by ${\bf A}$ and $a$.
+\\\\
+%
+In expanded-matrix form we have,
+\begin{align}
+\begin{pmatrix} 
+c_{11} & c_{12} & 0\cr 
+c_{21} & c_{22} & 0 \cr
+0 & 0 & c
+\end{pmatrix}
+%
+\begin{pmatrix} 
+\dot{v}_x \cr
+\dot{v}_z \cr
+\dot{u}
+\end{pmatrix}
+%
+=
+%
+&
+\begin{pmatrix} 
+0 & 0 & \partial_x \cr 
+0 & 0 & \partial_z \cr
+\partial_x & \partial_z & 0
+\end{pmatrix}
+%
+\begin{pmatrix} 
+v_x \cr
+v_z \cr
+u
+\end{pmatrix}
+%
+%
+-\\
+%
+&
+\begin{pmatrix} 
+a_{11} & a_{12} & 0\cr 
+a_{21} & a_{22} & 0 \cr
+0 & 0 & a
+\end{pmatrix}
+%
+\begin{pmatrix} 
+v_x \cr
+v_z \cr
+u
+\end{pmatrix}
+%
++
+%
+\begin{pmatrix} 
+g_x \cr
+g_z \cr
+f
+\end{pmatrix}.
+\end{align}
+Note that this equation can handle anisotropy and attenuation acting on {\bf v}.
+% ----------------------------
+% 2.5d wave
+% ----------------------------
+\clearpage
+\section*{2D EM wave equation}
+\begin{align}
+\boldsymbol{\mu}\dot{{\bf H}} &= -\nabla\times{\bf E} -\boldsymbol{\sigma}^m{\bf H} + {\bf M}_s\\
+\boldsymbol{\varepsilon}\dot{{\bf E}} &= \nabla\times{\bf H} - \boldsymbol{\sigma}{\bf E} - {\bf J}_s
+\end{align}
+Assuming quasi-isotropic materials and $\partial_y=\boldsymbol{\sigma}^m={\bf M}_s=0$, in expanded-matrix form we have the TE mode,
+\begin{align}
+\begin{pmatrix} 
+\mu_z & 0 & 0\cr 
+0 & \mu_x & 0 \cr
+0 & 0 & \varepsilon
+\end{pmatrix}
+%
+\begin{pmatrix} 
+-\dot{H}_z \cr
+\dot{H}_x \cr
+\dot{E}_y
+\end{pmatrix}
+%
+=
+%
+&
+\begin{pmatrix} 
+0 & 0 & \partial_x \cr 
+0 & 0 & \partial_z \cr
+\partial_x & \partial_z & 0
+\end{pmatrix}
+%
+\begin{pmatrix} 
+-H_z \cr
+H_x \cr
+E_y
+\end{pmatrix}
+%
+%
+-\\
+%
+&\sigma
+\begin{pmatrix} 
+0 \cr
+0 \cr
+E_y
+\end{pmatrix}
+%
+-
+%
+\begin{pmatrix} 
+0 \cr
+0 \cr
+J_y
+\end{pmatrix}.
+\end{align}
+% ----------------------------
+% 2.5d wave
+% ----------------------------
+\section*{The 2D EM wave code}
+The actual code models the 2D EM wave assuming $\partial_z=0$ and quasi-isotropic materials with attenuation for both $E_z$ and ${\bf H}$,
+\begin{align}
+\begin{pmatrix} 
+\mu_y & 0 & 0\cr 
+0 & \mu_x & 0 \cr
+0 & 0 & \varepsilon_z
+\end{pmatrix}
+%
+\begin{pmatrix} 
+\dot{H}_y \cr
+-\dot{H}_x \cr
+\dot{E}_z
+\end{pmatrix}
+%
+=
+%
+&
+\begin{pmatrix} 
+0 & 0 & \partial_x \cr 
+0 & 0 & \partial_y \cr
+\partial_x & \partial_y & 0
+\end{pmatrix}
+%
+\begin{pmatrix} 
+H_y \cr
+-H_x \cr
+E_z
+\end{pmatrix}
+%
+%
+-\\
+%
+&
+%
+\begin{pmatrix} 
+\sigma^m_y & 0 & 0\cr 
+0 & \sigma^m_x & 0 \cr
+0 & 0 & \sigma_z
+\end{pmatrix}
+%
+\begin{pmatrix} 
+H_y \cr
+-H_x \cr
+E_z
+\end{pmatrix}
+%
++
+%
+\begin{pmatrix} 
+0 \cr
+0 \cr
+-J_z
+\end{pmatrix}.
+\end{align}
+% ----------------------------
+% 2.5d dc
+% ----------------------------
+\clearpage
+\section*{2D elastic SV wave equation}
+Let $\nabla_{el}$ be the matrix,
+\begin{align}
+\nabla_{el} = 
+\begin{pmatrix} 
+\partial_x & 0 & \partial_z \cr 
+0 & \partial_z & \partial_x 
+\end{pmatrix} 
+%
+\hspace{2em}
+%
+\nabla_{el}^{\top} = 
+%
+\begin{pmatrix} 
+\partial_x & 0 \cr 
+ 0 & \partial_z \cr
+\partial_z & \partial_x
+\end{pmatrix},
+\end{align}
+%
+and the particle velocity and stress be ${\bf v}^{el}$ and ${\bf T}$ respectively,
+%
+\begin{align}
+{\bf v}^{el} = 
+\begin{pmatrix} 
+v^{el}_x \cr 
+v^{el}_z 
+\end{pmatrix} 
+%
+\hspace{2em}
+%
+{\bf T} = 
+%
+\begin{pmatrix} 
+\sigma_{xx} \cr 
+\sigma_{xz} \cr
+\sigma_{zz}
+\end{pmatrix}.
+\end{align}
+The 2D elastic SV polarized wave equation is given by,
+\begin{align}
+{\bf s}\dot{{\bf T}} &= \nabla_{el}^{\top} \cdot {\bf v} - \boldsymbol{\tau}{\bf T}\\
+\rho\dot{{\bf v}}^{el} &= \nabla_{el}\cdot{\bf T} + {\bf f}
+\end{align}
+%
+where ${\bf s}$ and $\boldsymbol{\tau}$ denote the inverse of stiffness and viscosity respectively \cite[][]{carcione1995acoustic}. We have (how does $\boldsymbol{\tau}^{-1}$ look like??),
+\begin{align}
+{\bf s}^{-1}&=
+\begin{pmatrix} 
+\lambda+2\mu & \lambda & 0\cr 
+0 & 0 & \mu \cr
+\lambda & \lambda+2\mu & 0
+\end{pmatrix}
+\end{align}
+\begin{align}
+v_p = \sqrt{\frac{\lambda+2\mu}{\rho}} , \hspace{2em} v_s=\sqrt{\frac{\mu}{\rho}}.
+\end{align}
+\begin{align}
+\lambda=(v_p^2 - 2v_s^2)\rho \hspace{2em} \mu=\rho v_s^2
+\end{align}
+ The {\it first} and {\it second} Lam\'e parameters are $\lambda$ and $\mu$ respectively. 
+\\\\
+Following \cite{groos2017application},
+\begin{align}
+200\leq v_p\, (m/s)\leq 500 \\
+80\leq v_s\, (m/s)\leq 400\\
+1700\leq \rho \, (Kg/m^3)\leq 2000\\
+-1.4\times 10^8 \leq \lambda\,(Kg/m/s^2) \leq 4.6 \times 10^7 \\
+10^7 \leq \mu\,(Kg/m/s^2)\leq 3.2\times 10^8 
+\end{align}
+At $20^{\circ}C$ and 1 atm (101.325 kPa), air-speed is $v_p=343.21 m/s$ with a density of $\rho=1.2041Kg/m^3$.
+%
+%
+%------------
+% biblio
+%------------
+%\newpage
+\bibliographystyle{plainnat}
+\bibliography{elastic-EM}
+%\nocite{*}
+\end{document}

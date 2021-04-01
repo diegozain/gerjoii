@@ -22,6 +22,8 @@ __pycache__/
 *.avi
 *.xcf
 
+dir_paths_.m
+
 data/w-processing/pics/
 data/dc-processing/pics/
 
@@ -39,6 +41,7 @@ bhrs6-fi/
 bhrs7-fi/
 bhrsDC-fi/
 calcite/
+elastic/
 compli-sy/
 dibujo-sy/
 effective-sy/
@@ -48,17 +51,20 @@ florida-fi/f21/
 geopark-fi/g5/
 geyser-c/
 glacier-sy/
+glacier2-sy/
 grenoble-aba/
 gronin/
 groningen/
 groningen2/
 high-sy/
+kafadar-sy/
 kompli-sy/
 low-sy/
 refract-fwd/
 refract-sy/
 sandbar-fi/
 snow-sy/
+tinyelastic-sy/
 tree-sy/
 twofive-sy/
 utah-sy/

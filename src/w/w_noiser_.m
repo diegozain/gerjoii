@@ -48,9 +48,6 @@ d = d + noise;
 % to=3; % [ns]
 % d = w_lmute(d,rx,t,sx,to,c);
 % bandpass data back to denoised levels
-for i=1:nr
-  d(:,i) = d(:,i) .* tukeywin(nt,0.1);
-end
 nbutter = 10;
 d = filt_gauss(d,dt,f_low,f_high,nbutter); % [s], [GHz]
 % keep track of noise level??

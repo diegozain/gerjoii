@@ -63,8 +63,8 @@ parame_.w.nt = 3000; % 1500. 1900. 1050. dispersion: 4000.
 % ------------------
 % pml padding
 % ------------------
-parame_.w.pml_w = 60;
-parame_.w.pml_d = 60;
+parame_.w.pml_w = 20;
+parame_.w.pml_d = 20;
 %------------------
 % robin padding
 %------------------

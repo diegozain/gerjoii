@@ -33,8 +33,12 @@ n_slice = nx_/n_slices;
 for i_=1:n_slices
   % compute derivative on u-slice
   % store dtu_.slice... but store it in u!!! fucking smart is what it is.
-  gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:) = ...
-    dt_u(gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:),geome_.w.dt);
+  %
+  % % -- this method is ok.
+  % gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:) = ...
+  %   dt_u(gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:),geome_.w.dt);
+  % -- this method is way faster.
+  gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:) = differentiate_cube(gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:),geome_.w.dt);
 end
 % ------------------------------------------------------------------------------
 % compute gradients & weigh them
@@ -143,8 +147,4 @@ end
 % update
 % ..............................................................................
 depsilon = double(-step_w_e*gerjoii_.w.g_e(:));
-% % ............................................................................
-% % invert for source
-% % ............................................................................
-% parame_.natu.w.wvlets_(:,is) = new wvlet source
 end

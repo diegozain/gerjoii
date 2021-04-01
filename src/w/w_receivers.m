@@ -24,7 +24,6 @@ function gerjoii_ = w_receivers(geome_,parame_,gerjoii_)
 % s -------- r ------ r ------ r
 
 lo = parame_.w.lo;
-sources = gerjoii_.w.sources;
 ns = gerjoii_.w.ns;
 rec_TYPE = gerjoii_.w.rec_TYPE;
 x = geome_.X;

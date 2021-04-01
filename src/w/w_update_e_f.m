@@ -79,8 +79,12 @@ n_slice = nx_/n_slices;
 for i_=1:n_slices
   % compute derivative on u-slice
   % store dtu_.slice... but store it in u!!! fucking smart is what it is.
-  gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:) = ...
-    dt_u(gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:),geome_.w.dt);
+  %
+  % % -- this method is ok.
+  % gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:) = ...
+  %   dt_u(gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:),geome_.w.dt);
+  % -- this method is way faster.
+  gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:) = differentiate_cube(gerjoii_.w.u_2d(:, ((i_-1)*n_slice+1):(i_*n_slice) ,:),geome_.w.dt);
 end
 % ---- cross-correlation ---- 
 [g_e,a_max] = w_grad(gerjoii_.w.u_2d,geome_,finite_,gerjoii_);

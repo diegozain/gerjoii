@@ -21,10 +21,10 @@ param_wdc;
 % wdc_geom  gives dx,dz with wave criteria.
 % wdc_geom_ gives dx,dz arbitrarilly.
 % ------------------------------------------------------------------------------
-% [parame_,finite_,geome_] = wdc_geom(parame_);
+[parame_,finite_,geome_] = wdc_geom(parame_);
 % ------------------------------------------------------------------------------
-dx=0.05;
-[parame_,finite_,geome_] = wdc_geom_(parame_,dx);
+% dx=0.05;
+% [parame_,finite_,geome_] = wdc_geom_(parame_,dx);
 % ------------------------------------------------------------------------------
 % overwrite eps and sig with a cute box in the middle.
 % here you could put whatever values for permittivity and conductivity 

@@ -10,7 +10,8 @@ tol_error = gerjoii_.wdc.tol_error;
 data_pathsigs_ = 'dsigs/';
 data_patheps_ = 'depsis/';
 % linker from a suspended inversion 
-if isfield(gerjoii_,'linker')
+% if isfield(gerjoii_,'linker')
+if strcmp(gerjoii_.linker.yn,'y')
   E = gerjoii_.wdc.E;
   if numel(E)==0
     E_ = Inf;

@@ -56,6 +56,7 @@ midi=midi,
 title=title,
 xlabel="Length (m)",
 ylabel="Depth (m)",
+# colo='ybwrk_colorblind',#'groundwater_colorblind','ybwrk_colorblind',
 guarda_path=guarda_path,
 guarda=120).matrix()
 # ------------------------------------------------------------------------------

@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: 2d-EM-elastic.aux
+The style file: plainnat.bst
+Database file #1: elastic-EM.bib
+You've used 2 entries,
+            2773 wiz_defined-function locations,
+            609 strings with 5294 characters,
+and the built_in function-call counts, 1065 in all, are:
+= -- 95
+> -- 60
+< -- 1
++ -- 20
+- -- 18
+* -- 95
+:= -- 166
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 12
+chr.to.int$ -- 2
+cite$ -- 4
+duplicate$ -- 41
+empty$ -- 84
+format.name$ -- 22
+if$ -- 214
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 2
+newline$ -- 19
+num.names$ -- 8
+pop$ -- 20
+preamble$ -- 2
+purify$ -- 10
+quote$ -- 0
+skip$ -- 32
+stack$ -- 0
+substring$ -- 60
+swap$ -- 2
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 22
+warning$ -- 0
+while$ -- 10
+width$ -- 0
+write$ -- 34

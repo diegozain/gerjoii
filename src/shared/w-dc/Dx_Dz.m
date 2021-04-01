@@ -16,6 +16,21 @@ function [Dx,Dz] = Dx_Dz(n,m)
   % example:
   % [nz,nx] = size(a);
   % [Dz,Dx] = Dx_Dz(nz,nx);
+  % 
+  % expanded example:
+  % nx=200;nz=100;
+  % [Dz,Dx] = Dx_Dz(nz,nx);
+  % a=ones(nz,nx);
+  % a(fix(nz/3):fix(2*nz/3),fix(nx/3):fix(2*nx/3))=2;
+  % z=linspace(1,10,nz);
+  % x=linspace(1,20,nx);
+  % dx=x(2)-x(1); dz=z(2)-z(1);
+  % ax=(1/dx)*Dx*a(:);ax=reshape(ax,nz,nx);
+  % az=(1/dz)*Dz*a(:);az=reshape(az,nz,nx);
+  %
+  % figure;imagesc(x,z,a);axis image
+  % figure;imagesc(x,z,ax);axis image    
+  % figure;imagesc(x,z,az);axis image
   % ----------------------------------------------------------------------------
   Dx = DX(n,m);
   Dz = DZ(n,m);

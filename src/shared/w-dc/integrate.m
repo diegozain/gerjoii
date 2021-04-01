@@ -1,4 +1,4 @@
-function y_ = integrate(y,dt,cte)
+function y = integrate(y,dt,cte)
 % diego domenzain
 % spring 2018 @ TUDelft
 % ------------------------------------------------------------------------------
@@ -14,8 +14,8 @@ Dt(nt+1,nt-2:nt) = 0;
 Dt(end)=1;
 
 y=[ cte ; y ];
-y_ = Dt\y;
-y_(end)=[];
+y = Dt\y;
+y(end)=[];
 end
 % % test
 % 

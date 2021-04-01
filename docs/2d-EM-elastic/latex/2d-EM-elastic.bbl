@@ -1,0 +1,22 @@
+\newcommand{\SortNoop}[1]{}
+\begin{thebibliography}{2}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Carcione and Cavallini(1995)]{carcione1995acoustic}
+Jos{\'e}M Carcione and Fabio Cavallini.
+\newblock On the acoustic-electromagnetic analogy.
+\newblock \emph{Wave motion}, 21\penalty0 (2):\penalty0 149--162, 1995.
+
+\bibitem[Groos et~al.(2017)Groos, Sch{\"a}fer, Forbriger, and
+  Bohlen]{groos2017application}
+Lisa Groos, Martin Sch{\"a}fer, Thomas Forbriger, and Thomas Bohlen.
+\newblock Application of a complete workflow for 2d elastic full-waveform
+  inversion to recorded shallow-seismic rayleigh wavesworkflow for fwi of
+  rayleigh waves.
+\newblock \emph{Geophysics}, 82\penalty0 (2):\penalty0 R109--R117, 2017.
+
+\end{thebibliography}

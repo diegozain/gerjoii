@@ -71,7 +71,7 @@ class fancy_figure():
         self.midi = kwargs.get('midi',None)
         self.vmin = kwargs.get('vmin',None)
         self.vmax = kwargs.get('vmax',None)
-        self.colo = kwargs.get('colo','ybwrk')
+        self.colo = kwargs.get('colo','ybwrk_colorblind')
         self.colop = kwargs.get('colop',None)
         self.scatter_colo = kwargs.get('scatter_colo',None)
         self.cololabel    = kwargs.get('cololabel',10)
@@ -764,11 +764,25 @@ class fancy_figure():
             colo = colo + colo_
             colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
         # -------------------------
+        if self.colo == 'groundwater_colorblind':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(1.0000,0.7608,0.0392),(0.6000,0.3098,0)]
+            colo_ = [(0.865,0.865,0.865), (0.0471,0.4824,0.8627),(0.3647,0.2275,0.6078)]
+            colo = colo + colo_
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
         if self.colo == 'groundwater_':
             from matplotlib.colors import LinearSegmentedColormap
             # colo  = [(0.3765,0.0353,0.6196),(0.2039,0.4824,0.8980)]
             colo  = [(0.3765,0.0353,0.6196),(0.0275,0.7647,0.9882)]
             colo_ = [(0.865,0.865,0.865),(0.4 ,0.2 ,0),(0.8275,0.7922,0.0745)]
+            colo = colo + colo_
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'glacier':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0.9,0.9,0.9),(0,0,0)]
+            colo_ = [(0.9294,0.9137,0.0627),(0.0627,0.3216,0.9294)]
             colo = colo + colo_
             colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
         # -------------------------
@@ -800,6 +814,13 @@ class fancy_figure():
             colo  = [(0.8275,0.7922,0.0745),(0.230,0.299,0.754)]
             colo_ = [(0.865,0.865,0.865), (0.8078, 0.0941,0.0941),(0,0,0)]
             # colo_ = [(0.9765,0.2510,0.9294),(0.8078, 0.0941,0.0941),(0,0,0)]
+            colo = colo + colo_
+            colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
+        # -------------------------
+        if self.colo == 'ybwrk_colorblind':
+            from matplotlib.colors import LinearSegmentedColormap
+            colo  = [(0.9412,0.8941,0.2588),(0.0471,0.4824,0.8627)]
+            colo_ = [(0.865,0.865,0.865), (0.8627,0.1961,0.1255),(0,0,0)]
             colo = colo + colo_
             colo  = LinearSegmentedColormap.from_list('name',colors=colo,N=256)
         # -------------------------

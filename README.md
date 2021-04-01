@@ -10,7 +10,11 @@ https://diegozain.github.io/gerjoii
 
 ***
 
-eager to start? __scroll down for an example__. (under construction, sorry)
+eager to start?
+
+* [```field/tinyradar-sy/```](field/tinyradar-sy/) for a synthetic example that can run in a laptop.
+* [```field/example-sy/```](field/example-sy/) for a synthetic example that should be run in a cluster.
+* [scroll down](#Examples) for a more detailed example (under construction, sorry)
 
 ***
 
@@ -74,7 +78,7 @@ __gerjoii__ does, for both radar and electrical resistivity:
 * radar source estimation
 * __common-offset gather__ processing for radar
 
-### Cuties
+### Useful stuff
 
 * 2D velocity generator (.png to .mat file, __any__ .png will do)
 * electrical resistivity sequence generator ready for [Syscal](http://www.iris-instruments.com/syscal-pro.html)
@@ -133,7 +137,7 @@ For a longer recipe read these steps:
 	w-data/data-mat-fwi/
 	```
 
-2. 
+2. Under construction, sorry.
 ***
 
 # Author

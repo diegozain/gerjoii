@@ -32,7 +32,7 @@ gerjoii_.dc.s_ = s_i_r_d_std{ i_e }{ 1 }(1:2);
 gerjoii_.dc.i_ = s_i_r_d_std{ i_e }{ 1 }(3);
 gerjoii_.dc.r_ = s_i_r_d_std{ i_e }{ 2 }(:,1:2);
 % fake zero data
-parame_.natu.dc.d_2d = s_i_r_d_std{ i_e }{ 2 }(:,1:2);
+parame_.natu.dc.d_2d = s_i_r_d_std{ i_e }{ 2 }(:,3);
 parame_.natu.dc.std_2d = s_i_r_d_std{ i_e }{ 2 }(:,4);
 clear s_i_r_d_std;
 % choose source, receivers, measuring operator, observed data & std
