@@ -10,12 +10,12 @@ guarda_path="pics/"
 # ------------------------------------------------------------------------------
 path_ini = "../image2mat/nature-synth/initial-guess/"
 epsi_ini = 'epsi_init'
-sigm_ini = 'sigm_init'#'sigm_hori'
+sigm_ini = 'sigm_init'
 # ------------------------------------------------------------------------------
 title_e = "True permittivity ( )"
 title_s = "True conductivity (mS/m)"
-midi_e  = 7
-midi_s  = 2
+midi_e  = 6.5
+midi_s  = 6
 # ------------------------------------------------------------------------------
 maxi_e = -float('Inf')
 mini_e =  float('Inf')

@@ -184,6 +184,8 @@ if strcmp(save_,'y')
   if strcmp(save_i,'y')
     % save path
     save_path = 'nature-synth/initial-guess/';
+    epsi(:) = epsi(1);
+    sigm(:) = sigm(1);
     save(strcat( save_path , 'epsi_init.mat'), 'epsi' );
     save(strcat( save_path , 'sigm_init.mat'), 'sigm' );
     fprintf('\n    ok. your initial models were saved in \n\n')

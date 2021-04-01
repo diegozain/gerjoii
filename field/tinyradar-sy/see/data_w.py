@@ -16,12 +16,13 @@ elif (reco_obs == 'recovered'):
 # ------------------------------------------------------------------------------
 guarda_path = 'pics/'
 dpi = 120*1
+size=[5,5]
+# percentage of max amplitude to clip for plotting
+prct  = 0.1
+midi  = 0
 # ------------------------------------------------------------------------------
 # bring to memory (w)
 # ------------------------------------------------------------------------------
-midi  = 0
-mini  = -1
-maxi  = 1
 struct_ = 'radargram'
 # ------------------------------------------------------------------------------
 rx,_,_     = fancy_figure.bring_struct(path_,name_,struct_,'r',0,0)
@@ -32,7 +33,7 @@ d,_,_ = fancy_figure.bring_struct(path_,name_,struct_,'d',0,0)
 # ------------------------------------------------------------------------------
 # delete tapered parts
 nt,nr=d.shape
-nt_cut=100
+nt_cut=1
 # ------------------------------------------------------------------------------
 d = np.delete(d, slice(0, nt_cut), axis=0)
 d = np.delete(d, slice(nt-2*nt_cut, nt-nt_cut), axis=0)
@@ -40,6 +41,9 @@ t = np.delete(t, slice(nt-2*nt_cut, nt), axis=0)
 # ------------------------------------------------------------------------------
 print('max ',d.max())
 print('min ',d.min())
+
+mini  = -d.max()*prct
+maxi  =  d.max()*prct
 # ------------------------------------------------------------------------------
 # set consantants for plotting
 # ------------------------------------------------------------------------------
@@ -77,22 +81,26 @@ rx[0:(il+1)],
 np.linspace(rx[il]+dr,rx[il+1]-dr,no).transpose().squeeze(),
 rx[il+1:]
 ),0)
-# -----------------
-extent_ = [rx[0],rx[-1],t[-1],t[0]]
-print(d.shape)
+# ------------------------------------------------------------------------------
+extent_ = np.array([rx[0],rx[-1],t[-1],t[0]],dtype=float)
 # ------------------------------------------------------------------------------
 #                       data w
 # ------------------------------------------------------------------------------
 aspect_ = 'auto'#0.16 # larger number --> y axis is longer
-size=[9.6*0.8,9.6*0.8]
 # ------------------------------------------------------------------------------
-fancy_figure(aspect=aspect_,figsize=size,
-data=d,extent=extent_,
+fancy_figure(
+aspect=aspect_,
+figsize=size,
+data=d,
+extent=extent_,
 x=rx,y=t,
 # y_ticklabels='off',x_ticklabels='off',
-midi=midi,vmin=mini,vmax=maxi,
+midi=midi,
+vmin=mini,
+vmax=maxi,
 # colo='Greys',
 title=name_+' '+reco_obs,xlabel='Receivers (m)',ylabel='Time (ns)',
 guarda_path=guarda_path,
-guarda=dpi,fig_name=name_+'_'+project_+'_'+reco_obs).matrix()
+guarda=dpi,fig_name=name_+'_'+project_+'_'+reco_obs
+).matrix()
 # -------------------------

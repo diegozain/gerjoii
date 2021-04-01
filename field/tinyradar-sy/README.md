@@ -72,10 +72,14 @@ The entire example is customizable too.
 ### Visualize the results
 
 1. The synthetic *observed* data is in,
-  * ```t1/data-synth/```
+   * ```t1/data-synth/```
 1. The output of the inversion is in,
-  * ```t1/output/```
+   * ```t1/output/```
 1. The interface to visualize all the data is in,
-  * ```t1/see/```
-1. 
+   * ```t1/see/```
+1. These scripts visualize the data,
+   * ```data_dc.m```
+   * ```data_w.m``` and ```data_w.py```
+   
+   
 ---

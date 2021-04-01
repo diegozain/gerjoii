@@ -1,4 +1,4 @@
-load('../c12/data-synth/w/line7.mat')
+load('../t1/data-synth/w/line1.mat')
 
 d   = radargram.d;
 t   = radargram.t; %          [ns]
@@ -27,7 +27,15 @@ d_pow = abs(d_).^2 / nt^2;
 figure;
 plot(f,d_pow,'.-')
 axis tight
-xlabel('f (Hz)')
-ylabel('d power')
-title('line')
+xlabel('Frequency (GHz)')
+ylabel('Power')
+title('Power spectra')
+simple_figure()
+
+figure;
+fancy_imagesc(d,rx,t)
+axis normal
+xlabel('Receivers (m)')
+ylabel('Time (ns)')
+title('Data')
 simple_figure()
