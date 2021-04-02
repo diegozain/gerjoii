@@ -64,6 +64,7 @@ The entire example is customizable too.
    * **and run the joint inversion.**
 1. Memory requirements,
    * 0.7Gb of memory per CPU at most during the *joint inversion*
+   * These 0.7Gb are due to the radar **gradient computation**
    * 0.5Gb during the **DC gradient computation**
 1. For the model presented here running on
    * a *MacBook Pro 2010* with *2 CPUs* and *Matlab 2014a*,
