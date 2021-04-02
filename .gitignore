@@ -27,7 +27,7 @@ dir_paths_.m
 data/w-processing/pics/
 data/dc-processing/pics/
 
-server-see/pics/
+field/server-see/pics/
 
 variable-layout/
 scp-git/
@@ -45,7 +45,6 @@ elastic/
 compli-sy/
 dibujo-sy/
 effective-sy/
-example-sy/
 florida-fi/f20/
 florida-fi/f21/
 geopark-fi/g5/
