@@ -231,8 +231,8 @@ clear epsi
 % ..............
 % choose filter bandwidth in units of [1/m],
 % smaller ax,az --> only lower freqs survive
-% ax=1/(parame_.w.lo*1.5); az=ax;
-ax=1/(parame_.w.lo*kk_factor_w); az=ax;
+ax=1/(parame_.w.lo*kk_factor_w);
+az=1/(parame_.w.lo*kk_factor_w);
 % ax=20; az=ax;
 fprintf('\ncharacateristic wavelength is %2.2d [m]\n',parame_.w.lo)
 fprintf('\nwave kk-filter: ax=%2.2d, az=%2.2d [1/m]\n',ax,az);
@@ -248,8 +248,8 @@ gerjoii_.w.dsigma_   = zeros(size(parame_.w.sigma));
 % frequencies
 % -----------
 % frequency scheme (this is a low-pass high bound)
-gerjoii_.w.regu.f__ = 0.7*1e+9; % 0.7*1e+9; % [Hz]
-gerjoii_.w.regu.f_ = -0.7*1e+9; % -0.7*1e+9; % [Hz]
+gerjoii_.w.regu.f__ = 0.7*1e+9; % [Hz]
+gerjoii_.w.regu.f_ = -0.7*1e+9; % [Hz]
 % wanna use frequency scheme??
 gerjoii_.w.regu.f_yesno = 'NO'; % 'YES' or 'NO'
 % frequency for stepping:
@@ -282,7 +282,7 @@ fprintf('\nwave pica k_s somewhere between %2.2d and %2.2d\n',...
 % number of points for parabola. =2 is 3pt parabola, =3 is 4pt parabola, etc.
 gerjoii_.w.nparabo = nparabo;
 % percentage of bound k_e to try for 3 point parabola
-gerjoii_.w.keprct_  = 0.05; % 0.05; 0.1;
+gerjoii_.w.keprct_  = 0.05;
 gerjoii_.w.keprct__ = 0.5;
 % percentage of bound k_s to try for 3 point parabola
 gerjoii_.w.ksprct_  = 1e-2;
@@ -310,9 +310,8 @@ gerjoii_.w.regu.sig_min_ = sig_min_-prct_s*sig_min_;
 % ..............
 % choose filter bandwidth in units of [1/m],
 % smaller ax,az --> only lower freqs survive
-% ax=1/parame_.w.lo; az=ax; % [1/m]
-% ax = 1/1.6; az = 1/1.6; % [1/m]
-ax = 1/(parame_.dc.dr*kk_factor_dc); az = 1/(parame_.dc.dr*kk_factor_dc); % [1/m]
+ax = 1/(parame_.dc.dr*kk_factor_dc); 
+az = 1/(parame_.dc.dr*kk_factor_dc); % [1/m]
 fprintf('\ndc kk-filter:   ax=%2.2d, az=%2.2d [1/m]\n',ax,az);
 % turn to discrete coordinates,
 % (nax = nkx*ax*dx, but nkx is multiplied in image_gaussian.m)
