@@ -403,6 +403,10 @@ gerjoii_.wdc.deps.kb  = linspace(-1,2,4).';
 % dsigm_wdc * geomean * ?
 % -----------------------
 gerjoii_.wdc.step_    = step_;
+% -----------------------
+% init current appraisal
+% -----------------------
+gerjoii_.dc.v_currs=zeros(geome_.n,geome_.m);
 % ------------------------------------------------------------------------------
 %
 %                     wave & dc :: inversion routine
