@@ -5,7 +5,7 @@ from fancy_figure import fancy_figure
 import scipy.io as sio
 import numpy as np
 # ------------------------------------------------------------------------------
-project_= input ("project name : ") 
+project_= input ("project name : ")
 name_= input ("line (eg line1) : ")
 reco_obs= input ("recovered or observed: ")
 # ------------------------------------------------------------------------------
@@ -53,15 +53,15 @@ nr = rx.size
 t  = t*1e+9
 nt = t.size
 # ------------------------------------------------------------------------------
-# john and dylan REALLY need to see the data matrix 
-# broken up where the source is because they cant 
+# john and dylan REALLY need to see the data matrix
+# broken up where the source is because they cant
 # visualize it by themselves. whatever.
 # ------------------------------------------------------------------------------
 # in matlab:
 # [~,il]=max(diff(rx));
 # no=(rx(il+1)-rx(il))/dr;
 # no=uint32(no);
-# d_=[d(:,1:il),zeros(nt,no),d(:,(il+1):end)];              
+# d_=[d(:,1:il),zeros(nt,no),d(:,(il+1):end)];
 # rx=[rx(1:il); linspace(rx(il)+dr,rx(il+1)-dr,no).'  ; rx(il+1:end)  ];
 # -
 # np.full([nt, no], np.nan)
@@ -101,7 +101,7 @@ vmax=maxi,
 ylabel="Time (ns)",
 xlabel="Receivers (m)",
 # title='Shot-gather \#1',
-title=name_+' '+reco_obs,xlabel='Receivers (m)',ylabel='Time (ns)',
+title=name_+' '+reco_obs,
 guarda_path=guarda_path,
 guarda=dpi,fig_name=name_+'_'+project_+'_'+reco_obs
 ).matrix()

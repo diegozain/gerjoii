@@ -70,19 +70,9 @@ gerjoii_.w.MUTE = 'no_MUTE';
 % parame_.w.lo = parame_.w.c/( sqrt( max(parame_.natu.epsilon_w(:)) ))/parame_.w.fo;
 % % round to nearest-bigger decimal (e.g. 0.561924 -> 0.6)
 % parame_.w.lo = ceil( parame_.w.lo/0.1 )*0.1;
+% ------------------------------------------------------------------------------
 % set paths
 parame_.w.data_path_  = data_path_w;
-% ------------------------------------------------------------------------------
-% choose parameters for saving the wavefield
-% ------------------------------------------------------------------------------
-gerjoii_.w.ns = 1;
-parame_.w.parallel_memory = 'wavefield/u/';
-% ------------------------------------------------------------------------------
-% gerjoii_.w.chunks = [1e+3,1e+3,1e+3,1e+3,1e+3];
-% gerjoii_.w.chunks = [5e+2,5e+2,5e+2,5e+2,5e+2,5e+2,5e+2,5e+2,5e+2,5e+2];
-n_chunks_size = 1e+2;
-n_chunks = ceil(parame_.w.nt/n_chunks_size);
-gerjoii_.w.chunks = n_chunks*ones(1,n_chunks_size);
 % ------------------------------------------------------------------------------
 %
 %                       generate synthetic data
@@ -109,7 +99,7 @@ fprintf('    ------------------------------\n');
 % wave
 % --------------------------
 tic;
-natur__w_;
+natur__w;
 toc;
 % --------------------------
 % wave + noise

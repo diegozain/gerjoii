@@ -28,7 +28,11 @@ name_u = 'u'
 name_u_= 'u_w'
 # ------------------------------------------------------------------------------
 title_u = "Radar wave (V/m)"
+prct= 0.0005
+colo='kkrr'# 'y-b'
 midi_u  = 0
+nt_,_,_ = fancy_figure.bring_struct('../'+project_+'/data-recovered/w/','parame_','parame_','w.nt',0,0)
+nt_ = nt_[0,0]
 # ------------------------------------------------------------------------------
 x,_,_=fancy_figure.bring('../'+project_+'/output/w/','x',0,0)
 z,_,_=fancy_figure.bring('../'+project_+'/output/w/','z',0,0)
@@ -61,8 +65,8 @@ for i_ in range(1,nfile+1):
     mini = min(mini,mini_)
     maxi = max(maxi,maxi_)
 # ------------------------------------------------------------------------------
-mini_u = mini*0.05
-maxi_u = maxi*0.05
+mini_u = mini*prct
+maxi_u = maxi*prct
 # ------------------------------------------------------------------------------
 # plot
 # ------------------------------------------------------------------------------
@@ -74,40 +78,43 @@ size=[9.6*0.6,9.6*0.6]
 # ------------------------------------------------------------------------------
 # print figures
 # ------------------------------------------------------------------------------
+count_ = 0
 for i_ in range(1,nfile+1):
     file_ = path_ + name_u + str(i_) + '.mat'
     file_ = sio.loadmat(file_)
     data  = file_[name_u_]
     # --------------------------------------------------------------------------
-    _,_,nt= data.shape 
+    _,_,nt= data.shape
     # --------------------------------------------------------------------------
     title = title_u
     # --------------------------------------------------------------------------
     plt_=fancy_figure(data=np.zeros((2,2)),holdon='close',colorbaron='off',transparent='False').matrix()
     # --------------------------------------------------------------------------
-    # count_ = count_ + nt
-    # --------------------------------------------------------------------------    
-    for ii_ in range(0,nt):
-        fancy_figure(curve=rz_w,x=rx_w,
-        colop='c',transparent='False',
-        symbol='.',holdon='on').plotter()
-        fancy_figure(curve=sz_w,x=sx_w,
-        colop='c',transparent='False',
-        symbol='*',holdon='on').plotter()
-        # ----------------------------------------------------------------------
-        data_ = data[:,:,ii_]
-        data_ = np.squeeze(data_)
-        # ----------------------------------------------------------------------
-        fancy_figure(figsize=size,#aspect=aspect_,
-        data=data_,
-        x=x,y=z,extent=extents_,
-        xlabel="x (m)",ylabel="y (m)",
-        midi=midi_u,vmin=mini_u,vmax=maxi_u,
-        title=title,transparent='False',
-        colo_accu="%g",
-        colorbaron='off',
-        fig_name='wavefield'+str(ii_+(i_-1)*nt),
-        guarda=420,guarda_path=guarda_path,holdon='close').matrix()
+    count_ = count_ + nt
+    # --------------------------------------------------------------------------
+    for ii_ in range(0,nt,10):
+    # for ii_ in range(0,nt):
+        if count_+ii_<=nt_:
+            fancy_figure(curve=rz_w,x=rx_w,
+            colop='c',transparent='False',
+            symbol='.',holdon='on').plotter()
+            fancy_figure(curve=sz_w,x=sx_w,
+            colop='b',transparent='False',
+            symbol='*',markersize=20,holdon='on').plotter()
+            # ------------------------------------------------------------------
+            data_ = data[:,:,ii_]
+            data_ = np.squeeze(data_)
+            # ------------------------------------------------------------------
+            fancy_figure(figsize=size,#aspect=aspect_,
+            data=data_,
+            x=x,y=z,extent=extents_,
+            xlabel="Length (m)",ylabel="Depth (m)",
+            midi=midi_u,vmin=mini_u,vmax=maxi_u,
+            title=title,transparent='False',colo=colo,
+            colo_accu="%g",
+            colorbaron='off',
+            fig_name='wavefield'+str(ii_+(i_-1)*nt),
+            guarda=120,guarda_path=guarda_path,holdon='close').matrix()
 # ------------------------------------------------------------------------------
 # make video using ffmpeg
 # ------------------------------------------------------------------------------
@@ -121,11 +128,10 @@ os.environ["vide_name"] = "wavefield"
 # ------------------------------------------------------------------------------
 # sips -g pixelWidth $file_name0.png
 # os.system('gifski -o $vide_name.gif -W 800 -H 400 --fps 1 $file_name*.png')
-os.system('gifski -o $vide_name.gif -W 400 -H 406 --fps 40 $file_name*.png')
+# os.system('gifski -o $vide_name.gif -W 400 -H 406 --fps 40 $file_name*.png')
 # ------------------------------------------------------------------------------
 # os.system('ffmpeg -r 2 -i $file_name%d.png -c:v ffv1 -r 10 $vide_name.avi')
 # os.system('ffmpeg -r 2 -i $file_name%d.png -vf scale="600:-1" -r 10 $vide_name.gif')
 # os.system('ffmpeg -i $vide_name.avi -pix_fmt rgb24 $vide_name_.gif')
 # ------------------------------------------------------------------------------# ------------------------------------------------------------------------------
 # '''
-

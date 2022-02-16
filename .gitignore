@@ -1,4 +1,5 @@
 .DS_Store
+._DS_Store
 *.m~
 *.sh~
 *.txt~
@@ -21,8 +22,15 @@ __pycache__/
 *.dat
 *.avi
 *.xcf
+*.bin
+*.csv
+*.npy
 
 dir_paths_.m
+
+acquiferflat-sy/
+acquifer-sy/
+vineyard-sy/
 
 data/w-processing/pics/
 data/dc-processing/pics/
