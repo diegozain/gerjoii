@@ -47,6 +47,7 @@ The entire example is customizable too.
    
 1. Choose your model parameter values in:
    * ```gerjoii/field/tinyradar-sy/image2mat/image2gerjoii.m```
+   
    ```
    % permittivity
    eps_rgb = [23; 37; 130; 132; 255];
@@ -56,6 +57,9 @@ The entire example is customizable too.
    sig_ele = [10; 8;   5;   3;   1]*1e-3;
    ```
    * Values for relative permittivity must be between 2 and 9.
+      * if you want to change that, edit line 35 of,
+        ```tinyradar-sy/base/param_wdc.mat```
+        and then repeat from step 1.
    * Values for conductivity must be larger than zero.
    * This will save the model parameters as ```.mat``` files.
    * You can also save initial homogeneous models running this script.
