@@ -96,21 +96,21 @@ for it = 1:nt
     % ---------------------------------------------------------------------------
     %                                𝐇x & 𝐇y
     % ---------------------------------------------------------------------------
-    % update H and H_pml
-    current_time  = current_time + dt/2;
+    % current_time  = current_time + dt/2;
     [Hx,Hy] = new_H(Hx,Hy,Ez,finite_);
-    [Hx,Hy] = new_H_pml(Hx,Hy,Ez,finite_);
-    % source
+    % 🧲 source
     Hy(s_w(1),s_w(2)) = Hy(s_w(1),s_w(2)) + finite_.w.coeff.Chym * wvlet_(it);
+    % 🧽 pml
+    [Hx,Hy] = new_H_pml(Hx,Hy,Ez,finite_);
     % ---------------------------------------------------------------------------
     %                                  𝐄z
     % ---------------------------------------------------------------------------
-    % update Ez and Ez_pml
-    current_time  = current_time + dt/2;
+    % current_time  = current_time + dt/2;
     Ez = new_Ez(Hx,Hy,Ez,finite_);
-    % % source
+    % % 🔌 source
     % Ez(s_w(1),s_w(2)) = Ez(s_w(1),s_w(2)) + finite_.w.coeff.Cezj * wvlet_(it);
-    % pml
+    % Ez(s_w(1),s_w(2)) = Ez(s_w(1),s_w(2)) + finite_.w.coeff.Cezj * wvlet_(it);
+    % 🧽 pml
     [Ez,finite_] = new_Ez_pml(Hx,Hy,Ez,finite_);
     % ---------------------------------------------------------------------------
     %                                👁️ ⦿ 👁️

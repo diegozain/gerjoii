@@ -55,7 +55,7 @@ fprintf('\nhowever it will be changed to %f \n',geome_.dx);
 %--------------
 % time intervals
 %--------------
-courant_factor = 0.9;
+courant_factor = 0.9; % 0.9 em wave
 geome_.w.dt = 1/(vel_max * sqrt((1/geome_.dx^2)+(1/geome_.dy^2)));  % [s]
 geome_.w.dt = courant_factor * geome_.w.dt; % [s]
 time_ = geome_.w.dt * (geome_.w.nt-1); % [s]
@@ -99,8 +99,8 @@ parame_ = w_magmat(finite_,parame_);
 %--------------
 % pml relevant stuff
 %--------------
-finite_.w.pml_order = 2; 
-finite_.w.R_0 = 1e-8;
+finite_.w.pml_order = 6; % 2 em.wave
+finite_.w.R_0 = 1e-8; % 8 em.wave
 finite_.w.pis = finite_.w.pml_w + 1;
 finite_.w.pie = finite_.w.nx - finite_.w.pml_w + 1;
 finite_.w.pjs = finite_.w.pml_d + 1;
