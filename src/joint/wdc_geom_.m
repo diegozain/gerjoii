@@ -99,7 +99,7 @@ parame_ = w_magmat(finite_,parame_);
 %--------------
 % pml relevant stuff
 %--------------
-finite_.w.pml_order = 6; % 2 em.wave
+finite_.w.pml_order = 2; % 2 em.wave
 finite_.w.R_0 = 1e-8; % 8 em.wave
 finite_.w.pis = finite_.w.pml_w + 1;
 finite_.w.pie = finite_.w.nx - finite_.w.pml_w + 1;

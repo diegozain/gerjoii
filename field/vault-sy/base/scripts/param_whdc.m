@@ -20,8 +20,8 @@ parame_ = struct;
 % domain limits
 %--------------
 parame_.aa = 0;
-parame_.bb = 240;
-parame_.cc = 80;
+parame_.bb = 24;
+parame_.cc = 8;
 %--------------
 % material properties constants
 %--------------
@@ -39,15 +39,20 @@ parame_.natu.sig_e = 1e-3 * [1 1];
 % ------------------
 parame_.w.air = 60;
 % ------------------
-% central time 🌍 & width of pulse 🔶
-% ------------------
-parame_.w.tce = 325*1e-6; % s
-parame_.w.twd = 450*1e-6;
-% ------------------
 % max frequency and max time steps
 % ------------------
-parame_.w.fo = 1e6; % [Hz]
-parame_.w.nt = 235540;
+parame_.w.fo = 100e6; % 1e6; % [Hz]
+parame_.w.nt = 2500; % 235540;
+% ------------------
+% central time 🌍 & width of pulse 🔶
+% ------------------
+% parame_.w.tce = 325*1e-6; % s
+% parame_.w.twd = 450*1e-6; % s
+% parame_.w.twd = 2.25 / parame_.w.twd; % hz
+% parame_.w.twd = 1 / pi / parame_.w.twd; % s
+
+parame_.w.twd = 1 / parame_.w.fo / pi; % s
+parame_.w.tce = 2.5*parame_.w.twd;       % s
 % ------------------
 % pml padding
 % ------------------
