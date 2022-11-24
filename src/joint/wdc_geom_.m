@@ -2,13 +2,13 @@ function [parame_,finite_,geome_] = wdc_geom(parame_,dx)
 % diego domenzain
 % fall 2018 @ BSU
 % ------------------------------------------------------------------------------
-% wdc_geom.m finishes to build the necessary geometry parameters to be used by 
+% wdc_geom.m finishes to build the necessary geometry parameters to be used by
 % both the GPR and ER solvers.
 % Has to be run after param_wdc.m
 % ------------------------------------------------------------------------------
 geome_ = struct;
 geome_.aa = parame_.aa;
-geome_.bb = parame_.bb;  
+geome_.bb = parame_.bb;
 geome_.cc = parame_.cc;
 geome_.w.air = parame_.w.air;
 geome_.w.nt = parame_.w.nt;
@@ -99,8 +99,8 @@ parame_ = w_magmat(finite_,parame_);
 %--------------
 % pml relevant stuff
 %--------------
-finite_.w.pml_order = 2; % 2 em.wave
-finite_.w.R_0 = 1e-8; % 8 em.wave
+finite_.w.pml_order = 4; % 2 em.wave
+finite_.w.R_0 = 1e-4; % 8 em.wave
 finite_.w.pis = finite_.w.pml_w + 1;
 finite_.w.pie = finite_.w.nx - finite_.w.pml_w + 1;
 finite_.w.pjs = finite_.w.pml_d + 1;
